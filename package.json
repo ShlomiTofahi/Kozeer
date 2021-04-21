@@ -1,0 +1,32 @@
+{
+  "name": "kozeer",
+  "version": "1.0.0",
+  "description": "Manga comic website",
+  "main": "server.js",
+  "scripts": {
+    "client-install": "npm install --prefix client",
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ShlomiTofahi/Kozeer.git"
+  },
+  "author": "Shlomi Tofahi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ShlomiTofahi/Kozeer/issues"
+  },
+  "homepage": "https://github.com/ShlomiTofahi/Kozeer#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "concurrently": "^6.0.2",
+    "express": "^4.17.1",
+    "mongoose": "^5.12.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
