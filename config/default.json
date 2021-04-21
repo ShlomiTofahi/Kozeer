@@ -1,0 +1,5 @@
+{
+    "mongoURI" : "mongodb+srv://kozeerDB:17David17@cluster0.vu3cg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    "jwtSecret" : "sl_myJwtSecret",
+    "adminMail" : "topdogs5551@gmail.com"
+}
