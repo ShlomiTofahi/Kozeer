@@ -30,6 +30,52 @@ router.get('/:id', (req, res) => {
         })
 });
 
+
+// @route   POST api/comments
+// @desc    Create A Commend For A Commend In A Post by Given Post Id
+// @access  Private
+router.post('/cm/:data', auth, (req, res) => {
+    const { post_id, command_id, body } = JSON.parse(req.params.data);
+
+    //Simple validation
+    if (!body) {
+        return res.status(400).json({ msg: 'Please enter all fields' });
+    }
+
+    Comment.findById(command_id).then(comment => {
+        User.findById(req.user.id).select('-password').then(user => {
+            Post.findById(post_id).then(post => {
+                const newComment = new Comment({
+                    user,
+                    post,
+                    body,
+                    comment
+                });
+
+                newComment.save().then(comment2 => {
+                    Comment.findOne(comment2).populate('post').populate('user').then(comment3 => {
+                        Comment.find({ post: req.params.id }).populate('post').populate('user').then(post_comments => {
+                            Comment.find({ user: req.user.id }).populate('post').populate('user').then(user_comments => {
+
+                                comment.comments = [...comment.comments, comment3]
+                                post.comments = post_comments;
+                                user.comments = user_comments;
+                                post.save().then(() => {
+                                    user.save().then(() => {
+                                        comment.save().then(() => {
+                                            res.json(comment3);
+                                        });
+                                    });
+                                })
+                            })
+                        })
+                    });
+                });
+            })
+        })
+    })
+});
+
 // @route   POST api/comments
 // @desc    Create A Commend For Post by Given Post Id
 // @access  Private
@@ -82,15 +128,19 @@ router.delete('/:data', auth, (req, res) => {
     }
 
     Comment.findById(command_id).then(comment => {
-            var isAdmin = false;
-            User.findById(req.user.id).then(user => { user.admin ? isAdmin = true : isAdmin = false; })
+        var isAdmin = false;
+        User.findById(req.user.id).then(user => { user.admin ? isAdmin = true : isAdmin = false; })
 
-            User.findById(comment.user).select('-password').then(user => {
-                Post.findById(post_id).then(post => {
-                    if (!isAdmin && user._id != req.user.id) {
-                        return res.status(400).json({ msg: 'Comment does not belong to the user' });
+        User.findById(comment.user).select('-password').then(user => {
+            Post.findById(post_id).then(post => {
+                if (!isAdmin && user._id != req.user.id) {
+                    return res.status(400).json({ msg: 'Comment does not belong to the user' });
+                }
+                Comment.findById(comment.comment).then(fatherComment => {
+                    if (fatherComment) {
+                        fatherComment.comments = fatherComment.comments.filter(comment => comment._id != command_id)
+                        fatherComment.save();
                     }
-
                     Comment.find({ user: user._id }).then(comments => {
                         user.comments = comments.filter(comment => comment._id != command_id);
 
@@ -99,7 +149,11 @@ router.delete('/:data', auth, (req, res) => {
 
                             post.save().then(() => {
                                 user.save().then(() => {
-                                    comment.deleteOne().then(() => res.json({ success: true }));
+                                    comment.deleteOne().then(() => {
+                                        Comment.deleteMany({ comment: command_id }).then(() => {
+                                            res.json({ success: true })
+                                        })
+                                    });
                                 })
                             })
                         })
@@ -107,6 +161,7 @@ router.delete('/:data', auth, (req, res) => {
                 })
             })
         })
+    })
         .catch(err => res.status(404).json({ success: false }));
 });
 

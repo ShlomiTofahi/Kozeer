@@ -10,13 +10,13 @@ const auth = require("../../middleware/auth");
 const User = require('../../models/User');
 
 // @route   GET api/users
-// @desc    Get All Items
-// @access  Public
-router.get('/', (req, res) => {
-    User.find().populate('comments')
-        .sort({ date: -1 })
-        .then(users => res.json(users))
-});
+// // @desc    Get All Items
+// // @access  Public
+// router.get('/', (req, res) => {
+//     User.find().populate('comments')
+//         .sort({ date: -1 })
+//         .then(users => res.json(users))
+// });
 
 // // // @route   POST api/users/all
 // // // @desc    Get All Users

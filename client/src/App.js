@@ -13,7 +13,7 @@ import Main from './components/Main';
 
 class App extends Component {
   componentDidMount() {
-    // store.dispatch(loadUser());
+    store.dispatch(loadUser());
   }
   render() {
 

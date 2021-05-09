@@ -9,14 +9,23 @@ const PostSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Comment"
     }],
-    loved: {
-        type: Number,
+    mangas: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Manga"
+    }],
+    is_manga: {
+        type: Boolean,
         required: true,
-        default: 0
+        default: false
     },
     postImage: {
         type: String,
         default: ''
+    },
+    loved: {
+        type: Number,
+        required: true,
+        default: 0
     },
     views: {
         type: Number,

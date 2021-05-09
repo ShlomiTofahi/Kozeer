@@ -6,12 +6,14 @@ const auth = require('../../middleware/auth');
 const Post = require('../../models/Post');
 //User Model
 const User = require('../../models/User');
+//Manga Model
+const Manga = require('../../models/Manga');
 
 // @route   GET api/posts
 // @desc    Get All Posts
 // @access  Public
 router.get('/', (req, res) => {
-    Post.find().populate('comments')
+    Post.find().populate('mangas').populate('comments')
         .sort({ published_date: -1 })
         .then(posts => res.json(posts))
 });
@@ -20,7 +22,7 @@ router.get('/', (req, res) => {
 // @desc    Get Post
 // @access  Public
 router.get('/:id', (req, res) => {
-    Post.findById(req.params.id).populate('comments')
+    Post.findById(req.params.id).populate('mangas').populate('comments')
         .then(post => res.json(post))
 });
 
@@ -28,18 +30,24 @@ router.get('/:id', (req, res) => {
 // @desc    Create A Post
 // @access  Private
 router.post('/', auth, (req, res) => {
-    const { title, body, postImage } = req.body;
-
+    const { title, body, postImage, is_manga, mangasSelected } = req.body;
     //Simple validation
-    if (!title || !body) {
-        return res.status(400).json({ msg: 'Please enter all fields' });
+    if (!title) {
+        return res.status(400).json({ msg: 'Please enter title' });
+    }
+    if (is_manga) {
+        if (!mangasSelected.length) {
+            return res.status(400).json({ msg: 'Please select pages' });
+        }
     }
 
     User.findById(req.user.id).then(user => {
 
-        const newPost = new Post({
+        let newPost = new Post({
             title,
-            body
+            body,
+            is_manga,
+            mangas: []
         });
 
         if (postImage != '')
@@ -47,6 +55,14 @@ router.post('/', auth, (req, res) => {
 
         newPost.save().then(post => {
             Post.findOne(post).then(post => {
+                if (is_manga) {
+                    if (mangasSelected) {
+                        Manga.find({ page: mangasSelected }).then(mangas => {
+                            post.mangas = mangas
+                            post.save();
+                        })
+                    }
+                }
                 res.json(post);
             })
         });
@@ -64,7 +80,7 @@ router.delete('/:id', auth, (req, res) => {
                 return res.status(400).json({ msg: 'No permission, Post does not belong to the user' });
             }
 
-            User.find().select('-password').populate('comments').then(users => {
+            User.find().select('-password').populate('mangas').populate('comments').then(users => {
                 users.map(user => {
                     user.comments = user.comments.filter(comment => comment.post != req.params.id);
                     user.save().then(() => { });
@@ -97,6 +113,43 @@ router.post('/loved/:id', (req, res) => {
         post.save().then(() => res.json({ success: true }));
     })
         .catch(err => res.status(404).json({ success: false }));
+});
+
+// @route   GET api/posts/filter
+// @desc    Get specific Post
+// @access  Public
+router.post('/filter', (req, res) => {
+    const { title } = req.body;
+
+    //Simple validation
+    if (title == null)
+        return res.status(400).json({ msg: 'One or more field is missing' });
+
+    if (!title || title == "") {
+        Post.find().populate('mangas').populate('comments')
+            .sort({ date: -1 })
+            .then(posts => res.json(posts))
+    } else {
+        var post = [];
+        var postIdList = [];
+
+        Post.find({ title: { $regex: title, $options: 'i' } }).select("_id").then(newPost => {
+            if (title != "") {
+                if (!newPost.length) {
+                    return res.json([])
+                }
+                else {
+                    postIdList = []
+                    newPost.map(post => postIdList.push(String(post._id)))
+                    if (!post.length) post = newPost;
+                    if (newPost.length) post = post.filter(element => postIdList.includes(String(element._id)));
+                }
+            }
+            Post.find({ "_id": { $in: post } }).populate('mangas').populate('comments')
+                .sort({ date: -1 })
+                .then(posts => res.json(posts))
+        })
+    }
 });
 
 module.exports = router;
