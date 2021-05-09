@@ -1,0 +1,219 @@
+
+.App {
+  /* text-align: center;
+  max-width: 1396px; */
+  overflow-x: hidden;
+}
+
+/*--------------start Navbar---------------*/
+.nav-color{
+  font: italic small-caps 16px/1 cursive;
+  background: linear-gradient(180deg, #d959d5 50%, #c213bd 50%);
+  -webkit-box-shadow: inset 0px 0px 20px 6px rgba(0,0,0,0.1); 
+  box-shadow: inset 0px 0px 20px 6px rgba(0,0,0,0.1);
+  border-radius: 10px;
+  color: white;
+}
+
+.nav-link{
+  color: white;
+  font-size: 1px;
+}
+
+.nav-link:hover {
+  background: linear-gradient(180deg, #fb6af7 50%, #ef39e9 50%);
+  color: #21201f;
+}
+
+
+.nav-header {
+  background: linear-gradient(180deg, #d959d5 50%, #c213bd 50%);
+  -webkit-box-shadow: inset 0px 0px 20px 6px rgba(0,0,0,0.1); 
+  box-shadow: inset 0px 0px 20px 6px rgba(0,0,0,0.1);
+  font: italic small-caps 16px/1 cursive;
+  border-radius: 10px;
+  color: #fff;
+}
+
+.header-tab .header-tablinks {
+  background-color: inherit;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  color: white;
+  font-size: 12px;
+  border-left: 1px solid #c914c3;
+}
+
+.header-tab .header-tablinks:hover {
+  text-decoration: none;
+  text-shadow: 1px 1px 0 #7A7A7A;
+  background: linear-gradient(180deg, #fb6af7 50%, #ef39e9 50%);
+  color: #21201f;
+}
+
+.header-tab .header-tablinks.active {
+  background: linear-gradient(180deg, #ffffff 50%, #f2f2f2 50%);
+  -webkit-box-shadow: inset 0px 0px 20px 6px rgba(0,0,0,0.1); 
+  box-shadow: inset 0px 0px 20px 6px rgba(0,0,0,0.1);
+  color: #21201f;
+  text-shadow: 1px 1px 0 #7A7A7A;
+}
+
+.header{
+  top: 0;
+  /* max-width: 1370px; */
+  margin: 0 auto;
+}
+
+.header-img-slider{
+  max-width:12%;
+}
+
+.slider-imgs {
+  max-height: 100%;
+  object-fit:contain;
+}
+/*@media screen and (max-width:1080px) {
+  .header-logo-name{
+    max-width: calc(100% - 380px);
+    }
+  .header-logo-shape{
+    top: -50px;
+    left: 320px;
+    max-width: 125px;
+    }
+} */
+/*--------------end Navbar---------------*/
+
+/*--------------start Footer---------------*/
+.contact-btn{
+  color: white;
+}
+.contact-btn:hover{
+  text-decoration: none;
+  color: #5e8f86;
+}
+/*--------------end Footer---------------*/
+
+/*--------------start Modal Login---------------*/
+.login-modal .modal-content{
+  background-color: #292820;
+  color: rgba(255, 255, 255, 0.712);
+}
+.login-btn {
+  background: none!important;
+  border: none;
+  padding: 0!important;
+  /*optional*/
+  font-family: arial, sans-serif;
+  /*input has OS specific font-family*/
+  color: #5e8f86;
+  cursor: pointer;
+}
+.login-btn:hover {
+  text-decoration: none;
+  color: #cecece;
+}
+.login-btn-sign-in-up{
+  border-color: #363535;
+  margin-top:20px;
+  margin-bottom:30px;
+}
+.login-btn-sign-in-up:hover{
+  background-color: rgba(0, 0, 0, 0);
+  border-color: rgba(255, 255, 255, 0.781);
+  color: rgba(255, 255, 255, 0.781);
+}
+/*--------------end Modal Login-----------------*/
+
+/*--------------start Post---------------*/
+.posts-Imgs{
+  /* object-fit: cover; */
+  width:10%;
+  /* height:10px; */
+}
+.post-link{
+  /* color: black; */
+}
+.post-link:hover{
+  text-decoration: none;
+}
+.post-loved-btn{
+  all: unset;
+  color: rgba(211, 4, 4, 0.623);
+  cursor: pointer;
+padding-left:2px;
+padding-right:15px;
+} 
+.post-search-btn{
+  all: unset;
+  color: rgba(255, 255, 255, 0.952);
+  cursor: pointer;
+/* padding-left:2px;
+padding-right:15px; */
+} 
+
+.input-place-holder::placeholder{
+font-size:x-small;
+color: rgba(255, 255, 255, 0.411);
+}
+
+
+/*---swtich button---*/
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+}
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+input:checked + .slider {
+  background-color: #5e8f86;
+}
+input:focus + .slider {
+  box-shadow: 0 0 1px #5e8f86;
+}
+input:checked + .slider:before {
+  -webkit-transform: translateX(21px);
+  -ms-transform: translateX(21px);
+  transform: translateX(21px);
+}
+.slider.round {
+  border-radius: 34px;
+}
+.slider.round:before {
+  border-radius: 50%;
+}
+/*---swtich button---*/
+
+/*--------------end Post-----------------*/
+
