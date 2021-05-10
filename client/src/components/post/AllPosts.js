@@ -6,7 +6,7 @@ import {
 } from 'reactstrap';
 
 import { getPosts, getFilterPosts } from '../../actions/postActions';
-import { addComment2, addComment } from '../../actions/commentActions';
+import { replyComment, addComment } from '../../actions/commentActions';
 
 import ShowPosts from './ShowPosts';
 import AddPostModal from './AddPostModal';
@@ -25,11 +25,11 @@ class AllPosts extends Component {
   componentDidMount() {
     this.props.getPosts();
 
-    console.log('first')
-    const postID2 = '609538dc93644d5738d7863e';
-    const commentID = '609542b8a1c5ac76f40d2d82';
-    const body = 'test 1';
-    this.props.addComment2(postID2, commentID, body);
+    // console.log('first')
+    // const postID2 = '609538dc93644d5738d7863e';
+    // const commentID = '609803494c499133f0a769c9';
+    // const body = 'test 1';
+    // this.props.replyComment(postID2, commentID, body);
 
    }
   onSearchClick = (id) => {
@@ -153,5 +153,5 @@ const mapStateToProps = (state) => ({
 
 export default connect(
   mapStateToProps,
-  { getPosts, getFilterPosts, addComment2, addComment }
+  { getPosts, getFilterPosts, replyComment, addComment }
 )(AllPosts);

@@ -40,7 +40,7 @@ export const addComment = (id, comment) => (dispatch, getState) => {
         });
 };
 
-export const addComment2 = (post_id, command_id, body) => (dispatch, getState) => {
+export const replyComment = (post_id, command_id, body) => (dispatch, getState) => {
     const body1 = JSON.stringify({ post_id, command_id, body });
     console.log('second')
     axios

@@ -23,13 +23,12 @@ router.get('/', (req, res) => {
 // @desc    Get All Commends of Post by Given Post Id 
 // @access  Public
 router.get('/:id', (req, res) => {
-    Comment.find({ post: req.params.id }).populate('post').populate('user')
+    Comment.find({ post: req.params.id }).populate('post').populate('user').populate('comment').populate({ path: 'comment', populate: {path: 'user'  }}).populate({ path: 'comments', populate: {path: 'user'  }})
         .sort({ comment_date: -1 })
         .then(comments => {
             res.json(comments)
         })
 });
-
 
 // @route   POST api/comments
 // @desc    Create A Commend For A Commend In A Post by Given Post Id
@@ -53,7 +52,7 @@ router.post('/cm/:data', auth, (req, res) => {
                 });
 
                 newComment.save().then(comment2 => {
-                    Comment.findOne(comment2).populate('post').populate('user').then(comment3 => {
+                    Comment.findOne(comment2).populate('post').populate('user').populate('comment').populate('comments').then(comment3 => {
                         Comment.find({ post: req.params.id }).populate('post').populate('user').then(post_comments => {
                             Comment.find({ user: req.user.id }).populate('post').populate('user').then(user_comments => {
 
@@ -96,7 +95,7 @@ router.post('/:id', auth, (req, res) => {
             });
 
             newComment.save().then(comment => {
-                Comment.findOne(comment).populate('post').populate('user').then(comment => {
+                Comment.findOne(comment).populate('post').populate('user').populate('comment').populate('comments').then(comment => {
                     Comment.find({ post: req.params.id }).populate('post').populate('user').then(post_comments => {
                         Comment.find({ user: req.user.id }).populate('post').populate('user').then(user_comments => {
 

@@ -5,7 +5,7 @@ import {
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { addComment } from '../../actions/commentActions';
+import { addComment, replyComment } from '../../actions/commentActions';
 
 class AddComment extends Component {
   state = {
@@ -15,8 +15,9 @@ class AddComment extends Component {
   static propTypes = {
     auth: PropTypes.object.isRequired,
     msg: PropTypes.object.isRequired,
-    addComment: PropTypes.func.isRequired
-  }   
+    addComment: PropTypes.func.isRequired,
+    replyComment: PropTypes.func.isRequired
+  }
 
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
@@ -29,8 +30,10 @@ class AddComment extends Component {
     const newComment = {
       body
     }
-
-    this.props.addComment(this.props.postID, newComment);
+    if (this.props.commentID)
+      this.props.replyComment(this.props.postID, this.props.commentID, body);
+    else
+      this.props.addComment(this.props.postID, newComment);
 
     this.setState({
       body: ''
@@ -44,35 +47,36 @@ class AddComment extends Component {
       <div>
         <Form onSubmit={this.onSubmit}>
           <FormGroup>
-            {isAuthenticated ?
-              <nav align="right" className="mt-3">
-                <div style={addPostBorder} className="input-group col-12 col-sm-8 col-md-6 col-lg-5 pr-1 pb-3">
-                  <CardImg bottom className='forum-pet-image ml-1' src={user.petImage} />
-                  <Label for='body'></Label>
-                  <Input
-                    style={addPostInput}
-                    value={this.state.body}
-                    type='text'
-                    name='body'
-                    id='body'
-                    placeholder={'היי ' + user.name + ', כתוב תגובה...'}
-                    className='mb-2'
-                    onChange={this.onChange}
-                  />
-                  <div style={commentButton}>
-                    <Button
-                      style={{ height: '38px' }}
-                      size='sm'
-                      className='badge-pill badge-secondary'
-                      color='dark'
-                      block
-                    >	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;תגובה</Button>
-                  </div>
+            {/* {isAuthenticated ? */}
+            <nav align="right" className="mt-3">
+              <div style={addPostBorder} className="input-group col-12 col-sm-8 col-md-6 col-lg-5 pr-1 pb-3">
+                {/* <CardImg bottom className='forum-pet-image ml-1' src={user.petImage} /> */}
+                <Label for='body'></Label>
+                <Input
+                  style={addPostInput}
+                  value={this.state.body}
+                  type='text'
+                  name='body'
+                  id='body'
+                  // placeholder={'היי ' + user.name + ', כתוב תגובה...'}
+                  className='mb-2'
+                  onChange={this.onChange}
+                />
+                <div style={commentButton}>
+                  <Button
+                    style={{ height: '38px' }}
+                    size='sm'
+                    className='badge-pill badge-secondary'
+                    color='dark'
+                    block
+                  >	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;תגובה</Button>
                 </div>
-              </nav>
-              : <CardFooter className='lead mt-3' style={{ fontSize: '15px' }} align='right'>
+              </div>
+            </nav>
+            {/* : <CardFooter className='lead mt-3' style={{ fontSize: '15px' }} align='right'>
                 <smalll> היי אורח, התחבר כדי להגיב לפוסט זה </smalll>
-              </CardFooter>}
+              </CardFooter>
+              } */}
           </FormGroup>
         </Form>
       </div>
@@ -123,5 +127,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { addComment }
+  { addComment, replyComment }
 )(AddComment);
