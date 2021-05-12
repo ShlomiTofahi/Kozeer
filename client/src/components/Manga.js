@@ -109,7 +109,7 @@ class Manga extends Component {
                             </Swiper>
                         </div>
                     </div>
-                    <div id="myModal" className="modal">
+                    <div id="myModal" className="manga-modal">
                         <span className="close">&times;</span>
                         <img className="modal-content" id="img01" />
                         <div id="caption"></div>

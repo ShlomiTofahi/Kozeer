@@ -1,11 +1,23 @@
 import React, { Component } from 'react';
 // import { connect } from 'react-redux';
 // import { Link } from 'react-router-dom';
-import { Button, Form, FormGroup, Input } from 'reactstrap';
+import { Button, Form, FormGroup, Input, Collapse } from 'reactstrap';
 
 class Footer extends Component {
     state = {
-        isOpen: false
+        subscribefadeIn: false
+    }
+
+    subscribe = () => {
+        var subtxt = document.getElementById("submited");
+        subtxt.innerHTML = 'Thanks for submitting!';
+        window.setTimeout(this.fadeout, 2000);
+
+    }
+
+    fadeout = () => {
+        var subtxt = document.getElementById("submited");
+        subtxt.innerHTML = '';
     }
 
     shdowStyle = () => {
@@ -46,28 +58,35 @@ class Footer extends Component {
                                     </a>
                                 </li>
                                 <li className='mb-1'>
-                                    <Form onSubmit={this.onSubmit}>
+                                    <Form
+                                    //  onSubmit={this.onSubmit}
+                                    >
                                         <FormGroup>
                                             <div align='left' style={{ maxWidth: '300px' }}>
                                                 <Input
-                                                    bsSize="sm"
-                                                    type='password'
-                                                    name='password'
-                                                    id='password'
+                                                    type='email'
+                                                    name='email'
+                                                    id='email'
                                                     placeholder='Enter your email here*'
-                                                    style={subscribeInputStyle}
                                                     onChange={this.onChange}
+                                                    bsSize="sm"
+                                                    style={subscribeInputStyle}
                                                 />
                                                 <Button
                                                     size="sm"
                                                     color='dark'
                                                     style={subscribeBtnStyle}
+                                                    onClick={this.subscribe}
                                                     block
                                                 ><small>Subscribe Now</small>
                                                 </Button>
                                             </div>
                                         </FormGroup>
                                     </Form>
+                                    {/* <Collapse isOpen={this.state.subscribefadeIn}> */}
+                                    <span id='submited' style={{ color: 'white', opacity: '0.7' }}></span>
+
+                                    {/* </Collapse> */}
                                 </li>
                             </ul>
                         </div>

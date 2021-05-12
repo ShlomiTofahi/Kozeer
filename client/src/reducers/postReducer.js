@@ -1,4 +1,4 @@
-import { GET_POSTS, POSTS_LOADING, ADD_POST, DELETE_POST, VIEWS_POST } from '../actions/types';
+import { GET_POSTS, POSTS_LOADING, ADD_POST, DELETE_POST, VIEWS_POST, LOVED_POST, UNLOVED_POST } from '../actions/types';
 
 const initialState = {
     posts: [],
@@ -25,9 +25,18 @@ export default function postReducer(state = initialState, action) {
                 posts: state.posts.filter(post => post._id !== action.payload)
             };
         case VIEWS_POST:
+        case LOVED_POST:
+        case UNLOVED_POST:
+            let newPost = [...state.posts];
+            var index = newPost.findIndex(element => element._id === action.payload._id);
+            newPost[index] = action.payload;
             return {
-                ...state
+                ...state,
+                posts: newPost
             };
+            // return {
+            //     ...state
+            // };
         case POSTS_LOADING:
             return {
                 ...state,

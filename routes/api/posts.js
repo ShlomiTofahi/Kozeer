@@ -95,7 +95,7 @@ router.delete('/:id', auth, (req, res) => {
 
 // @route   POST api/posts/views
 // @desc    Views A Post
-// @access  Private
+// @access  Publice
 router.post('/views/:id', (req, res) => {
     Post.findById(req.params.id).then(post => {
         post.views = post.views + 1;
@@ -104,13 +104,26 @@ router.post('/views/:id', (req, res) => {
         .catch(err => res.status(404).json({ success: false }));
 });
 
-// @route   POST api/posts/views
+// @route   POST api/posts/loved
 // @desc    Loved A Post
-// @access  Private
+// @access  Publice
 router.post('/loved/:id', (req, res) => {
     Post.findById(req.params.id).then(post => {
         post.loved = post.loved + 1;
-        post.save().then(() => res.json({ success: true }));
+        post.save().then((post) => res.json(post));
+    })
+        .catch(err => res.status(404).json({ success: false }));
+});
+
+// @route   POST api/posts/unloved
+// @desc    unLoved A Post
+// @access  Publice
+router.post('/unloved/:id', (req, res) => {
+    Post.findById(req.params.id).then(post => {
+        post.loved = post.loved - 1;
+        if (post.loved < 0)
+            post.loved = 0;
+        post.save().then(() => res.json(post));
     })
         .catch(err => res.status(404).json({ success: false }));
 });

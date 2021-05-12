@@ -26,6 +26,8 @@ export const ADD_POST = 'ADD_POST';
 export const ADD_POST_FAIL = 'ADD_POST_FAIL';
 export const DELETE_POST = 'DELETE_POST';
 export const VIEWS_POST = 'VIEWS_POST';
+export const LOVED_POST = 'LOVED_POST';
+export const UNLOVED_POST = 'UNLOVED_POST';
 
 //Comments
 export const GET_POST_COMMENTS = 'GET_POST_COMMENTS';
