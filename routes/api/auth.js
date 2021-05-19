@@ -44,6 +44,7 @@ router.post('/', (req, res) => {
                                     name: user.name,
                                     admin: user.admin,
                                     email: user.email,
+                                    profileImage: user.profileImage,
                                     comments: user.comments
                                 }
                             });

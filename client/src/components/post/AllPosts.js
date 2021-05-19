@@ -54,6 +54,7 @@ class AllPosts extends Component {
 
   render() {
     const { posts, loading } = this.props.post;
+    console.log(posts)
 
     const searchToggle = this.state.searchCicked ?
       <div style={searchLimitStyle} className="input-group">
@@ -116,7 +117,7 @@ const spinnerStyle = {
 
 const postFrameStyle = {
   margin: '0 auto',
-  backgroundColor: '#221415f8',
+  backgroundColor: '#221415dc',
   color: 'white',
   width: '65%',
 };

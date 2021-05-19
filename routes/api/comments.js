@@ -80,7 +80,6 @@ router.post('/cm/:data', auth, (req, res) => {
 // @access  Private
 router.post('/:id', auth, (req, res) => {
     const { body } = req.body;
-
     //Simple validation
     if (!body) {
         return res.status(400).json({ msg: 'Please enter all fields' });
@@ -100,6 +99,8 @@ router.post('/:id', auth, (req, res) => {
                         Comment.find({ user: req.user.id }).populate('post').populate('user').then(user_comments => {
 
                             post.comments = post_comments;
+                            console.log('post');
+                            console.log(post);
                             user.comments = user_comments;
                             post.save().then(() => {
                                 user.save().then(() => {

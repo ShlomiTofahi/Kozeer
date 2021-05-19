@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
 import {
-  Button, Form, FormGroup, Label, Input, CardImg, CardFooter
+  Button, Form, FormGroup, Label, Input, CardImg, CardFooter, Container, Modal, ModalHeader, ModalBody
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Collapse } from 'react-collapse';
 
 import { addComment, replyComment } from '../../actions/commentActions';
 
 class AddComment extends Component {
   state = {
-    body: ''
+    body: '',
+    // asGuest: true,
+    commentRow: 1,
+    commentInputOpen: false,
+    modal: false
   };
 
   static propTypes = {
@@ -20,12 +25,22 @@ class AddComment extends Component {
   }
 
   onChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
+    this.setState({
+      [e.target.name]: e.target.value
+    });
   }
-
+  checkConnected = () => {
+    const { isAuthenticated, user } = this.props.auth;
+    if (isAuthenticated) {
+      this.onSubmit();
+    }
+    else {
+      alert('not connected')
+    }
+  }
   onSubmit = e => {
     e.preventDefault();
-
+    alert("great")
     const { body } = this.state;
     const newComment = {
       body
@@ -40,49 +55,139 @@ class AddComment extends Component {
     });
   }
 
+  onCommentClick = () => {
+    this.setState({
+      commentRow: 6
+    });
+  }
+
+  toggle = () => {
+    this.setState({
+      modal: !this.state.modal
+    });
+  }
+
+  commentButtonStyle = () => {
+    return {
+      // position: 'relative',
+      // left: '34px',
+      // width: '80px',
+      position: this.state.commentInputOpen ? 'absolute' : null,
+      display: 'inline',
+      bottom: '10px',
+      right: '10px'
+    };
+  };
   render() {
     const { isAuthenticated, user } = this.props.auth;
 
     return (
-      <div>
-        <Form onSubmit={this.onSubmit}>
+      <div className='pt-2'>
+        <Form>
           <FormGroup>
-            {/* {isAuthenticated ? */}
             <nav align="right" className="mt-3">
-              <div style={addPostBorder} className="input-group col-12 col-sm-8 col-md-6 col-lg-5 pr-1 pb-3">
-                {/* <CardImg bottom className='forum-pet-image ml-1' src={user.petImage} /> */}
+              <div
+                // style={addPostBorder}
+                className="input-group col-12 col-sm-12 col-md-12 col-lg-12 pr-1 pb-3">
+                <CardImg bottom style={profileImgStyle} className='mt-1' src={'/uploads/users/no-image.png'} />
                 <Label for='body'></Label>
-                <Input
+                {/* <Input
                   style={addPostInput}
                   value={this.state.body}
                   type='text'
                   name='body'
                   id='body'
-                  // placeholder={'היי ' + user.name + ', כתוב תגובה...'}
+                  block
+                  placeholder={'Write a comment...'}
                   className='mb-2'
                   onChange={this.onChange}
-                />
-                <div style={commentButton}>
-                  <Button
-                    style={{ height: '38px' }}
-                    size='sm'
-                    className='badge-pill badge-secondary'
-                    color='dark'
+                /> */}
+                <div style={textBoxStyle}
+                  onFocus={(e) => { this.setState({ commentRow: 5, commentInputOpen: true }); }}
+                  onBlur={(e) => { this.setState({ commentRow: 1, commentInputOpen: false }); }}
+                >
+                  <textarea
+                    style={addPostInput}
+                    value={this.state.body}
+                    type='text'
+                    name='body'
+                    id='body'
                     block
-                  >	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;תגובה</Button>
+                    placeholder={'Write a comment...'}
+                    className='mb-2'
+                    onChange={this.onChange}
+
+                    rows={this.state.commentRow}
+                  />
+                  <Collapse isOpened={this.state.commentInputOpen}>
+                    <div style={this.commentButtonStyle()} className='mb-1'>
+                      <Button
+                        size='sm'
+                        className='mr-2'
+                        color='dark'
+                        outline
+                        onClick={(e) => { this.setState({ commentRow: 1, commentInputOpen: false }); }}
+                      >Cancel</Button>
+                      <Button
+                        size='sm'
+                        color='dark'
+                        outline
+                        onClick={isAuthenticated ? this.onSubmit : this.toggle}
+                      >Publish</Button>
+                    </div>
+                  </Collapse>
                 </div>
               </div>
             </nav>
-            {/* : <CardFooter className='lead mt-3' style={{ fontSize: '15px' }} align='right'>
-                <smalll> היי אורח, התחבר כדי להגיב לפוסט זה </smalll>
-              </CardFooter>
-              } */}
           </FormGroup>
         </Form>
+
+        <Modal
+          align="center"
+          isOpen={this.state.modal}
+          toggle={this.toggle}
+          className="login-modal"
+        >
+          {/* <ModalHeader cssModule={{ 'modal-title': 'w-100 text-center' }} toggle={this.toggle} >
+            <span class="lead">הודעת שגיאה</span>
+          </ModalHeader>
+
+          <ModalBody>
+                connect or comment as a guest
+          </ModalBody> */}
+          <ModalHeader className='mt-3' cssModule={{ 'modal-title': 'w-100 text-center' }} toggle={this.toggle}></ModalHeader>
+          <ModalBody>
+            <div>
+            <Button className='login-btn' > Connect</Button>
+            &nbsp;or comment as a <Button className='login-btn' >  Guest</Button>
+            </div>
+            <div style={{ maxWidth: '250px' }}>
+            Don't have an Account?&nbsp;<Button className='login-btn' >Sign Up</Button> 
+            </div>
+          </ModalBody>
+        </Modal>
       </div>
     );
   }
 }
+
+const textBoxStyle = {
+  display: 'inline-block',
+  position: 'relative',
+  width: "80%",
+
+};
+const addPostInput = {
+  display: 'block',
+  background: 'white',
+  // webkitBorderRadius: '20px',
+  // mozBorderRadius: '20px',
+  // borderRadius: '20px',
+  border: '3px solid gray',
+  width: "100%",
+  // zIndex: '1'
+};
+
 
 const addPostBorder = {
   background: "white",
@@ -90,13 +195,7 @@ const addPostBorder = {
   height: "100px",
   width: "900px",
   border: '1px solid rgb(230, 230, 230)',
-
-  // margin: "auto 0",
-  // padding: "0px 2.5px",
   paddingTop: "20px",
-  // borderRadius: "50%",
-  // cursor: "pointer",
-  // float: "right",
   webkitBoxShadow: '0 0 1px 0.1px #C7C7C7',
   boxSshadow: '0 0 1px 0.1px #C7C7C7',
   webkitBorderRadius: '15px',
@@ -104,20 +203,15 @@ const addPostBorder = {
   borderRadius: '15px',
 };
 
-const addPostInput = {
-  background: '#f7f7f7',
-  webkitBorderRadius: '20px',
-  mozBorderRadius: '20px',
-  borderRadius: '20px',
-  zIndex: '1'
-};
 
-const commentButton = {
-  position: 'relative',
-  left: '34px',
-  width: '80px',
-};
-
+const profileImgStyle = {
+  borderRadius: '50%',
+  width: '25px',
+  height: '25px',
+  marginRight: '5px',
+  backgroundColor: 'rgb(240, 240, 240)'
+  // marginTop: '9px',
+}
 
 const mapStateToProps = state => ({
   auth: state.auth,

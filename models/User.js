@@ -21,6 +21,11 @@ const UserSchema =  new Schema({
         type: String,
         required: true
     },  
+    profileImage: {
+        type: String,
+        required: true,
+        default: '/uploads/users/no-image.png'
+    },
     secret: {
         type: String,
         required: false

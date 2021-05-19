@@ -93,16 +93,16 @@ export const deleteUser = (id) => (dispatch, getState) => {
 };
 
 //Register User
-export const register = ({ name, pet, breed, email, cellphone, petImage, password }) => dispatch => {
+export const register = ({ name, email, profileImage, password }) => dispatch => {
   // Headers
   const config = {
     headers: {
       'Content-Type': 'application/json'
     }
   };
-
+  console.log(profileImage)
   // Request body
-  const body = JSON.stringify({ name, pet, breed, email, cellphone, petImage, password });
+  const body = JSON.stringify({ name, email, profileImage, password });
 
   axios
     .post('/api/users', body, config)
@@ -194,8 +194,6 @@ export const changePassByEmail = (id, data) => (dispatch, getState) => {
 //Edit User
 export const edit = (id, user) => (dispatch, getState) => {
 
-  // Request body
-  // const body = JSON.stringify({ name, pet, email, breed, cellphone, petImage, password});
   axios
     .post(`/api/users/edit/${id}`, user, tokenConfig(getState))
     .then(res => {

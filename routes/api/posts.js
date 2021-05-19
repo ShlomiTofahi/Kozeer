@@ -110,7 +110,11 @@ router.post('/views/:id', (req, res) => {
 router.post('/loved/:id', (req, res) => {
     Post.findById(req.params.id).then(post => {
         post.loved = post.loved + 1;
-        post.save().then((post) => res.json(post));
+        post.save().then((post) => {
+            Post.findOne(post).populate('mangas').populate('comments').then((post) =>
+                res.json(post)
+            );
+        })
     })
         .catch(err => res.status(404).json({ success: false }));
 });
@@ -123,7 +127,11 @@ router.post('/unloved/:id', (req, res) => {
         post.loved = post.loved - 1;
         if (post.loved < 0)
             post.loved = 0;
-        post.save().then(() => res.json(post));
+        post.save().then((post) => {
+            Post.findOne(post).populate('mangas').populate('comments').then((post) =>
+                res.json(post)
+            );
+        })
     })
         .catch(err => res.status(404).json({ success: false }));
 });

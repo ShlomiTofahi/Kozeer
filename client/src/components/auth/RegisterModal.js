@@ -4,9 +4,11 @@ import {
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 import { register } from '../../actions/authActions';
 import { clearErrors } from '../../actions/errorActions';
+import FileUpload from '../fileupload/FileUpload';
 
 class RegisterModal extends Component {
     state = {
@@ -16,6 +18,7 @@ class RegisterModal extends Component {
         name: '',
         email: '',
         password: '',
+        profileImage: '',
         msg: null,
     };
 
@@ -64,19 +67,38 @@ class RegisterModal extends Component {
     onSubmit = e => {
         e.preventDefault();
 
-        const { name, email, password } = this.state;
+        const { name, email, password, profileImage } = this.state;
         // Create user object
         const NewUser = {
             name,
             email,
-            password
+            password,
+            profileImage
         };
 
         // Attempt to register
         this.props.register(NewUser);
     }
 
+    setRegisterModalStates = (val) => {
+        if (val != '')
+            this.setState({ profileImage: val });
+    }
+
+    close = () => {
+        const noImageFullpath = this.state.path + 'no-image.png';
+        const filepath = this.state.profileImage
+        if (filepath !== '' && filepath != noImageFullpath) {
+            const formData = new FormData();
+            formData.append('filepath', filepath);
+            axios.post('/remove', formData);
+            this.setState({ profileImage: '' });
+        }
+    }
+
     render() {
+        const noImageFullpath = this.state.path + 'no-image.png';
+
         return (
             <Fragment>
                 {/* <Link className={'navlink header-tablinks py-2 px-5 nav-link d-md-inline-block'} onClick={this.toggle} to='#'>SIGN UP</Link> */}
@@ -118,6 +140,11 @@ class RegisterModal extends Component {
                                 onChange={this.onChange}
                                 bsSize="sm"
                                 style={inputStyle}
+                            />
+                            <FileUpload
+                                setRegisterModalStates={this.setRegisterModalStates}
+                                path={this.state.path}
+                                currImage={noImageFullpath}
                             />
                             <Button
                                 style={btnStyle}

@@ -62,7 +62,7 @@ const FileUpload = (props) => {
     }
     else {
       setFile(file);
-      setFilename(file.name.replace(/\s+/g, '_') + uuidv4());
+      setFilename(uuidv4() + file.name.replace(/\s+/g, '_'));
     }
   };
 
@@ -138,7 +138,7 @@ const FileUpload = (props) => {
       formData.append('abspath', props.path);
 
       axios.post('/remove', formData);
-      setMessage('התמונה נמחקה בהצלחה!')
+      setMessage('Image deleted successfully!')
       setImageSubmited(false)
 
       if (props.prevImage) {
@@ -170,7 +170,7 @@ const FileUpload = (props) => {
         setFilepath(noImageFullpath)
         setFilename('no-image.png');
 
-        setMessage('התמונה המקורית נמחקה בהצלחה!')
+        setMessage('The original image was successfully deleted!')
       }
       else {
         setFilepath('');
@@ -209,9 +209,9 @@ const FileUpload = (props) => {
           }
         }}
       />
-      
+
       {message ? <Message msg={message} /> : null}
-      
+
       <form>
         <div className='custom-file mb-4'>
           <input
@@ -233,7 +233,7 @@ const FileUpload = (props) => {
           size='sm'
           onClick={onSubmitFileUpload}
           style={{ marginTop: '2rem' }}
-        >העלאה
+        >Upload
         </Button>
       </form>
 
@@ -242,7 +242,7 @@ const FileUpload = (props) => {
           color='danger'
           size='sm'
           onClick={removeOrginalImage}
-        >מחק תמונה מקורית</Button>
+        >Delete original image</Button>
       </Fade>
       {uploadedFile ? (
         <div className='row mt-5' style={{ maxWidth: '506px' }}>
@@ -258,10 +258,18 @@ const FileUpload = (props) => {
           color='light'
           size='sm'
           onClick={removeImage}
-        >מחק תמונה</Button>
+        >Delete image</Button>
       </Fade>
     </Fragment>
   );
+};
+
+const inputStyle = {
+  backgroundColor: 'rgba(0, 0, 0, 0)',
+  border: 'none',
+  borderBottom: '1px solid #76735c',
+  borderRadius: '1px',
+  marginTop: '-9px'
 };
 
 export default FileUpload;

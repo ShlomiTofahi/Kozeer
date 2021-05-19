@@ -249,8 +249,9 @@ const User = require('../../models/User');
 // @desc    Register new user
 // @access  Public
 router.post('/', (req, res) => {
-
-    const { name, email, password } = req.body;
+    const { name, email, password, profileImage } = req.body;
+    console.log("_________________profileImage________________")
+    console.log(profileImage)
 
     //Simple validation
     if (!name || !email || !password) {
@@ -267,6 +268,9 @@ router.post('/', (req, res) => {
                 email,
                 password
             });
+
+            if (profileImage != '')
+            newUser.profileImage = profileImage;
 
             // Create salt & hash
             bcrypt.genSalt(10, (err, salt) => {
@@ -292,6 +296,7 @@ router.post('/', (req, res) => {
                                                     name: user.name,
                                                     admin: user.admin,
                                                     email: user.email,
+                                                    profileImage: user.profileImage
                                                 }
                                             });
                                         }
