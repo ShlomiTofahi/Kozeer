@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import {
-  Button, Form, FormGroup, Label, Input, CardImg, CardFooter, Container, Modal, ModalHeader, ModalBody
+  Button, Form, FormGroup, Label, Input, CardImg, CardFooter, Container, Modal, ModalHeader, ModalBody, Row
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Collapse } from 'react-collapse';
 
-import { addComment, replyComment } from '../../actions/commentActions';
+import { addComment, replyComment, addCommentAsGuest, replyCommentAsGuest } from '../../actions/commentActions';
+import LoginModal from '../auth/LoginModal';
 
 class AddComment extends Component {
   state = {
@@ -14,14 +15,19 @@ class AddComment extends Component {
     // asGuest: true,
     commentRow: 1,
     commentInputOpen: false,
-    modal: false
+    modal: false,
+    // publishfadeIn: true,
+    guestfadeIn: false,
+    loginfadeIn: false,
   };
 
   static propTypes = {
     auth: PropTypes.object.isRequired,
     msg: PropTypes.object.isRequired,
     addComment: PropTypes.func.isRequired,
-    replyComment: PropTypes.func.isRequired
+    replyComment: PropTypes.func.isRequired,
+    addCommentAsGuest: PropTypes.func.isRequired,
+    replyCommentAsGuest: PropTypes.func.isRequired,
   }
 
   onChange = e => {
@@ -29,18 +35,42 @@ class AddComment extends Component {
       [e.target.name]: e.target.value
     });
   }
+
   checkConnected = () => {
     const { isAuthenticated, user } = this.props.auth;
     if (isAuthenticated) {
       this.onSubmit();
     }
     else {
-      alert('not connected')
+      const user = {
+        email: 'none@none.com',
+        password: '123456'
+      }
+
+      const { body } = this.state;
+      const newComment = {
+        body
+      }
+      if (this.props.commentID)
+        this.props.replyCommentAsGuest(this.props.postID, this.props.commentID, body);
+      else
+        this.props.addCommentAsGuest(this.props.postID, newComment);
+      // if (this.props.commentID)
+      //   this.props.replyComment(this.props.postID, this.props.commentID, body);
+      // else
+      //   this.props.addComment(this.props.postID, newComment);
+
+      // this.done();
+
+      this.setState({
+        body: ''
+      });
+
     }
+    this.toggle();
   }
   onSubmit = e => {
     e.preventDefault();
-    alert("great")
     const { body } = this.state;
     const newComment = {
       body
@@ -78,6 +108,14 @@ class AddComment extends Component {
       right: '10px'
     };
   };
+
+  close = () => {
+    this.setState((state) => ({
+      // publishfadeIn: true,
+      guestfadeIn: false,
+      logInfadeIn: false
+    }))
+  }
   render() {
     const { isAuthenticated, user } = this.props.auth;
 
@@ -132,7 +170,7 @@ class AddComment extends Component {
                         size='sm'
                         color='dark'
                         outline
-                        onClick={isAuthenticated ? this.onSubmit : this.toggle}
+                        onClick={isAuthenticated || (user && user.email === 'none@none.com') ? this.onSubmit : this.toggle}
                       >Publish</Button>
                     </div>
                   </Collapse>
@@ -143,28 +181,28 @@ class AddComment extends Component {
         </Form>
 
         <Modal
-          align="center"
+          align='center'
           isOpen={this.state.modal}
           toggle={this.toggle}
+          onClosed={this.close}
           className="login-modal"
         >
-          {/* <ModalHeader cssModule={{ 'modal-title': 'w-100 text-center' }} toggle={this.toggle} >
-            <span class="lead">הודעת שגיאה</span>
-          </ModalHeader>
+          {/* <Collapse isOpened={this.state.publishfadeIn}> */}
+            <ModalHeader className='mt-3' cssModule={{ 'modal-title': 'w-100 text-center' }} toggle={this.toggle}></ModalHeader>
+            <ModalBody>
+              <Container>
+                <Row>
+                  <LoginModal linkcolor='green' />
+            &nbsp;or publish as a&nbsp;<Button onClick={this.checkConnected} className='login-btn' >Guest</Button>
+                </Row>
+              </Container>
+            </ModalBody>
+          {/* </Collapse> */}
 
-          <ModalBody>
-                connect or comment as a guest
-          </ModalBody> */}
-          <ModalHeader className='mt-3' cssModule={{ 'modal-title': 'w-100 text-center' }} toggle={this.toggle}></ModalHeader>
-          <ModalBody>
-            <div>
-            <Button className='login-btn' > Connect</Button>
-            &nbsp;or comment as a <Button className='login-btn' >  Guest</Button>
-            </div>
-            <div style={{ maxWidth: '250px' }}>
-            Don't have an Account?&nbsp;<Button className='login-btn' >Sign Up</Button> 
-            </div>
-          </ModalBody>
+          {/* <Collapse isOpened={this.state.loginfadeIn}>
+            <div style={{ maxWidth: '250px' }}> */}
+          {/* </div>
+          </Collapse>*/}
         </Modal>
       </div>
     );
@@ -221,5 +259,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { addComment, replyComment }
+  { addComment, replyComment, addCommentAsGuest, replyCommentAsGuest }
 )(AddComment);

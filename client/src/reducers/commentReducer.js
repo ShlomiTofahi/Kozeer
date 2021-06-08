@@ -1,4 +1,4 @@
-import { GET_POST_COMMENTS, COMMENTS_LOADING, ADD_COMMENT, DELETE_COMMENT } from '../actions/types';
+import { GET_POST_COMMENTS, COMMENTS_LOADING, ADD_COMMENT, DELETE_COMMENT, REPLY_COMMENT, REPLY_COMMENT_FAIL } from '../actions/types';
 
 const initialState = {
     comments: [],
@@ -17,6 +17,14 @@ export default function commentReducer(state = initialState, action) {
             return {
                 ...state,
                 comments: [action.payload, ...state.comments]
+            };
+        case REPLY_COMMENT:
+            let newComment = [...state.comments];
+            var index = newComment.findIndex(element => element._id === action.payload.command_id);
+            newComment[index].comments= [action.payload.data, ...newComment[index].comments];
+            return {
+                ...state,
+                posts: newComment
             };
         case DELETE_COMMENT:
             return {

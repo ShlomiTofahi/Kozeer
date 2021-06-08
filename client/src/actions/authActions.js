@@ -100,7 +100,7 @@ export const register = ({ name, email, profileImage, password }) => dispatch =>
       'Content-Type': 'application/json'
     }
   };
-  console.log(profileImage)
+
   // Request body
   const body = JSON.stringify({ name, email, profileImage, password });
 

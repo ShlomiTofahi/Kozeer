@@ -34,9 +34,6 @@ export default function postReducer(state = initialState, action) {
                 ...state,
                 posts: newPost
             };
-            // return {
-            //     ...state
-            // };
         case POSTS_LOADING:
             return {
                 ...state,

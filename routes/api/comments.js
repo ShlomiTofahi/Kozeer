@@ -19,21 +19,77 @@ router.get('/', (req, res) => {
         .then(comments => res.json(comments))
 });
 
+// router.get('sort/:', (req, res) => {
+//     Comment.find()
+//         .sort({ comment_date: -1 })
+//         .then(comments => res.json(comments))
+// });
+
 // @route   GET api/comments
 // @desc    Get All Commends of Post by Given Post Id 
 // @access  Public
 router.get('/:id', (req, res) => {
+    let order = -1
+
+    if (req.params.data)
+         order = JSON.parse(req.params.data);
+        
     Comment.find({ post: req.params.id }).populate('post').populate('user').populate('comment').populate({ path: 'comment', populate: {path: 'user'  }}).populate({ path: 'comments', populate: {path: 'user'  }})
-        .sort({ comment_date: -1 })
+        .sort({ comment_date: order })
         .then(comments => {
             res.json(comments)
         })
 });
 
-// @route   POST api/comments
+// @route   POST api/comments/reply/asguest
+// @desc    Create A Commend For A Commend In A Post by Given Post Id As A Guest
+// @access  Public
+router.post('/reply/asguest/:data', (req, res) => {
+    const { post_id, command_id, body } = JSON.parse(req.params.data);
+
+    //Simple validation
+    if (!body) {
+        return res.status(400).json({ msg: 'Please enter all fields' });
+    }
+
+    Comment.findById(command_id).then(comment => {
+        User.findOne({email:'none@none.com'}).select('-password').then(user => {
+            Post.findById(post_id).then(post => {
+                const newComment = new Comment({
+                    user,
+                    post,
+                    body,
+                    comment
+                });
+
+                newComment.save().then(comment2 => {
+                    Comment.findOne(comment2).populate('post').populate('user').populate('comment').populate('comments').then(comment3 => {
+                        Comment.find({ post: req.params.id }).populate('post').populate('user').then(post_comments => {
+                            Comment.find({ user }).populate('post').populate('user').then(user_comments => {
+
+                                comment.comments = [...comment.comments, comment3]
+                                post.comments = post_comments;
+                                user.comments = user_comments;
+                                post.save().then(() => {
+                                    user.save().then(() => {
+                                        comment.save().then(() => {
+                                            res.json(comment3);
+                                        });
+                                    });
+                                })
+                            })
+                        })
+                    });
+                });
+            })
+        })
+    })
+});
+
+// @route   POST api/comments/reply
 // @desc    Create A Commend For A Commend In A Post by Given Post Id
 // @access  Private
-router.post('/cm/:data', auth, (req, res) => {
+router.post('/reply/:data', auth, (req, res) => {
     const { post_id, command_id, body } = JSON.parse(req.params.data);
 
     //Simple validation
@@ -71,6 +127,46 @@ router.post('/cm/:data', auth, (req, res) => {
                     });
                 });
             })
+        })
+    })
+});
+
+// @route   POST api/comments/asguest
+// @desc    Create A Commend For Post by Given Post Id As A Guest
+// @access  Public
+router.post('/asguest/:id', (req, res) => {
+    const { body } = req.body;
+    //Simple validation
+    if (!body) {
+        return res.status(400).json({ msg: 'Please enter all fields' });
+    }
+
+    User.findOne({email:'none@none.com'}).select('-password').then(user => {
+        Post.findById(req.params.id).then(post => {
+            const newComment = new Comment({
+                user,
+                post,
+                body
+            });
+
+            newComment.save().then(comment => {
+                Comment.findOne(comment).populate('post').populate('user').populate('comment').populate('comments').then(comment => {
+                    Comment.find({ post: req.params.id }).populate('post').populate('user').then(post_comments => {
+                        Comment.find({ user }).populate('post').populate('user').then(user_comments => {
+
+                            post.comments = post_comments;
+                            console.log('post');
+                            console.log(post);
+                            user.comments = user_comments;
+                            post.save().then(() => {
+                                user.save().then(() => {
+                                    res.json(comment);
+                                });
+                            })
+                        })
+                    })
+                });
+            });
         })
     })
 });

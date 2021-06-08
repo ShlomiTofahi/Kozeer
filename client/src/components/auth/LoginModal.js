@@ -123,8 +123,12 @@ class LoginModal extends Component {
     render() {
         return (
             <div>
-                {/* <Link className='navlink' style={{float:'right'}} onClick={ this.toggle } href='#'>התחבר</Link>   */}
-                <Link className={'navlink header-tablinks py-2 px-5 nav-link d-md-inline-block'} onClick={this.toggle} to='#'>SIGN UP</Link>
+                {
+                    this.props.linkcolor === 'green' ?
+                        <Link className='login-btn' onClick={this.toggle} href='#'>Connect</Link>
+                        : <Link className={'navlink header-tablinks py-2 px-5 nav-link d-md-inline-block'} onClick={this.toggle} to='#'>SIGN UP</Link>
+                }
+
 
                 <Modal align="center" isOpen={this.state.modal} toggle={this.toggle} onClosed={this.close} className="login-modal">
                     <Collapse isOpen={this.state.signUpfadeIn}>
