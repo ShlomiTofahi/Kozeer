@@ -115,8 +115,6 @@ export const lovedPost = (_id) => (dispatch) => {
 
 export const unlovedPost = (_id) => (dispatch) => {
     // Request body
-    console.log('good here');
-
     const body = JSON.stringify({});
     axios
         .post(`/api/posts/unloved/${_id}`, body)

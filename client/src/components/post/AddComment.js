@@ -192,7 +192,7 @@ class AddComment extends Component {
             <ModalBody>
               <Container>
                 <Row>
-                  <LoginModal linkcolor='green' />
+                  <LoginModal linkcolor='green' toggle={ this.toggle } />
             &nbsp;or publish as a&nbsp;<Button onClick={this.checkConnected} className='login-btn' >Guest</Button>
                 </Row>
               </Container>

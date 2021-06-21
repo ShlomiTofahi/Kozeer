@@ -62,6 +62,11 @@ class Post extends Component {
     this.props.getPostComments(this.props.match.params.id)
   }
 
+  order = (order) => {
+    if(order ===-1 || order ===1)
+      this.props.getPostComments(this.props.match.params.id, order)
+  }
+
   onDeletePostClick = (id, postImage) => {
     this.props.deletePost(id);
 
@@ -145,7 +150,6 @@ class Post extends Component {
       <Fragment>
         <div style={postFrameStyle} className='pb-4'>
           <div style={postHeaderStyle} className='pb-4'>
-
             <div className='row  justify-content-between'>
               <div
               // className='bg-dark col-4 col-sm-4 col-md-3 col-lg-3'
@@ -321,6 +325,7 @@ class Post extends Component {
                   <Col>
                     <hr />
                     <Row>
+                      
                       <div className="input-group">
                         <p>
                           <small style={postFooterStyle} className="text-muted pl-3 mb-2">
@@ -357,7 +362,7 @@ class Post extends Component {
             </div>
 
             <div className='mb-4 mt-5 mx-2' style={postBodyStyle}>
-              <ShowComments postID={this.props.match.params.id} />
+              <ShowComments postID={this.props.match.params.id} order={this.order} />
             </div>
 
           </Container>
@@ -372,7 +377,7 @@ class Post extends Component {
 const postFrameStyle = {
   margin: '0 auto',
   backgroundColor: '#221415dc',
-  color: 'white',
+  // color: 'white',
   width: '65%',
 };
 const postBodyStyle = {

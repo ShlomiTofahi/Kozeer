@@ -117,6 +117,13 @@
   text-decoration: none;
   color: #cecece;
 }
+
+/* .login-btn:focus {
+  all: unset;
+} */
+
+
+
 .login-btn-sign-in-up{
   border-color: #363535;
   margin-top:20px;
@@ -216,6 +223,24 @@ input:checked + .slider:before {
 /*---swtich button---*/
 
 /*--------------end Post-----------------*/
+
+/*--------------start Comment-----------------*/
+.reply-btn {
+  background: none!important;
+  border: none;
+  padding: 0!important;
+  /*optional*/
+  /* font-family: arial, sans-serif; */
+  font-size:small;
+  /*input has OS specific font-family*/
+  color: #666666;
+  cursor: pointer;
+}
+.reply-btn:hover {
+  text-decoration: none;
+  color: #a0a0a0;
+}
+/*--------------end Comment-----------------*/
 
 /*--------------start Manga-----------------*/
 .manga-slider-imgs{

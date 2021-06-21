@@ -15,27 +15,28 @@ const User = require('../../models/User');
 // @access  Public
 router.get('/', (req, res) => {
     Comment.find()
-        .sort({ comment_date: -1 })
+        .sort({ published_date: -1 })
         .then(comments => res.json(comments))
 });
 
 // router.get('sort/:', (req, res) => {
 //     Comment.find()
-//         .sort({ comment_date: -1 })
+//         .sort({ published_date: -1 })
 //         .then(comments => res.json(comments))
 // });
 
 // @route   GET api/comments
 // @desc    Get All Commends of Post by Given Post Id 
 // @access  Public
-router.get('/:id', (req, res) => {
-    let order = -1
+router.get('/:data', (req, res) => {
+    const { post_id, order } = JSON.parse(req.params.data);
+    // let order = -1
 
-    if (req.params.data)
-         order = JSON.parse(req.params.data);
-        
-    Comment.find({ post: req.params.id }).populate('post').populate('user').populate('comment').populate({ path: 'comment', populate: {path: 'user'  }}).populate({ path: 'comments', populate: {path: 'user'  }})
-        .sort({ comment_date: order })
+    // if (req.params.data)
+    //      order = JSON.parse(req.params.data);
+    console.log(order)
+    Comment.find({ post: post_id }).populate('post').populate('user').populate('comment').populate({ path: 'comment', populate: { path: 'user' } }).populate({ path: 'comments', populate: { path: 'user' } })
+        .sort({ published_date: order })
         .then(comments => {
             res.json(comments)
         })
@@ -53,7 +54,7 @@ router.post('/reply/asguest/:data', (req, res) => {
     }
 
     Comment.findById(command_id).then(comment => {
-        User.findOne({email:'none@none.com'}).select('-password').then(user => {
+        User.findOne({ email: 'none@none.com' }).select('-password').then(user => {
             Post.findById(post_id).then(post => {
                 const newComment = new Comment({
                     user,
@@ -141,7 +142,7 @@ router.post('/asguest/:id', (req, res) => {
         return res.status(400).json({ msg: 'Please enter all fields' });
     }
 
-    User.findOne({email:'none@none.com'}).select('-password').then(user => {
+    User.findOne({ email: 'none@none.com' }).select('-password').then(user => {
         Post.findById(req.params.id).then(post => {
             const newComment = new Comment({
                 user,
@@ -169,6 +170,41 @@ router.post('/asguest/:id', (req, res) => {
             });
         })
     })
+});
+
+// @route   POST api/comments/loved
+// @desc    Loved A Comment
+// @access  Publice
+router.post('/loved/:id', (req, res) => {
+    Comment.findById(req.params.id)
+        .then(comment => {
+            comment.loved = comment.loved + 1;
+            comment.save()
+                .then((comment) => {
+                    Comment.findOne(comment).populate('post').populate('user').populate('comment').populate({ path: 'comment', populate: { path: 'user' } }).populate({ path: 'comments', populate: { path: 'user' } })
+                        .then((comment) =>
+                            res.json(comment)
+                        );
+                })
+        })
+        .catch(err => res.status(404).json({ success: false }));
+});
+
+// @route   POST api/comments/unloved
+// @desc    unLoved A Comment
+// @access  Publice
+router.post('/unloved/:id', (req, res) => {
+    Comment.findById(req.params.id).then(comment => {
+        comment.loved = comment.loved - 1;
+        if (comment.loved < 0)
+            comment.loved = 0;
+        comment.save().then((comment) => {
+            Comment.findOne(comment).populate('post').populate('user').populate('comment').populate({ path: 'comment', populate: { path: 'user' } }).populate({ path: 'comments', populate: { path: 'user' } }).then((comment) =>
+                res.json(comment)
+            );
+        })
+    })
+        .catch(err => res.status(404).json({ success: false }));
 });
 
 // @route   POST api/comments

@@ -1,13 +1,15 @@
 import axios from 'axios';
-import { GET_POST_COMMENTS, COMMENTS_LOADING, ADD_COMMENT, ADD_COMMENT_FAIL, DELETE_COMMENT, REPLY_COMMENT, REPLY_COMMENT_FAIL } from './types';
+import { GET_POST_COMMENTS, COMMENTS_LOADING, ADD_COMMENT, ADD_COMMENT_FAIL, DELETE_COMMENT, REPLY_COMMENT,
+     REPLY_COMMENT_FAIL, LOVED_COMMENT, UNLOVED_COMMENT } from './types';
 import { tokenConfig } from './authActions';
 import { returnErrors } from './errorActions';
 import { returnMsgs } from './msgActions';
 
-export const getPostComments = (id) => dispatch => {
+export const getPostComments = (post_id, order=-1) => dispatch => {
     dispatch(setCommentsLoading());
+    const body = JSON.stringify({ post_id, order });
     axios
-        .get(`/api/comments/${id}`)
+        .get(`/api/comments/${body}`)
         .then(res =>
             dispatch({
                 type: GET_POST_COMMENTS,
@@ -65,8 +67,6 @@ export const addCommentAsGuest = (id, comment) => (dispatch) => {
 
 export const replyComment = (post_id, command_id, body) => (dispatch, getState) => {
     const body1 = JSON.stringify({ post_id, command_id, body });
-    console.log('command_id')
-    console.log(command_id)
     axios
         .post(`/api/comments/reply/${body1}`,null ,tokenConfig(getState))
         .then(res =>
@@ -85,9 +85,6 @@ export const replyComment = (post_id, command_id, body) => (dispatch, getState) 
 };
 export const replyCommentAsGuest = (post_id, command_id, body) => (dispatch) => {
     const body1 = JSON.stringify({ post_id, command_id, body });
-    console.log('second')
-    console.log('command_id')
-    console.log(command_id)
     axios
         .post(`/api/comments/reply/asguest/${body1}`,null)
         .then(res =>
@@ -118,6 +115,36 @@ export const deleteComment = (post_id, command_id) => (dispatch, getState) => {
         );
 };
 
+
+export const lovedComment = (_id) => (dispatch) => {
+    // Request body
+    const body = JSON.stringify({});
+    axios
+        .post(`/api/comments/loved/${_id}`, body)
+        .then(res =>
+            dispatch({
+                type: LOVED_COMMENT,
+                payload: res.data
+            }))
+        .catch(err =>
+            dispatch(returnErrors(err.response.data, err.response.status))
+        );
+};
+
+export const unlovedComment = (_id) => (dispatch) => {
+    // Request body
+    const body = JSON.stringify({});
+    axios
+        .post(`/api/comments/unloved/${_id}`, body)
+        .then(res =>
+            dispatch({
+                type: UNLOVED_COMMENT,
+                payload: res.data
+            }))
+        .catch(err =>
+            dispatch(returnErrors(err.response.data, err.response.status))
+        );
+};
 
 export const setCommentsLoading = () => {
     return {

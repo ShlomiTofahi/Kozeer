@@ -25,7 +25,7 @@ const CommentSchema = new Schema({
         default: 0
     },
     body: String,
-    comment_date: {
+    published_date: {
         type: Date,
         default: Date.now
     }

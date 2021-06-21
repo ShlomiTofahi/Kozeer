@@ -54,6 +54,10 @@ class LoginModal extends Component {
         this.setState({
             modal: !this.state.modal
         });
+    
+        if(this.state.modal===true && this.props.linkcolor && this.props.toggle){
+            this.props.toggle()
+        }
     }
 
     onChange = e => {
