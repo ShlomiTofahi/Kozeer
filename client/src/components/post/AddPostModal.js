@@ -260,7 +260,7 @@ class AddPostModal extends Component {
                   color='dark'
                   style={{ marginTop: '2rem' }}
                   block
-                >צור פוסט</Button>
+                >Create</Button>
               </FormGroup>
             </Form>
           </ModalBody>

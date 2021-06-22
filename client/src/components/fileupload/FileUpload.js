@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { Prompt } from 'react-router'
-import { Button, Fade } from 'reactstrap';
+import { Button, Collapse } from 'reactstrap';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -237,39 +237,30 @@ const FileUpload = (props) => {
         </Button>
       </form>
 
-      <Fade in={removeOrginalImagefadeIn} tag="h5" className="mt-3">
+      <Collapse isOpen={removeOrginalImagefadeIn} tag="h5" className="mt-3">
         <Button
           color='danger'
           size='sm'
           onClick={removeOrginalImage}
         >Delete original image</Button>
-      </Fade>
+      </Collapse>
       {uploadedFile ? (
-        <div className='row mt-5' style={{ maxWidth: '506px' }}>
+        <div className='row mt-4' style={{ maxWidth: '506px' }}>
           <div className='col-md-6 m-auto'>
-            <small className='text-center'>{uploadedFile.fileName}</small>
             <img style={{ width: '100%' }} src={uploadedFile.filePath} alt='' />
           </div>
         </div>
       ) : null}
 
-      <Fade in={removeImagefadeIn} tag="h5" className="mt-3">
+      <Collapse isOpen={removeImagefadeIn} tag="h5" className="mt-3">
         <Button
           color='light'
           size='sm'
           onClick={removeImage}
         >Delete image</Button>
-      </Fade>
+      </Collapse>
     </Fragment>
   );
-};
-
-const inputStyle = {
-  backgroundColor: 'rgba(0, 0, 0, 0)',
-  border: 'none',
-  borderBottom: '1px solid #76735c',
-  borderRadius: '1px',
-  marginTop: '-9px'
 };
 
 export default FileUpload;

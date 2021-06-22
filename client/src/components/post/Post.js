@@ -269,6 +269,7 @@ class Post extends Component {
                       <TwitterShareButton
                         className='ml-5'
                         title={title}
+                        url={`${url}`}
                       >
                         <TwitterIcon
                           size={size}
@@ -279,6 +280,7 @@ class Post extends Component {
 
                       <WhatsappShareButton
                         className='ml-5'
+                        url={`${url}`}
                         title={title}
                         separator=":: "
                       >
@@ -291,7 +293,7 @@ class Post extends Component {
 
                       <LinkedinShareButton
                         className='ml-5'
-                        url={String(window.location)}
+                        url={`${url}`}
                         title={title}
                         windowWidth={750}
                         windowHeight={600}
@@ -305,7 +307,7 @@ class Post extends Component {
 
                       <PinterestShareButton
                         className='ml-5'
-                        url={String(window.location)}
+                        url={`${url}`}
                         media={`${shareImage}`}
                         windowWidth={1000}
                         windowHeight={730}

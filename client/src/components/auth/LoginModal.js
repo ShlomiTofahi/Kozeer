@@ -197,7 +197,7 @@ class LoginModal extends Component {
                                         />
                                         <Button className='login-btn' size="sm" onClick={this.signToggle.bind(this, 'restPass')}>Forgot password?</Button>
                                         <Button
-                                            style={btnStyle}
+                                            className='green-style-btn mt-4'
                                             size="sm"
                                             color='dark'
                                             block
@@ -219,12 +219,6 @@ const inputStyle = {
     borderBottom: '1px solid #76735c',
     borderRadius: '1px',
     marginTop: '-9px'
-};
-
-const btnStyle = {
-    backgroundColor: '#5e8f86',
-    borderRadius: '1px',
-    marginTop: '2rem'
 };
 
 const mapStateToProps = state => ({

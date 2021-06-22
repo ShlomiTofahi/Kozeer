@@ -297,7 +297,6 @@ class RestPassword extends Component {
                         </Row >
                     </Container>
                 </ModalBody>
-
             </Fragment >
         );
     }

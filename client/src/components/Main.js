@@ -12,11 +12,12 @@ import ScrollToTop from './ScrollToTop';
 // import Home from './home/Home';
 import About from './About';
 import Manga from './Manga';
-import posts from './post/AllPosts';
+import Posts from './post/AllPosts';
 import OnlyPosts from './post/OnlyPosts';
 import Post from './post/Post';
 import ShowMangas from './manga/ShowMangas';
-
+import ShowProfile from './profile/ShowProfile';
+import EditProfile from './profile/EditProfile';
 
 // import Contact from './Contact';
 // import Haircut from './Haircut';
@@ -34,7 +35,7 @@ class Main extends Component {
     }
 
     render() {
-        // const { isAuthenticated, user } = this.props.auth;
+        const { isAuthenticated } = this.props.auth;
         // const is_admin = (isAuthenticated && user.admin);
 
         return (
@@ -62,7 +63,9 @@ class Main extends Component {
                     {/* <Route exact path='/profile' component={isAuthenticated ? ShowProfile : Home} />
                     <Route exact path='/profile/edit' component={isAuthenticated ? EditProfile : Home} /> */}
 
-                    <Route exact path='/' component={posts} />
+                    <Route exact path='/' component={Posts} />
+                    <Route exact path='/profile' component={isAuthenticated ? ShowProfile : Posts} />
+                    <Route exact path='/profile/edit' component={isAuthenticated ? EditProfile : Posts} />
                     <Route exact path='/my-vision' component={About} />
                     <Route exact path='/manga' component={Manga} />
                     <Route exact path='/post' component={OnlyPosts} />

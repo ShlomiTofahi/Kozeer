@@ -122,7 +122,7 @@ class ChangePassword extends Component {
                         size='sm'
                         onClick={this.CollapseHangdle}
                         style={{ marginBottom: '1rem' }}
-                    >שינוי סיסמא<strong class='pl-3' style={{ position: 'absolute', left: '0' }}>{dropDownSymbol}</strong></Button>
+                    >Change password<strong class='pl-3' style={{ position: 'absolute', left: '0' }}>{dropDownSymbol}</strong></Button>
                     <Collapse isOpened={this.state.Collapsetoggle}>
                         <Card style={this.bodyStyle()} align="right">
                             {/* <CardTitle className={'mr-5 mb-2 lead'} tag="h5" style={{ display: 'inline' }}>עריכת סיסמא</CardTitle> */}
@@ -133,7 +133,7 @@ class ChangePassword extends Component {
                                 <Form onSubmit={this.onSubmit}>
                                     <FormGroup>
                                         <Row>
-                                            <Label className='pl-2' for='currentPassword'>סיסמא נוכחית:</Label>
+                                            <Label className='pl-2' for='currentPassword'>Current pass:</Label>
                                             <Input
                                                 size='sm'
                                                 type='password'
@@ -145,7 +145,7 @@ class ChangePassword extends Component {
                                             />
                                         </Row>
                                         <Row>
-                                            <Label className='pl-2' for='password'>סיסמא חדשה:&nbsp;</Label>
+                                            <Label className='pl-2' for='password'>New pass:&nbsp;</Label>
                                             <Input
                                                 size='sm'
                                                 type='password'
@@ -157,7 +157,7 @@ class ChangePassword extends Component {
                                             />
                                         </Row>
                                         <Row>
-                                            <Label className='pl-2' for='validationPassword'>אימות סיסמא:&nbsp;</Label>
+                                            <Label className='pl-2' for='validationPassword'>Confirm Pass:&nbsp;</Label>
                                             <Input
                                                 size='sm'
                                                 type='password'
@@ -174,7 +174,7 @@ class ChangePassword extends Component {
                                             color='light'
                                             style={{ marginTop: '2rem' }}
                                             block
-                                        >שמור את השינויים</Button>
+                                        >Save the changes</Button>
                                     </FormGroup>
                                 </Form>
                             </CardBody>

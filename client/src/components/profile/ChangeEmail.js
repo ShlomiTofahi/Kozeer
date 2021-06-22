@@ -120,15 +120,15 @@ class ChangeEmail extends Component {
                         size='sm'
                         onClick={this.CollapseHangdle}
                         style={{ marginBottom: '1rem' }}
-                    >שינוי אימייל<strong class='pl-3' style={{ position: 'absolute', left: '0' }}>{dropDownSymbol}</strong></Button>
+                    >Change email<strong class='pl-3' style={{ position: 'absolute', left: '0' }}>{dropDownSymbol}</strong></Button>
                     <Collapse isOpened={this.state.Collapsetoggle}>
-                        <Card style={this.bodyStyle()} align="right">
+                        <Card style={this.bodyStyle()}>
                             <CardBody className='pr-4 mr-5'>
                                 {this.state.msg ? <Alert color="danger">{this.state.msg}</Alert> : null}
                                 <Form onSubmit={this.onSubmit}>
                                     <FormGroup>
                                         <Row>
-                                            <Label className='pl-2' for='password'>סיסמא:</Label>
+                                            <Label className='pl-2' for='password'>Password:</Label>
                                             <Input
                                                 size='sm'
                                                 type='password'
@@ -140,7 +140,7 @@ class ChangeEmail extends Component {
                                             />
                                         </Row>
                                         <Row>
-                                            <Label className='pl-2' for='email'>אמייל:&nbsp;</Label>
+                                            <Label className='pl-2' for='email'>Email:&nbsp;</Label>
                                             <Input
                                                 size='sm'
                                                 type='email'
@@ -156,7 +156,7 @@ class ChangeEmail extends Component {
                                             color='light'
                                             style={{ marginTop: '2rem' }}
                                             block
-                                        >שמור את השינויים</Button>
+                                        >Save the changes</Button>
                                     </FormGroup>
                                 </Form>
                             </CardBody>

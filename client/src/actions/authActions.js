@@ -128,7 +128,7 @@ export const changePassword = (id, data) => (dispatch, getState) => {
     .post(`/api/users/change-pass/${id}`, data, tokenConfig(getState))
     .then(res => {
       dispatch(
-        returnMsgs('הסיסמא שונתה בהצלחה', null, 'CHANGE_PASSWORD_SUCCESS')
+        returnMsgs('Password changed successfully', null, 'CHANGE_PASSWORD_SUCCESS')
       );
       dispatch({
         type: CHANGE_PASSWORD,
@@ -151,7 +151,7 @@ export const changeEmail = (id, data) => (dispatch, getState) => {
     .post(`/api/users/change-email/${id}`, data, tokenConfig(getState))
     .then(res => {
       dispatch(
-        returnMsgs('האימייל שונה בהצלחה', null, 'CHANGE_EMAIL_SUCCESS')
+        returnMsgs('Email changed successfully', null, 'CHANGE_EMAIL_SUCCESS')
       );
       dispatch({
         type: CHANGE_EMAIL,
@@ -174,7 +174,7 @@ export const changePassByEmail = (id, data) => (dispatch, getState) => {
     .post(`/api/users/change-pass-by-email/${id}`, data, tokenConfig(getState))
     .then(res => {
       dispatch(
-        returnMsgs('הסיסמא שונתה בהצלחה', null, 'CHANGE_PASSWORD_SUCCESS')
+        returnMsgs('Password changed successfully', null, 'CHANGE_PASSWORD_SUCCESS')
       );
       dispatch({
         type: CHANGE_PASSWORD,
@@ -198,7 +198,7 @@ export const edit = (id, user) => (dispatch, getState) => {
     .post(`/api/users/edit/${id}`, user, tokenConfig(getState))
     .then(res => {
       dispatch(
-        returnMsgs('המשתמש נערך בהצלחה', null, 'EDIT_USER_SUCCESS')
+        returnMsgs('User edited successfully', null, 'EDIT_USER_SUCCESS')
       );
       dispatch({
         type: EDIT_USER_SUCCESS,

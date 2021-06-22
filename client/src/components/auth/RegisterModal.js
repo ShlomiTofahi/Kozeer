@@ -147,7 +147,7 @@ class RegisterModal extends Component {
                                 currImage={noImageFullpath}
                             />
                             <Button
-                                style={btnStyle}
+                                className='green-style-btn mt-4'
                                 size="sm"
                                 color='dark'
                                 block
@@ -168,11 +168,7 @@ const inputStyle = {
     borderRadius: '1px',
     marginTop: '-9px'
 };
-const btnStyle = {
-    backgroundColor: '#5e8f86',
-    borderRadius: '1px',
-    marginTop: '2rem'
-};
+
 const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated,
     error: state.error,

@@ -14,7 +14,7 @@ class EditProfile extends Component {
         return (
             <Fragment >
                 <Container className='mb-5'>
-                    <Row >
+                    <Row style={FrameStyle}>
                         <ChangeUserInfo />
                         <div>
                             <Col>
@@ -33,5 +33,12 @@ class EditProfile extends Component {
         );
     }
 }
+
+const FrameStyle = {
+    textAlign:'center',
+    // margin: '0 auto',
+    backgroundColor: '#221415dc',
+    // width: '65%',
+};
 
 export default EditProfile;

@@ -13,6 +13,7 @@ import { Collapse } from 'react-collapse';
 import { deleteComment, lovedComment, unlovedComment } from '../../actions/commentActions';
 
 import AddComment from './AddComment';
+import { ShareModal } from './ShareModal';
 
 class ShowComments extends Component {
   state = {
@@ -155,13 +156,20 @@ class ShowComments extends Component {
 
             <AddComment postID={this.props.postID} />
 
-            <Card className="mt-4">
+            <Card className="mt-4" style={{ border: 'none' }}>
               {/* <CardTitle tag="h5" className='pr-4 pb-3'>תגובות הגולשים</CardTitle> */}
 
 
               {comments && comments.map(({ _id, body, user: user1, comment, comments, published_date, loved }) => (
-                <Card key={_id} className="mb-5 mr-4">
+                <Card key={_id} className="mb-5 mr-4" style={{ borderRight: 'none', borderTop: 'none' }}>
                   <CardBody>
+                    <ShareModal />
+                    {/* <button className='share-btn' style={shareStyle}>
+                      <svg xmlns="http://www.w3.org/2000/svg" role="img" width="22" height="22" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" d="M12.444 13.5c-.82-.03-1.464-.716-1.444-1.537.02-.82.697-1.473 1.518-1.463.821.01 1.482.679 1.482 1.5-.016.844-.712 1.515-1.556 1.5zm0-6.5c-.82-.03-1.464-.716-1.444-1.537.02-.82.697-1.473 1.518-1.463C13.34 4.01 14 4.68 14 5.5c-.016.844-.712 1.515-1.556 1.5zm.112 10c.82.03 1.464.716 1.444 1.537-.02.82-.697 1.473-1.519 1.463-.82-.01-1.48-.679-1.481-1.5.017-.843.713-1.514 1.556-1.5z">
+                        </path>
+                      </svg>
+                    </button> */}
                     {/* {
                       comment ? null : <Fragment> */}
                     <Row>
@@ -184,12 +192,12 @@ class ShowComments extends Component {
                     <CardText className='mb-2 text-muted pb-3 pr-4 ml-3'> {body}</CardText>
                     {
                       loved ?
-                      <span style={postLovedStyle}>
-                        <CardImg bottom style={likeprofileImgStyle} className='forum-pet-image ml-1 mb-2' src='/images/posts/like-image.png' />
-                        <span style={{fontSize:'14px'}} >{loved}</span>
-                        &nbsp;<span style={{fontSize:'14px'}} className='mr-1'>Like</span>
-                      </span>
-                      : null
+                        <span style={postLovedStyle}>
+                          <CardImg bottom style={likeprofileImgStyle} className='ml-1 mb-2' src='/images/posts/like-image.png' />
+                          <span style={{ fontSize: '14px' }} >{loved}</span>
+                        &nbsp;<span style={{ fontSize: '14px' }} className='mr-1'>Like</span>
+                        </span>
+                        : null
                     }
 
 
@@ -236,8 +244,9 @@ class ShowComments extends Component {
                     {/* </Fragment>
                     } */}
                     {comments && comments.map(({ _id, body, user: user2, comment, comments, published_date }) => (
-                      <Card key={_id} className="mb-3 mr-4">
+                      <Card key={_id} className="mb-3 mr-4 mt-2 ml-3" style={{ borderRight: 'none', borderTop: 'none' }}>
                         <CardBody>
+                          <ShareModal />
                           <Row>
                             <div style={postUserDetails} className="input-group ">
                               <CardImg bottom style={profileImgStyle} className='forum-pet-image ml-1 mb-2' src={user2.profileImage} />
@@ -285,6 +294,10 @@ class ShowComments extends Component {
       </Fragment>
     );
   }
+}
+const shareStyle = {
+  position: 'absolute',
+  right: '0',
 }
 const postLovedStyle = {
   position: 'absolute',

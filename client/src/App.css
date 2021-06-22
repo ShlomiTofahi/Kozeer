@@ -155,6 +155,7 @@
 padding-left:2px;
 padding-right:15px;
 } 
+
 .post-search-btn{
   all: unset;
   color: rgba(255, 255, 255, 0.952);
@@ -240,6 +241,7 @@ input:checked + .slider:before {
   text-decoration: none;
   color: #a0a0a0;
 }
+
 /*--------------end Comment-----------------*/
 
 /*--------------start Manga-----------------*/
@@ -340,3 +342,38 @@ input:checked + .slider:before {
   }
 }
 /*--------------end Manga-----------------*/
+
+/*--------------start ShareModal-----------------*/
+.share-btn{
+  all: unset;
+  cursor: pointer;
+/* padding-left:2px;
+padding-right:15px; */
+} 
+
+.share-modal{
+  width: 40vw;   /* Occupy the 90% of the screen width */
+  max-width: 40vw;
+} 
+/*--------------end ShareModal-----------------*/
+
+/*--------------start ShowProfile-----------------*/
+.profile-img{
+  max-width: 300px;
+  max-height: 330px;
+  border-radius: 50%;
+  object-fit: contain;
+} 
+/*--------------end ShowProfile-----------------*/
+
+
+.green-style-btn{
+  border:none;
+  background-color: #5e8f86;
+  border-radius: 1px;
+  /* margin-top: 2rem; */
+}
+
+.green-style-btn:hover{
+  background-color: #3c635ccb;
+}
