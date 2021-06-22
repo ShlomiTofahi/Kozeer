@@ -35,10 +35,8 @@ class EditProfile extends Component {
 }
 
 const FrameStyle = {
-    textAlign:'center',
-    // margin: '0 auto',
+    margin: '0 auto',
     backgroundColor: '#221415dc',
-    // width: '65%',
 };
 
 export default EditProfile;

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Collapse } from 'react-collapse';
 import {
     Card, CardBody, Button, Form,
-     FormGroup, Label, Input, Alert, Row
+    FormGroup, Label, Input, Alert, Row
 } from 'reactstrap';
 
 import { changeEmail } from '../../actions/authActions';
@@ -21,7 +21,7 @@ class ChangeEmail extends Component {
         email: '',
 
         msg: null,
-        msgAlert:''
+        msgAlert: ''
     };
 
     static protoType = {
@@ -120,7 +120,7 @@ class ChangeEmail extends Component {
                         size='sm'
                         onClick={this.CollapseHangdle}
                         style={{ marginBottom: '1rem' }}
-                    >Change email<strong class='pl-3' style={{ position: 'absolute', left: '0' }}>{dropDownSymbol}</strong></Button>
+                    >Change email<strong class='pr-3' style={{ position: 'absolute', right: '0' }}>{dropDownSymbol}</strong></Button>
                     <Collapse isOpened={this.state.Collapsetoggle}>
                         <Card style={this.bodyStyle()}>
                             <CardBody className='pr-4 mr-5'>
@@ -128,33 +128,33 @@ class ChangeEmail extends Component {
                                 <Form onSubmit={this.onSubmit}>
                                     <FormGroup>
                                         <Row>
-                                            <Label className='pl-2' for='password'>Password:</Label>
                                             <Input
                                                 size='sm'
                                                 type='password'
                                                 name='password'
                                                 id='password'
-                                                className='mb-3'
+                                                placeholder='Password'
+                                                className='mb-4'
                                                 onChange={this.onChange}
-                                                style={addPostInput}
+                                                style={inputStyle}
                                             />
                                         </Row>
                                         <Row>
-                                            <Label className='pl-2' for='email'>Email:&nbsp;</Label>
                                             <Input
                                                 size='sm'
                                                 type='email'
                                                 name='email'
                                                 id='email'
-                                                className='mb-3'
+                                                placeholder='Email'
+                                                className='mb-4'
                                                 onChange={this.onChange}
-                                                style={addPostInput}
+                                                style={inputStyle}
                                             />
                                         </Row>
                                         <Button
                                             size='sm'
                                             color='light'
-                                            style={{ marginTop: '2rem' }}
+                                            className='mt-4'
                                             block
                                         >Save the changes</Button>
                                     </FormGroup>
@@ -172,6 +172,14 @@ const addPostInput = {
     background: '#f7f7f7',
     width: window.innerWidth >= 463 ? '200px' : 'null',
     height: '24px'
+};
+
+const inputStyle = {
+    backgroundColor: 'rgba(0, 0, 0, 0)',
+    border: 'none',
+    borderBottom: '1px solid #76735c',
+    borderRadius: '1px',
+    marginTop: '-9px',
 };
 
 const mapStateToProps = (state) => ({

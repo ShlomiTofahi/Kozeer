@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Collapse } from 'react-collapse';
 import {
     Card, CardBody, Button, Form,
-     FormGroup, Label, Input, Alert, Row
+    FormGroup, Label, Input, Alert, Row
 } from 'reactstrap';
 
 import { changePassword } from '../../actions/authActions';
@@ -22,7 +22,7 @@ class ChangePassword extends Component {
         validationPassword: '',
 
         msg: null,
-        msgAlert:''
+        msgAlert: ''
     };
 
     static protoType = {
@@ -92,21 +92,6 @@ class ChangePassword extends Component {
         })
     }
 
-    bodyStyle = () => {
-        return {
-            border: '1px solid rgb(230, 230, 230)',
-            webkitBorderRadius: '15px',
-            mozBorderRadius: '15px',
-            borderRadius: '15px',
-            padding: '30px',
-            height: 'auto',
-            width: 'auto',
-
-            webkitBoxShadow: '0 0 5px 0.1px #C7C7C7',
-            boxSshadow: '0 0 5px 0.1px #C7C7C7'
-        };
-    };
-
     render() {
         const dropDownSymbol = this.state.Collapsetoggle ? <span>&#45;</span> : <span>&#x2B;</span>
 
@@ -122,9 +107,10 @@ class ChangePassword extends Component {
                         size='sm'
                         onClick={this.CollapseHangdle}
                         style={{ marginBottom: '1rem' }}
-                    >Change password<strong class='pl-3' style={{ position: 'absolute', left: '0' }}>{dropDownSymbol}</strong></Button>
+                    >Change password<strong class='pr-3' style={{ position: 'absolute', right: '0' }}>{dropDownSymbol}</strong>
+                    </Button>
                     <Collapse isOpened={this.state.Collapsetoggle}>
-                        <Card style={this.bodyStyle()} align="right">
+                        <Card style={bodyStyle}>
                             {/* <CardTitle className={'mr-5 mb-2 lead'} tag="h5" style={{ display: 'inline' }}>עריכת סיסמא</CardTitle> */}
 
 
@@ -132,47 +118,42 @@ class ChangePassword extends Component {
                                 {this.state.msg ? <Alert color="danger">{this.state.msg}</Alert> : null}
                                 <Form onSubmit={this.onSubmit}>
                                     <FormGroup>
-                                        <Row>
-                                            <Label className='pl-2' for='currentPassword'>Current pass:</Label>
-                                            <Input
-                                                size='sm'
-                                                type='password'
-                                                name='currentPassword'
-                                                id='currentPassword'
-                                                className='mb-3'
-                                                onChange={this.onChange}
-                                                style={addPostInput}
-                                            />
-                                        </Row>
-                                        <Row>
-                                            <Label className='pl-2' for='password'>New pass:&nbsp;</Label>
-                                            <Input
-                                                size='sm'
-                                                type='password'
-                                                name='password'
-                                                id='password'
-                                                className='mb-3'
-                                                onChange={this.onChange}
-                                                style={addPostInput}
-                                            />
-                                        </Row>
-                                        <Row>
-                                            <Label className='pl-2' for='validationPassword'>Confirm Pass:&nbsp;</Label>
-                                            <Input
-                                                size='sm'
-                                                type='password'
-                                                name='validationPassword'
-                                                id='validationPassword'
-                                                className='mb-3'
-                                                onChange={this.onChange}
-                                                style={addPostInput}
-                                            />
-                                        </Row>
+                                        <Input
+                                            size='sm'
+                                            type='password'
+                                            name='currentPassword'
+                                            id='currentPassword'
+                                            placeholder='Current password'
+                                            className='mb-4'
+                                            onChange={this.onChange}
+                                            style={inputStyle}
+
+                                        />
+                                        <Input
+                                            size='sm'
+                                            type='password'
+                                            name='password'
+                                            id='password'
+                                            placeholder='New password'
+                                            className='mb-4'
+                                            onChange={this.onChange}
+                                            style={inputStyle}
+                                        />
+                                        <Input
+                                            size='sm'
+                                            type='password'
+                                            name='validationPassword'
+                                            id='validationPassword'
+                                            placeholder='Confirm password'
+                                            className='mb-3'
+                                            onChange={this.onChange}
+                                            style={inputStyle}
+                                        />
 
                                         <Button
                                             size='sm'
                                             color='light'
-                                            style={{ marginTop: '2rem' }}
+                                            className='mt-4'
                                             block
                                         >Save the changes</Button>
                                     </FormGroup>
@@ -187,12 +168,31 @@ class ChangePassword extends Component {
     }
 }
 
+const bodyStyle = {
+    border: '1px solid rgb(230, 230, 230)',
+    webkitBorderRadius: '15px',
+    mozBorderRadius: '15px',
+    borderRadius: '15px',
+    padding: '30px',
+    height: 'auto',
+    width: 'auto',
+
+    webkitBoxShadow: '0 0 5px 0.1px #C7C7C7',
+    boxSshadow: '0 0 5px 0.1px #C7C7C7'
+};
+
 const addPostInput = {
     background: '#f7f7f7',
     width: window.innerWidth >= 463 ? '200px' : 'null',
     height: '24px'
 };
-
+const inputStyle = {
+    backgroundColor: 'rgba(0, 0, 0, 0)',
+    border: 'none',
+    borderBottom: '1px solid #76735c',
+    borderRadius: '1px',
+    marginTop: '-9px',
+};
 const mapStateToProps = (state) => ({
     auth: state.auth,
     error: state.error,

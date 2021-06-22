@@ -162,9 +162,9 @@ class ChangeUserInfo extends Component {
     render() {
         return (
             <Fragment >
-                <div className='position-relative py-4 pl-4'>
+                <div className='position-relative py-4 px-4'>
                     <Card style={bodyStyle}>
-                        <CardTitle className={'mr-5 mb-2 lead pt-3'} tag="h5" style={{ display: 'inline' }}>User Editing</CardTitle>
+                        <CardTitle align='center' className={'mr-5 mb-2 lead pt-3'} tag="h5" style={{ display: 'inline' }}>User Editing</CardTitle>
 
                         <CardBody className='pr-4 mr-5'>
                             {this.state.msg ? <Alert color="danger">{this.state.msg}</Alert> : null}
@@ -181,7 +181,6 @@ class ChangeUserInfo extends Component {
                                         bsSize="sm"
                                         onChange={this.onChange}
                                         style={inputStyle}
-
                                     />
 
                                     <FileUpload

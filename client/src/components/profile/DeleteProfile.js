@@ -112,11 +112,10 @@ class DeleteProfile extends Component {
                         size='sm'
                         onClick={this.CollapseHangdle}
                         style={{ marginBottom: '1rem' }}
-                    >Delete profile<strong class='pl-3' style={{ position: 'absolute', left: '0' }}>{dropDownSymbol}</strong></Button>
+                    >Delete profile<strong class='pr-3' style={{ position: 'absolute', right: '0' }}>{dropDownSymbol}</strong></Button>
                     <Collapse isOpened={this.state.Collapsetoggle}>
                         <Card style={this.bodyStyle()}>
                             {!is_admin ?
-
                                 <CardBody className='pr-4 mr-5'>
                                     {this.state.msg ? <Alert color="danger">{this.state.msg}</Alert> : null}
                                     <Form onSubmit={this.onSubmit}>
@@ -124,20 +123,20 @@ class DeleteProfile extends Component {
                                             <Row>
                                                 <label class="checkbox_item">
                                                     <input class="ml-2" onChange={this.confirmHangdle} type="checkbox" name="confirm" data-tax="level" defaultValue={true} />
-                                                    <span>Confirm</span>
+                                                    <span> Confirm</span>
                                                 </label>
                                             </Row>
                                             <Button
                                                 size='sm'
                                                 color='light'
-                                                style={{ marginTop: '2rem' }}
+                                                className='mt-4'
                                                 block
                                             >Delete</Button>
                                         </FormGroup>
                                     </Form>
                                 </CardBody>
-                                : <span>Unable to delete admin user</span>
-                            }
+                                 : <span>Unable to delete admin user</span>
+                            } 
                         </Card>
                     </Collapse>
                 </div>
