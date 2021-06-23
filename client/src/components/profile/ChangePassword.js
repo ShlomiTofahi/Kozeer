@@ -106,7 +106,7 @@ class ChangePassword extends Component {
                         block
                         size='sm'
                         onClick={this.CollapseHangdle}
-                        style={{ marginBottom: '1rem' }}
+                        style={{ marginBottom: '1rem', opacity: '0.9' }}
                     >Change password<strong class='pr-3' style={{ position: 'absolute', right: '0' }}>{dropDownSymbol}</strong>
                     </Button>
                     <Collapse isOpened={this.state.Collapsetoggle}>
@@ -114,7 +114,7 @@ class ChangePassword extends Component {
                             {/* <CardTitle className={'mr-5 mb-2 lead'} tag="h5" style={{ display: 'inline' }}>עריכת סיסמא</CardTitle> */}
 
 
-                            <CardBody className='pr-4 mr-5'>
+                            <CardBody className='mx-4 mt-3'>
                                 {this.state.msg ? <Alert color="danger">{this.state.msg}</Alert> : null}
                                 <Form onSubmit={this.onSubmit}>
                                     <FormGroup>
@@ -127,7 +127,6 @@ class ChangePassword extends Component {
                                             className='mb-4'
                                             onChange={this.onChange}
                                             style={inputStyle}
-
                                         />
                                         <Input
                                             size='sm'
@@ -169,23 +168,19 @@ class ChangePassword extends Component {
 }
 
 const bodyStyle = {
-    border: '1px solid rgb(230, 230, 230)',
-    webkitBorderRadius: '15px',
-    mozBorderRadius: '15px',
-    borderRadius: '15px',
-    padding: '30px',
+    // border: '1px solid rgb(230, 230, 230)',
+    // webkitBorderRadius: '15px',
+    // mozBorderRadius: '15px',
+    // borderRadius: '15px',
+    // padding: '30px',
     height: 'auto',
     width: 'auto',
+    border: '5px solid #730104',
 
-    webkitBoxShadow: '0 0 5px 0.1px #C7C7C7',
-    boxSshadow: '0 0 5px 0.1px #C7C7C7'
+    // webkitBoxShadow: '0 0 5px 0.1px #C7C7C7',
+    // boxSshadow: '0 0 5px 0.1px #C7C7C7'
 };
 
-const addPostInput = {
-    background: '#f7f7f7',
-    width: window.innerWidth >= 463 ? '200px' : 'null',
-    height: '24px'
-};
 const inputStyle = {
     backgroundColor: 'rgba(0, 0, 0, 0)',
     border: 'none',
@@ -193,6 +188,7 @@ const inputStyle = {
     borderRadius: '1px',
     marginTop: '-9px',
 };
+
 const mapStateToProps = (state) => ({
     auth: state.auth,
     error: state.error,

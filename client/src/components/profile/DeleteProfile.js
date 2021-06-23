@@ -80,21 +80,6 @@ class DeleteProfile extends Component {
         })
     }
 
-    bodyStyle = () => {
-        return {
-            border: '1px solid rgb(230, 230, 230)',
-            webkitBorderRadius: '15px',
-            mozBorderRadius: '15px',
-            borderRadius: '15px',
-            padding: '30px',
-            height: 'auto',
-            width: 'auto',
-
-            webkitBoxShadow: '0 0 5px 0.1px #C7C7C7',
-            boxSshadow: '0 0 5px 0.1px #C7C7C7'
-        };
-    };
-
     render() {
         const dropDownSymbol = this.state.Collapsetoggle ? <span>&#45;</span> : <span>&#x2B;</span>
         const { user, isAuthenticated } = this.props.auth;
@@ -111,12 +96,12 @@ class DeleteProfile extends Component {
                         color='danger'
                         size='sm'
                         onClick={this.CollapseHangdle}
-                        style={{ marginBottom: '1rem' }}
+                        style={{ marginBottom: '1rem',  opacity: '0.9' }}
                     >Delete profile<strong class='pr-3' style={{ position: 'absolute', right: '0' }}>{dropDownSymbol}</strong></Button>
                     <Collapse isOpened={this.state.Collapsetoggle}>
-                        <Card style={this.bodyStyle()}>
+                        <Card style={bodyStyle}>
                             {!is_admin ?
-                                <CardBody className='pr-4 mr-5'>
+                                <CardBody className='mx-4'>
                                     {this.state.msg ? <Alert color="danger">{this.state.msg}</Alert> : null}
                                     <Form onSubmit={this.onSubmit}>
                                         <FormGroup>
@@ -129,14 +114,14 @@ class DeleteProfile extends Component {
                                             <Button
                                                 size='sm'
                                                 color='light'
-                                                className='mt-4'
+                                                className='mt-3'
                                                 block
                                             >Delete</Button>
                                         </FormGroup>
                                     </Form>
                                 </CardBody>
-                                 : <span>Unable to delete admin user</span>
-                            } 
+                                : <span className='mx-4 my-4 text-center'>Unable to delete admin user</span>
+                            }
                         </Card>
                     </Collapse>
                 </div>
@@ -148,6 +133,20 @@ class DeleteProfile extends Component {
         );
     }
 }
+
+const bodyStyle = {
+    // border: '1px solid rgb(230, 230, 230)',
+    // webkitBorderRadius: '15px',
+    // mozBorderRadius: '15px',
+    // borderRadius: '15px',
+    // padding: '30px',
+    height: 'auto',
+    width: 'auto',
+    border: '5px solid #730104',
+
+    // webkitBoxShadow: '0 0 5px 0.1px #C7C7C7',
+    // boxSshadow: '0 0 5px 0.1px #C7C7C7'
+};
 
 const mapStateToProps = (state) => ({
     auth: state.auth,

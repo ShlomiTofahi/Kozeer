@@ -20,7 +20,7 @@ export const CreateToken = (email) => dispatch => {
         .post('/api/auth/create-token', body, config)
         .then(res => {
             dispatch(
-                returnMsgs('קוד אימות נשלח לך למייל', null, 'CREATE_TOKEN_SUCCESS')
+                returnMsgs('Verification code sent to email', null, 'CREATE_TOKEN_SUCCESS')
             );
             dispatch({
                 type: CREATE_TOKEN,
@@ -51,7 +51,7 @@ export const VerifyToken = (email, token) => dispatch => {
         .post('/api/auth/verify-token', body, config)
         .then(res => {
             dispatch(
-                returnMsgs('אימות אושר', null, 'VERIFY_TOKEN_SUCCESS')
+                returnMsgs('Authentication confirmed successfully', null, 'VERIFY_TOKEN_SUCCESS')
             );
             dispatch({
                 type: VERIFY_TOKEN,

@@ -111,9 +111,10 @@ class ShowComments extends Component {
     const is_admin = (isAuthenticated && user.admin);
 
     let { comments } = this.props.comment;
+    const commentsLen = comments.length;
 
     comments = comments.filter((comment) => !comment.comment)
-    //  comments = comments.filter((comment) => console.log(comment.comments.length===0) )
+    
     return (
       <Fragment>
         <Container className='px-1 px-sm-4 px-md-5 px-lg-5  pt-4 pb-5'>
@@ -123,7 +124,7 @@ class ShowComments extends Component {
                 <div className="input-group mt-3">
                   <small style={postFooterStyle} className="text-muted pl-3 mb-2">
                     {/* <Link to={'/post/' + post._id} className='text-dark post-link pl-2' onClick={this.handleClickPost.bind(this, post._id)}> */}
-                    <span style={{ fontFamily: "'Shadows Into Light', Kimberly Geswein", fontSize: '17px' }}>{comments.length} COMMENTS</span>
+                    <span style={{ fontFamily: "'Shadows Into Light', Kimberly Geswein", fontSize: '17px' }}>{commentsLen} COMMENTS</span>
                     {/* </Link> */}
                     <span style={postLovedStyle}>
                       {/* 1 */}

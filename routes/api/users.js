@@ -170,10 +170,11 @@ router.post('/change-email/:id', auth, (req, res) => {
 // @desc    Change Password For A User By Email
 // @access  Private
 router.post('/change-pass-by-email/:id', auth, (req, res) => {
-    let { validationPassword, password, currentPassword } = req.body;
+    let { validationPassword, password } = req.body;
+    console.log('change-pass-by-email')
     console.log(req.body)
     //Simple validation
-    if (!password || !validationPassword || !currentPassword) {
+    if (!password || !validationPassword) {
         return res.status(400).json({ msg: 'Please enter all fields' });
     }
     if (req.user.id !== req.params.id) {
@@ -188,8 +189,9 @@ router.post('/change-pass-by-email/:id', auth, (req, res) => {
         // Create salt & hash
         bcrypt.genSalt(10, (err, salt) => {
             bcrypt.hash(password, salt, (err, hash) => {
-                if (err) throw err;
 
+                if (err) throw err;
+                
                 password = hash;
                 user.updateOne({ password }).then(() => {
                     User.findById(req.params.id)

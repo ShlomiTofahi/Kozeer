@@ -54,10 +54,10 @@ class ShowProfile extends Component {
                                     <CardImg bottom className='profile-img' src={user.profileImage} alt="Profile image" />
                                 </div>
                                 <CardBody>
-                                    <CardTitle className={'mb-2 lead'} tag="h5" style={{ display: 'inline' }}>Personal Details</CardTitle>
-                                    <Link className='badge badge-pill badge-secondary mb-3 mr-1 ml-1' to='/profile/edit'>Edit</Link>
-                                    <CardSubtitle tag="h6" className="mb-2 text-muted"><spen style={{ color: 'black' }}>Name:</spen> {user.name}</CardSubtitle>
-                                    <CardSubtitle tag="h6" className="mb-2 text-muted"><spen style={{ color: 'black' }}>Email:</spen> {user.email}</CardSubtitle>
+                                    <CardTitle className='mb-2 lead' tag="h5" style={{ display: 'inline', fontFamily: "'Shadows Into Light', Kimberly Geswein", opacity: '0.8' }}>Personal Details</CardTitle>
+                                    <Link style={{opacity: '0.5'}} className='badge badge-pill badge-success mb-3 mr-1 ml-1' to='/profile/edit'>Edit</Link>
+                                    <CardSubtitle tag="h6" className="mb-2 text-muted"><spen style={{ color: 'black', opacity: '0.7' }}>Name:</spen> {user.name}</CardSubtitle>
+                                    <CardSubtitle tag="h6" className="mb-2 text-muted"><spen style={{ color: 'black', opacity: '0.7'  }}>Email:</spen> {user.email}</CardSubtitle>
                                     <CardText>
                                         <small className="text-muted">Register Date : {moment(user.register_date).format('llll')}</small>
                                     </CardText>

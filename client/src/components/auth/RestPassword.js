@@ -27,7 +27,9 @@ class RestPassword extends Component {
         validationPassword: '',
         verificationCode: '',
         userID: '',
-        msg: null
+        msg: null,
+
+        finishedtoggle: false
     };
 
     static protoType = {
@@ -84,9 +86,19 @@ class RestPassword extends Component {
         if (msg && msg.id === 'VERIFY_TOKEN_SUCCESS') {
             this.setState({
                 message: msg.msg,
-                messageAlery: 'info',
+                messageAlery: 'info'
             })
             this.ChgPassCollapseHangdle();
+            // Clear errors
+            this.props.clearErrors();
+            // Clear msgs
+            this.props.clearMsgs();
+        }
+        if (msg && msg.id === 'CHANGE_PASSWORD_SUCCESS') {
+            this.setState({
+                chgPassCollapsetoggle: false,
+                finishedtoggle: true
+            })
             // Clear errors
             this.props.clearErrors();
             // Clear msgs
@@ -100,7 +112,7 @@ class RestPassword extends Component {
 
     onSubmit = e => {
         e.preventDefault();
-        const { validationPassword, password, email } = this.state;
+        const { validationPassword, password } = this.state;
 
         const id = this.props.auth.user._id;
         const currPassword = this.props.auth.user.password;
@@ -147,151 +159,153 @@ class RestPassword extends Component {
         })
     }
 
-    bodyStyle = () => {
-        return {
-            border: '1px solid rgb(230, 230, 230)',
-            webkitBorderRadius: '15px',
-            mozBorderRadius: '15px',
-            borderRadius: '15px',
-            padding: '30px',
-            height: 'auto',
-            width: 'auto',
-            margin: '0 auto',
-            webkitBoxShadow: '0 0 5px 0.1px #C7C7C7',
-            boxSshadow: '0 0 5px 0.1px #C7C7C7',
-        };
-    };
-    verifybodyStyle = () => {
-        return {
-            border: '1px solid rgb(230, 230, 230)',
-            webkitBorderRadius: '15px',
-            mozBorderRadius: '15px',
-            borderRadius: '15px',
-            padding: '30px',
-            paddingBottom: '10px',
-            paddingTop: '10px',
-            height: 'auto',
-            width: 'auto',
-            margin: '0 auto',
-            webkitBoxShadow: '0 0 5px 0.1px #C7C7C7',
-            boxSshadow: '0 0 5px 0.1px #C7C7C7',
-        };
-    };
+    // bodyStyle = () => {
+    //     return {
+    //         // webkitBorderRadius: '15px',
+    //         // mozBorderRadius: '15px',
+    //         // borderRadius: '15px',
+    //         padding: '30px',
+    //         height: 'auto',
+    //         width: 'auto',
+    //         margin: '0 auto',
+    //         // webkitBoxShadow: '0 0 5px 0.1px #C7C7C7',
+    //         // boxSshadow: '0 0 5px 0.1px #C7C7C7',
+    //         border: '5px solid #730104',
+    //         color: 'black'
+    //     };
+    // };
+    // verifybodyStyle = () => {
+    //     return {
+    //         border: '1px solid rgb(230, 230, 230)',
+    //         webkitBorderRadius: '15px',
+    //         mozBorderRadius: '15px',
+    //         borderRadius: '15px',
+    //         padding: '30px',
+    //         paddingBottom: '10px',
+    //         paddingTop: '10px',
+    //         height: 'auto',
+    //         width: 'auto',
+    //         margin: '0 auto',
+    //         webkitBoxShadow: '0 0 5px 0.1px #C7C7C7',
+    //         boxSshadow: '0 0 5px 0.1px #C7C7C7',
+
+    //     };
+    // };
 
     render() {
         return (
             <Fragment >
                 <ModalBody>
-
                     <Container
                         style={{
                             display: 'flex',
                             justifyContent: 'center'
                         }}>
                         <Row >
-                            <div className='position-relative mt-3 mb-5 pb-5 pt-5'>
-                                {this.state.message ? <Alert color={this.state.messageAlery} isOpen={this.state.visible} toggle={this.onDismiss}>{this.state.message}</Alert>
+                            <div className='position-relative'>
+                                {this.state.message ? <Alert color={this.state.messageAlery} isOpen={this.state.visible} toggle={this.onDismiss}><small>{this.state.message}</small></Alert>
                                     : null}
                                 <Collapse isOpened={this.state.emailCollapsetoggle}>
-                                    <Card style={this.bodyStyle()} className='animated bounceInLeft'>
-                                        <CardBody className='pr-4'>
-                                            <Row>
-                                                <Label className='pl-2' for='email'>הכנס אמייל</Label>
-                                                <Input
-                                                    size='sm'
-                                                    type='email'
-                                                    name='email'
-                                                    id='email'
-                                                    className='mb-3'
-                                                    onChange={this.onChange}
-                                                    style={addPostInput}
-                                                    block
-                                                />
-                                            </Row>
-                                            <Button
-                                                color='dark'
-                                                size='sm'
-                                                onClick={this.onClickEmail}
-                                                style={{ marginTop: '2rem' }}
-                                                block
-                                            >אשר</Button>
-                                        </CardBody>
-                                    </Card>
+                                    {/* <Card style={this.bodyStyle()} className='animated bounceInLeft'> */}
+                                    <CardBody className='pr-4'>
+                                        <Input
+                                            size='sm'
+                                            type='email'
+                                            name='email'
+                                            id='email'
+                                            placeholder='Email'
+                                            className='mb-3'
+                                            onChange={this.onChange}
+                                            style={inputStyle}
+                                            block
+                                        />
+                                        <Button
+                                            color='light'
+                                            size='sm'
+                                            className='login-btn-sign-in-up'
+                                            outline
+                                            onClick={this.onClickEmail}
+                                            style={{ marginTop: '2rem' }}
+                                            block
+                                        >Confirm</Button>
+                                    </CardBody>
+                                    {/* </Card> */}
                                 </Collapse>
 
                                 <Collapse isOpened={this.state.verifyCollapsetoggle}>
-                                    <Card style={this.bodyStyle()}>
-                                        <CardBody className='pr-4'>
-                                            <Row>
-                                                <Label className='pl-2' for='verificationCode'>קוד אימות</Label>
-                                                <Input
-                                                    size='sm'
-                                                    type='text'
-                                                    name='verificationCode'
-                                                    id='verificationCode'
-                                                    onChange={this.onChange}
-                                                    style={addPostInput}
-                                                    block
-                                                />
-                                            </Row>
-                                            <Button
-                                                color='light'
-                                                size='sm'
-                                                onClick={this.onClickEmail}
-                                                className='badge badge-info ml-5'
-                                            >שלח קוד אימות חדש</Button>
-                                            <Button
-                                                color='dark'
-                                                size='sm'
-                                                onClick={this.onClickVerify}
-                                                style={{ marginTop: '2rem' }}
-                                                block
-                                            >אשר</Button>
-                                        </CardBody>
-                                    </Card>
+                                    {/* <Card style={this.bodyStyle()}> */}
+                                    <CardBody className='pr-4'>
+                                        <Input
+                                            size='sm'
+                                            type='text'
+                                            name='verificationCode'
+                                            id='verificationCode'
+                                            placeholder='Verification code'
+                                            onChange={this.onChange}
+                                            style={inputStyle}
+                                            block
+                                        />
+                                        <Button
+                                            color='light'
+                                            size='sm'
+                                            onClick={this.onClickEmail}
+                                            className='badge badge-info ml-5'
+                                        >Resend new verification code</Button>
+                                        <Button
+                                            color='light'
+                                            size='sm'
+                                            className='login-btn-sign-in-up'
+                                            outline
+                                            onClick={this.onClickVerify}
+                                            style={{ marginTop: '2rem' }}
+                                            block
+                                        >Confirm</Button>
+                                    </CardBody>
+                                    {/* </Card> */}
                                 </Collapse>
 
                                 <Collapse isOpened={this.state.chgPassCollapsetoggle}>
-                                    <Card style={this.verifybodyStyle()}>
-                                        <CardBody className='pr-4'>
-                                            {this.state.msg ? <Alert color="danger">{this.state.msg}</Alert> : null}
-                                            <Form onSubmit={this.onSubmit}>
-                                                <FormGroup>
-                                                    <Row>
-                                                        <Label className='pl-2' for='password'>סיסמא חדשה:&nbsp;</Label>
-                                                        <Input
-                                                            size='sm'
-                                                            type='password'
-                                                            name='password'
-                                                            id='password'
-                                                            className='mb-3'
-                                                            onChange={this.onChange}
-                                                            style={addPostInput}
-                                                        />
-                                                    </Row>
-                                                    <Row>
-                                                        <Label className='pl-2' for='validationPassword'>אימות סיסמא:&nbsp;</Label>
-                                                        <Input
-                                                            size='sm'
-                                                            type='password'
-                                                            name='validationPassword'
-                                                            id='validationPassword'
-                                                            className='mb-3'
-                                                            onChange={this.onChange}
-                                                            style={addPostInput}
-                                                        />
-                                                    </Row>
+                                    {/* <Card style={this.verifybodyStyle()}> */}
+                                    <CardBody className='pr-4'>
+                                        {this.state.msg ? <Alert color="danger">{this.state.msg}</Alert> : null}
+                                        <Form onSubmit={this.onSubmit}>
+                                            <FormGroup>
+                                                <Input
+                                                    size='sm'
+                                                    type='password'
+                                                    name='password'
+                                                    id='password'
+                                                    placeholder='New password'
+                                                    className='mb-3'
+                                                    onChange={this.onChange}
+                                                    style={inputStyle}
+                                                />
+                                                <Input
+                                                    size='sm'
+                                                    type='password'
+                                                    name='validationPassword'
+                                                    id='validationPassword'
+                                                    placeholder='Validation Password'
+                                                    className='mb-3'
+                                                    onChange={this.onChange}
+                                                    style={inputStyle}
+                                                />
 
-                                                    <Button
-                                                        size='sm'
-                                                        color='light'
-                                                        style={{ marginTop: '2rem' }}
-                                                        block
-                                                    >החלף סיסמא</Button>
-                                                </FormGroup>
-                                            </Form>
-                                        </CardBody>
-                                    </Card>
+                                                <Button
+                                                    color='light'
+                                                    size='sm'
+                                                    className='login-btn-sign-in-up'
+                                                    outline
+                                                    style={{ marginTop: '2rem' }}
+                                                    block
+                                                >Change password</Button>
+                                            </FormGroup>
+                                        </Form>
+                                    </CardBody>
+                                    {/* </Card> */}
+                                </Collapse>
+                                <Collapse isOpened={this.state.finishedtoggle}>
+                                    Password changed successfully
                                 </Collapse>
                             </div>
                         </Row >
@@ -302,10 +316,12 @@ class RestPassword extends Component {
     }
 }
 
-const addPostInput = {
-    background: '#f7f7f7',
-    width: window.innerWidth >= 463 ? '200px' : 'null',
-    height: '24px'
+const inputStyle = {
+    backgroundColor: 'rgba(0, 0, 0, 0)',
+    border: 'none',
+    borderBottom: '1px solid #76735c',
+    borderRadius: '1px',
+    marginTop: '-9px',
 };
 
 const mapStateToProps = (state) => ({

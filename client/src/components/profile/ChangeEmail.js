@@ -90,21 +90,6 @@ class ChangeEmail extends Component {
         })
     }
 
-    bodyStyle = () => {
-        return {
-            border: '1px solid rgb(230, 230, 230)',
-            webkitBorderRadius: '15px',
-            mozBorderRadius: '15px',
-            borderRadius: '15px',
-            padding: '30px',
-            height: 'auto',
-            width: 'auto',
-
-            webkitBoxShadow: '0 0 5px 0.1px #C7C7C7',
-            boxSshadow: '0 0 5px 0.1px #C7C7C7'
-        };
-    };
-
     render() {
         const dropDownSymbol = this.state.Collapsetoggle ? <span>&#45;</span> : <span>&#x2B;</span>
 
@@ -119,42 +104,37 @@ class ChangeEmail extends Component {
                         block
                         size='sm'
                         onClick={this.CollapseHangdle}
-                        style={{ marginBottom: '1rem' }}
+                        style={{ marginBottom: '1rem', opacity: '0.9'  }}
                     >Change email<strong class='pr-3' style={{ position: 'absolute', right: '0' }}>{dropDownSymbol}</strong></Button>
                     <Collapse isOpened={this.state.Collapsetoggle}>
-                        <Card style={this.bodyStyle()}>
-                            <CardBody className='pr-4 mr-5'>
+                        <Card style={bodyStyle}>
+                            <CardBody className='mx-4 mt-3'>
                                 {this.state.msg ? <Alert color="danger">{this.state.msg}</Alert> : null}
                                 <Form onSubmit={this.onSubmit}>
                                     <FormGroup>
-                                        <Row>
-                                            <Input
-                                                size='sm'
-                                                type='password'
-                                                name='password'
-                                                id='password'
-                                                placeholder='Password'
-                                                className='mb-4'
-                                                onChange={this.onChange}
-                                                style={inputStyle}
-                                            />
-                                        </Row>
-                                        <Row>
-                                            <Input
-                                                size='sm'
-                                                type='email'
-                                                name='email'
-                                                id='email'
-                                                placeholder='Email'
-                                                className='mb-4'
-                                                onChange={this.onChange}
-                                                style={inputStyle}
-                                            />
-                                        </Row>
+                                        <Input
+                                            size='sm'
+                                            type='password'
+                                            name='password'
+                                            id='password'
+                                            placeholder='Password'
+                                            className='mb-4'
+                                            onChange={this.onChange}
+                                            style={inputStyle}
+                                        />
+                                        <Input
+                                            size='sm'
+                                            type='email'
+                                            name='email'
+                                            id='email'
+                                            placeholder='Email'
+                                            className='mb-4'
+                                            onChange={this.onChange}
+                                            style={inputStyle}
+                                        />
                                         <Button
                                             size='sm'
                                             color='light'
-                                            className='mt-4'
                                             block
                                         >Save the changes</Button>
                                     </FormGroup>
@@ -167,6 +147,21 @@ class ChangeEmail extends Component {
         );
     }
 }
+
+const bodyStyle = {
+    // border: '1px solid rgb(230, 230, 230)',
+    // webkitBorderRadius: '15px',
+    // mozBorderRadius: '15px',
+    // borderRadius: '15px',
+    // padding: '30px',
+    height: 'auto',
+    width: 'auto',
+    border: '5px solid #730104',
+
+    // webkitBoxShadow: '0 0 5px 0.1px #C7C7C7',
+    // boxSshadow: '0 0 5px 0.1px #C7C7C7'
+
+};
 
 const addPostInput = {
     background: '#f7f7f7',

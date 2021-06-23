@@ -70,30 +70,30 @@ router.post('/create-token', (req, res) => {
     const { email } = req.body;
     //Simple validation
     if (!email) {
-        return res.status(400).json({ msg: 'אנא הכנס את המייל שלך' });
+        return res.status(400).json({ msg: 'Please enter your email' });
     }
     try {
         User.findOne({ email })
             .select('-password')
             .then(user => {
-                if (!user) return res.status(400).json({ msg: 'משתמש לא קיים' });
+                if (!user) return res.status(400).json({ msg: 'User does not exist' });
 
                 const secret = speakeasy.generateSecret();
                 token = speakeasy.totp({ secret: secret.base32, encoding: 'base32' });
                 user.updateOne({ secret: secret.base32 }).then(() => {
 
                     const output = `
-                    <h2>קוד לאיפוס סיסמה</h2>
+                    <div align='left'><h2>Password reset code</h2>
                     <p>
-                    ${user.name} שלום,<br /> 
-                    אנא השתמש בקוד זה כדי לאפס את הסיסמה לחשבון ${user.email}<br /> 
-                    הנה הקוד שלך: ${token}<br /> 
-                    אם אינך מזהה את חשבון ${user.email} Gdog
-                    התעלם מהודעה זו.<br /><br /> 
+                    ,Hello ${user.name}<br /> 
+                    Please use this code to reset your ${user.email} account password <br /> 
+                    Here is your code: ${token}<br /> 
+                    .If you do not recognize the ${user.email} Kozeer account, 
+                    ignore this message<br /><br /> 
 
-                    תודה, <br />
-                    צוות Kozeer.
-                    </p>
+                    ,Thanks <br />
+                    .Kozeer team
+                    </p><div>
                   `;
 
                     // create reusable transporter object using the default SMTP transport
@@ -109,12 +109,11 @@ router.post('/create-token', (req, res) => {
                             rejectUnauthorized: false
                         }
                     });
-
                     // setup email data with unicode symbols
                     let mailOptions = {
-                        from: `"GDog" <${config.get('adminMail')}>`, // sender address
+                        from: `"Kozeer" <${config.get('adminMail')}>`, // sender address
                         to: user.email, // list of receivers
-                        subject: 'איפוס סיסמת חשבון Gdog', // Subject line
+                        subject: 'Kozeer account password reset', // Subject line
                         text: 'Password reset code', // plain text body
                         html: output // html body
                     };
@@ -123,7 +122,7 @@ router.post('/create-token', (req, res) => {
                     transporter.sendMail(mailOptions, (error, info) => {
                         if (error) {
                             console.log(error);
-                            return res.status(500).json({ msg: 'בעיה בשליחת המייל' })
+                            return res.status(500).json({ msg: 'Failed to send email' })
                         }
                         console.log('Message sent: %s', info.messageId);
                         console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
@@ -149,7 +148,7 @@ router.post('/verify-token', (req, res) => {
         return res.status(400).json({ msg: 'No email entered' });
     }
     if (!token) {
-        return res.status(400).json({ msg: 'אנא הכנס את קוד האימות' });
+        return res.status(400).json({ msg: 'Please enter the verification code' });
     }
 
     try {
@@ -165,7 +164,7 @@ router.post('/verify-token', (req, res) => {
                     })
                 }
                 else
-                    return res.status(400).json({ msg: 'קוד אימות שגוי' });
+                    return res.status(400).json({ msg: 'Incorrect verification code' });
             })
     } catch (error) {
         console.log(error)
