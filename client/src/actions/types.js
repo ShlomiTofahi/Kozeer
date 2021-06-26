@@ -50,6 +50,17 @@ export const ADD_MANGA_FAIL = "ADD_MANGA_FAIL";
 export const EDIT_MANGA = "EDIT_MANGA";
 export const EDIT_MANGA_FAIL = "EDIT_MANGA_FAIL";
 
+//CHAPTERS
+export const GET_CHAPTERS = 'GET_CHAPTERS';
+export const ADD_CHAPTER = 'ADD_CHAPTER';
+export const DELETE_CHAPTER = 'DELETE_CHAPTER';
+export const CHAPTERS_LOADING = 'CHAPTERS_LOADING';
+export const ADD_CHAPTER_SUCCESS = "ADD_CHAPTER_SUCCESS";
+export const ADD_CHAPTER_FAIL = "ADD_CHAPTER_FAIL";
+export const EDIT_CHAPTER = "CHAPTERS_MANGA";
+export const EDIT_CHAPTER_FAIL = "CHAPTER_MANGA_FAIL";
+export const UPDATE_CHAPTER = "UPDATE_CHAPTER";
+
 //Errors and msgs
 export const GET_ERRORS = 'GET_ERRORS';
 export const CLEAR_ERRORS = 'CLEAR_ERRORS';

@@ -14,6 +14,7 @@ class AddMangaModal extends Component {
         path: '/uploads/mangas/',
         modal: false,
         page: '',
+        fullpage: false,
         mangaImage: ''
     };
 
@@ -43,6 +44,7 @@ class AddMangaModal extends Component {
                 this.toggle();
                 this.setState({
                     page: '',
+                    fullpage: false,
                     mangaImage: ''
                 })
             }
@@ -69,12 +71,17 @@ class AddMangaModal extends Component {
 
         const newManga = {
             page: this.state.page,
+            fullpage: this.state.fullpage,
+            chapter: this.props.chapter,
             mangaImage: this.state.mangaImage
         }
-        console.log(newManga)
         // Add manga via addManga action
         this.props.addManga(newManga);
     }
+
+    fullpageToggle = () => {
+        this.setState({ fullpage: !this.state.fullpage });
+      }
 
     setRegisterModalStates = (val) => {
         if (val !== '') {
@@ -93,6 +100,9 @@ class AddMangaModal extends Component {
             axios.post('/remove', formData);
             this.setState({ mangaImage: '' });
         }
+        this.setState({
+            fullpage: false
+          })
     }
 
     render() {
@@ -102,13 +112,12 @@ class AddMangaModal extends Component {
             <div>
                 { this.props.isAuthenticated ?
                     <Button outline
-                        className='add-element-btn'
                         color='info'
                         size='sm'
-                        style={{ marginBottom: '2rem' }}
+                        style={{ opacity: '0.7' }}
                         onClick={this.toggle}
                     >Add Manga</Button>
-                    : <h4 className='mb-3 ml-4'>Please log in to manage mangas</h4>}
+                    : null}
 
 
                 <Modal
@@ -118,7 +127,7 @@ class AddMangaModal extends Component {
                     onClosed={this.close}
                 >
                     {/* <ModalHeader toggle={this.toggle}>Add To Shopping List</ModalHeader> */}
-                    <ModalHeader cssModule={{ 'modal-title': 'w-100 text-center' }} toggle={this.toggle} ><span class="lead">הוספת קטגוריה</span></ModalHeader>
+                    <ModalHeader cssModule={{ 'modal-title': 'w-100 text-center' }} toggle={this.toggle} ><span class="lead">Add Manga</span></ModalHeader>
 
                     <ModalBody>
                         {this.state.msg ? <Alert color="danger">{this.state.msg}</Alert> : null}
@@ -134,7 +143,13 @@ class AddMangaModal extends Component {
                                     className='mb-2'
                                     onChange={this.onChange}
                                 />
-
+                                <div className='text-left'>
+                                    <small className='mr-2' style={{ color: '#76735c' }}><Label for='fullpage'>fullpage</Label></small>
+                                    <label className="switch">
+                                        <input id='fullpage' name='fullpage' type="checkbox" onChange={this.fullpageToggle} />
+                                        <span className="slider round"></span>
+                                    </label>
+                                </div>
                                 <FileUpload
                                     setRegisterModalStates={this.setRegisterModalStates}
                                     path={this.state.path}

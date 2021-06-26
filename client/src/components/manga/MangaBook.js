@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { CardImg } from 'reactstrap';
+import { Link } from 'react-router-dom';
 
-import { getMangas } from '../actions/mangaActions';
+import { ButtonGroup, CardImg } from 'reactstrap';
+
+import { getMangas } from '../../actions/mangaActions';
+import { getChapters } from '../../actions/chapterActions';
 
 import SwiperCore, { Navigation, Pagination, A11y } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -11,6 +14,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper.min.css';
 import 'swiper/components/navigation/navigation.min.css';
 import 'swiper/components/pagination/pagination.min.css';
+import { Fragment } from 'react';
 
 // install Swiper modules
 SwiperCore.use([Navigation, Pagination, A11y]);
@@ -20,12 +24,15 @@ class Manga extends Component {
         path: "/images/manga/"
     }
     static propTypes = {
+        auth: PropTypes.object.isRequired,
         manga: PropTypes.object.isRequired,
+        getChapters: PropTypes.func.isRequired,
         getMangas: PropTypes.func.isRequired
     }
 
     componentDidMount() {
         this.props.getMangas();
+        this.props.getChapters();
     }
 
     onClickImg = (mangaImage, page) => {
@@ -76,7 +83,12 @@ class Manga extends Component {
         };
     };
     render() {
+        const { isAuthenticated, user } = this.props.auth;
+        const is_admin = (isAuthenticated && user.admin);
+
         const { mangas } = this.props.manga;
+        const { chapters } = this.props.chapter;
+
         return (
             <div className="wrapper animated bounceInLeft">
                 <div align='center' style={this.aboutStyle()}>
@@ -96,14 +108,25 @@ class Manga extends Component {
                                 allowTouchMove={true}
                                 loop={false}
                             >
-                                {mangas &&
-                                    mangas.map(({ _id, mangaImage, page }) => (
-                                        <SwiperSlide key={_id}>
-                                            <div style={pageStyle} >
-                                                <CardImg onClick={this.onClickImg.bind(this, mangaImage, page)} id="myImg" className='manga-slider-imgs' src={mangaImage} alt={page} />
-                                            </div>
-                                            <span style={{ fontFamily: "'Shadows Into Light', Kimberly Geswein", opacity: '0.4', color: 'gray' }}>{page}</span>
-                                        </SwiperSlide>
+                                {chapters &&
+                                    chapters.map(({ _id:chapterID, chapterImage, name, mangas }) => (
+                                        <Fragment>
+                                            <SwiperSlide key={chapterID}>
+                                                <div style={pageStyle} >
+                                                    <CardImg onClick={this.onClickImg.bind(this, chapterImage, name)} id="myImg" className='manga-slider-imgs' src={chapterImage} alt={name} />
+                                                </div>
+                                                <span style={{ fontFamily: "'Shadows Into Light', Kimberly Geswein", opacity: '0.4', color: 'gray' }}>{name}</span>
+                                            </SwiperSlide>
+                                            {mangas && mangas.sort((a, b) =>  Number(a.page.substring(4))-Number(b.page.substring(4))).map(({ _id, mangaImage, page, fullpage }) => (
+                                                <SwiperSlide key={_id}>
+                                                    {/* {console.log(fullpage)} */}
+                                                    <div style={pageStyle} >
+                                                        <CardImg onClick={this.onClickImg.bind(this, mangaImage, page)} id="myImg" className={fullpage === true ? 'fullpage-manga-slider-imgs' : 'manga-slider-imgs'} src={mangaImage} alt={page} />
+                                                    </div>
+                                                    <span style={{ fontFamily: "'Shadows Into Light', Kimberly Geswein", opacity: '0.4', color: 'gray' }}>{page}</span>
+                                                </SwiperSlide>
+                                            ))}
+                                        </Fragment>
                                     ))
                                 }
                             </Swiper>
@@ -128,6 +151,11 @@ class Manga extends Component {
                                 link 2
                         </a>
                         </p>
+                        {
+                            is_admin && <Link to={'/show-mangas/'} className='login-btn pl-2 d-block d-sm-inline'>
+                                Manga List
+                            </Link>
+                        }
                     </div>
                 </div >
             </div >
@@ -148,10 +176,12 @@ const pageStyle = {
 }
 
 const mapStateToProps = state => ({
-    manga: state.manga
+    manga: state.manga,
+    chapter: state.chapter,
+    auth: state.auth
 });
 
 export default connect(
     mapStateToProps,
-    { getMangas }
+    { getMangas, getChapters }
 )(Manga);

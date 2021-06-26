@@ -4,6 +4,15 @@ const Schema = mongoose.Schema;
 // Create Schema
 const MangaSchema = new Schema({
     page: String,
+    chapter: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Chapter"
+    },
+    fullpage: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
     mangaImage: {
         type: String,
         default: ''

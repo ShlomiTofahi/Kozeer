@@ -12,9 +12,12 @@ export class Logout extends Component {
     };
 
     render() {
+
+        const navLink = window.innerWidth <= 575 ? 'nav-link' : '';
+
         return (
             <Fragment>
-                <Link className={'navlink header-tablinks py-2 px-5 nav-link d-md-inline-block'} onClick={ this.props.logout } to='#'>LOGOUT</Link>
+                <Link className={'navlink header-tablinks px-5 d-md-inline-block' + navLink} onClick={ this.props.logout } to='#'>LOGOUT</Link>
             </Fragment>
         )
     };

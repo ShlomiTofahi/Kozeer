@@ -11,7 +11,7 @@ import ScrollToTop from './ScrollToTop';
 // import EditProfile from './profile/EditProfile';
 // import Home from './home/Home';
 import About from './About';
-import Manga from './Manga';
+import MangaBook from './manga/MangaBook';
 import Posts from './post/AllPosts';
 import OnlyPosts from './post/OnlyPosts';
 import Post from './post/Post';
@@ -67,11 +67,11 @@ class Main extends Component {
                     <Route exact path='/profile' component={isAuthenticated ? ShowProfile : Posts} />
                     <Route exact path='/profile/edit' component={isAuthenticated ? EditProfile : Posts} />
                     <Route exact path='/my-vision' component={About} />
-                    <Route exact path='/manga' component={Manga} />
+                    <Route exact path='/manga' component={MangaBook} />
                     <Route exact path='/post' component={OnlyPosts} />
                     <Route exact path="/post/:id" component={Post} />
                     <Route exact path='/show-mangas' component={ShowMangas} />
-                    <Route exact path="/show-mangas/:id" component={Post} />
+                    {/* <Route exact path="/show-mangas/:id" component={Post} /> */}
                 </Switch>
             </main>
         )

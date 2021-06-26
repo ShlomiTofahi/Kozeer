@@ -86,8 +86,9 @@ router.delete('/:id', auth, (req, res) => {
                     user.save().then(() => { });
                 })
             })
-            Comment.deleteMany({ post: post._id }).then(posts => { })
-            post.deleteOne().then(() => res.json({ success: true }));
+            Comment.deleteMany({ post: post._id }).then(() => {
+                post.deleteOne().then(() => res.json({ success: true }));
+            })
         })
     })
         .catch(err => res.status(404).json({ success: false }));

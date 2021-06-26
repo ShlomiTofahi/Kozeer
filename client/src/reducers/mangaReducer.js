@@ -14,9 +14,12 @@ export default function mangaReducer(state = initialState, action) {
                 loading: false
             };
         case ADD_MANGA:
+            newMangas = [...state.mangas, action.payload];
+            newMangas = newMangas.sort((a, b) => Number(a.page.substring(4)) - Number(b.page.substring(4)));
+
             return {
                 ...state,
-                mangas: [...state.mangas, action.payload],
+                mangas: newMangas,
             };
         case DELETE_MANGA:
             return {
@@ -27,6 +30,7 @@ export default function mangaReducer(state = initialState, action) {
             let newMangas = [...state.mangas];
             var index = newMangas.findIndex(element => element._id === action.payload._id);
             newMangas[index] = action.payload;
+            newMangas = newMangas.sort((a, b) => Number(a.page.substring(4)) - Number(b.page.substring(4)));
             return {
                 ...state,
                 mangas: newMangas

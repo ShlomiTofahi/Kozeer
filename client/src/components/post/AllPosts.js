@@ -24,14 +24,8 @@ class AllPosts extends Component {
 
   componentDidMount() {
     this.props.getPosts();
-
-    // console.log('first')
-    // const postID2 = '609538dc93644d5738d7863e';
-    // const commentID = '609803494c499133f0a769c9';
-    // const body = 'test 1';
-    // this.props.replyComment(postID2, commentID, body);
-
    }
+
   onSearchClick = (id) => {
     this.setState({
       searchCicked: !this.state.searchCicked

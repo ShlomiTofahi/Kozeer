@@ -9,12 +9,15 @@ const Manga = require('../../models/Manga');
 const User = require('../../models/User');
 //Post Model
 const Post = require('../../models/Post');
+//Chapter Model
+const Chapter = require('../../models/Chapter');
 
 // @route   GET api/mangas
 // @desc    Get All Manga
 // @access  Public
 router.get('/', (req, res) => {
     Manga.find()
+        .sort({ page: 1 })
         .then(manga => res.json(manga))
 });
 
@@ -22,10 +25,11 @@ router.get('/', (req, res) => {
 // @desc    Create A Manga
 // @access  Private
 router.post('/', auth, (req, res) => {
-    const { page, mangaImage } = req.body;
+    let { page, fullpage, chapter, mangaImage } = req.body;
+    page = page.charAt(0).toUpperCase() + page.substring(1).toLowerCase();
 
     //Simple validation
-    if (!page || !mangaImage) {
+    if (!page || !chapter || !mangaImage) {
         return res.status(400).json({ msg: 'Please enter all fields' });
     }
     //check for existing manga
@@ -36,13 +40,28 @@ router.post('/', auth, (req, res) => {
                 .select('-password')
                 .then(user => {
                     if (user.admin) {
-                        const newManga = new Manga({ page, mangaImage });
-                        newManga.save().then(manga => {
-                            Manga.findOne(manga)
-                                .then(manga => {
-                                    res.json(manga)
-                                });
-                        });
+                        Chapter.findOne({ name: chapter }).then(chapter => {
+
+                            const newManga = new Manga({ page, fullpage, chapter, mangaImage });
+                            newManga.save().then(manga => {
+                                Manga.findOne(manga)
+                                    .then(manga => {
+                                        Manga.find({ chapter: chapter })
+                                            .then(mangas => {
+                                                chapter.mangas = mangas;
+                                                chapter.save().then(() => {
+                                                    {
+                                                        Manga.findOne(manga).populate('chapter').populate({ path: 'chapter', populate: { path: 'mangas' } })
+                                                            .then(manga => {
+                                                                res.json(manga)
+                                                            });
+                                                    }
+                                                })
+
+                                            })
+                                    });
+                            });
+                        })
                     } else {
                         return res.status(400).json({ msg: 'No permission' });
                     }
@@ -60,7 +79,8 @@ router.post('/edit/:id', auth, (req, res) => {
             return res.status(400).json({ msg: 'No permission' });
         }
 
-        const { page, mangaImage } = req.body;
+        let { page, fullpage, mangaImage } = req.body;
+        page = page.charAt(0).toUpperCase() + page.substring(1).toLowerCase();
 
         //Simple validation
         if (!page) {
@@ -69,33 +89,37 @@ router.post('/edit/:id', auth, (req, res) => {
 
         var newManga = {
             page,
+            fullpage,
             mangaImage
         };
 
         Manga.findById(req.params.id).then(manga =>
             manga.updateOne(newManga).then(() => {
-                Manga.findById(req.params.id)
+                Manga.findById(req.params.id).populate('chapter').populate({ path: 'chapter', populate: { path: 'mangas' } })
                     .then(manga => res.json(manga))
             })
-        ).catch(err => res.status(404).json({ success: false }));
+        ).catch(err => res.status(404).json({ manga }));
     })
-
 });
 
 // @route   DELETE api/mangas
 // @desc    Delete Manga
 // @access  Private
 router.delete('/:id', auth, (req, res) => {
+
     Manga.findById(req.params.id)
         .then(manga => {
             User.findById(req.user.id)
                 .select('-password')
                 .then(user => {
                     if (user.admin) {
-                        Post.findOne({ manga }).then(post => {
-                            if (post) return res.status(400).json({ msg: 'Cannot delete because there are posts under this manga' });
-
-                            manga.deleteOne().then(() => res.json({ success: true }))
+                        Chapter.findById(manga.chapter).populate('mangas').then(chapter => {
+                            chapter.mangas = chapter.mangas.filter(manga => manga._id != req.params.id);
+                            chapter.save().then(() => { });
+                            Post.findOne({ manga }).then(post => {
+                                if (post) return res.status(400).json({ msg: 'Cannot delete because there are posts under this manga' });
+                                manga.deleteOne().then(() => res.json(chapter))
+                            })
                         })
                     } else {
                         return res.status(400).json({ msg: 'No permission' });

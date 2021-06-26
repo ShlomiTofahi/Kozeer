@@ -57,13 +57,17 @@ class AppNavbar extends Component {
         const { isAuthenticated, user } = this.props.auth;
         // const is_admin = (isAuthenticated && user.admin);
 
+        const smallScreen = window.innerWidth <= 575 ? true : false;
+        const navColor = window.innerWidth <= 575 ? 'nav-color' : '';
+        const navLink = window.innerWidth <= 575 ? 'nav-link' : '';
+
         const authLinks = (
             <Fragment>
                 <NavItem>
                     <Logout />
                 </NavItem>
                 <NavItem>
-                    <Link className={'navlink header-tablinks py-2 px-5 nav-link d-md-inline-block'} to='/profile'>PROFIL</Link>
+                    <Link className={'navlink header-tablinks px-5 nav-link d-md-inline-block' + navLink} to='/profile'>PROFIL</Link>
                 </NavItem>
             </Fragment>
         );
@@ -124,65 +128,34 @@ class AppNavbar extends Component {
                         <div style={headerLogoStyle} className='mb-3' align="center">
                             <CardImg style={logoStyle} src={'/images/header/header_kozeer_logo.png'} />
                         </div>
-                        {window.innerWidth <= 575 ?
-                            <Navbar fixed='center' dark expand='sm' className='nav-header nav-color mb-5'>
-                                <Container>
-                                    <NavbarToggler className='NavToggler' onClick={this.toggle} />
-                                    <Collapse onClick={() => { this.setState({ isOpen: false }) }} isOpen={this.state.isOpen} navbar >
-                                        <Nav className='header-tab m-auto' navbar>
-                                            <NavItem>
-                                                <Link onClick={this.openTab.bind(this)} style={{ borderLeft: 'none' }} className={'navlink header-tablinks py-2 px-5 nav-link d-md-inline-block'} to='/forum'>HOME</Link>
-                                            </NavItem>
-                                            <NavItem>
-                                                <Link onClick={this.openTab.bind(this)} className={'navlink header-tablinks  py-2 px-5 nav-link d-md-inline-block lead'} to='/post'>POSTS</Link>
-                                            </NavItem>
-                                            <NavItem>
-                                                <Link onClick={this.openTab.bind(this)} className={'navlink header-tablinks  py-2 px-5 nav-link d-md-inline-block lead'} to='/manga'>MANGA</Link>
-                                            </NavItem>
-                                            <NavItem>
-                                                <Link onClick={this.openTab.bind(this)} className={'navlink header-tablinks disable-border py-2 px-5 nav-link d-md-inline-block lead'} to='/my-vision'>MY VISION</Link>
-                                            </NavItem>
-                                            {isAuthenticated ? authLinks : guestLinks}
-                                            {/* {is_admin &&
-                                                <NavItem>
-                                                    <Link style={{ float: 'right', color: 'red' }} className={'navlink py-2 nav-link d-md-inline-block lead'} to='/admin'>
-                                                        <strong>Admin</strong></Link>
-                                                </NavItem>
-                                            } */}
-                                        </Nav>
-                                    </Collapse>
-                                </Container>
-                            </Navbar>
-                            :
-                            <Navbar fixed='center' expand='sm' className='nav-header mb-5'>
-                                <Container>
-                                    <NavbarToggler className='NavToggler' onClick={this.toggle} />
-                                    <Collapse onClick={() => { this.setState({ isOpen: false }) }} isOpen={this.state.isOpen} navbar >
-                                        <Nav className='header-tab m-auto' navbar>
-                                            <NavItem>
-                                                <Link onClick={this.openTab.bind(this)} style={{ borderLeft: 'none' }} className={'navlink header-tablinks py-2 px-5 d-md-inline-block'} to='/'>HOME</Link>
-                                            </NavItem>
-                                            <NavItem>
-                                                <Link onClick={this.openTab.bind(this)} className={'navlink header-tablinks py-2 px-5 d-md-inline-block lead'} to='/post'>POSTS</Link>
-                                            </NavItem>
-                                            <NavItem>
-                                                <Link onClick={this.openTab.bind(this)} className={'navlink header-tablinks py-2  px-5 d-md-inline-block lead'} to='/manga'>MANGA</Link>
-                                            </NavItem>
-                                            <NavItem>
-                                                <Link onClick={this.openTab.bind(this)} className={'navlink header-tablinks py-2  px-5 d-md-inline-block lead'} to='/my-vision'>MY VISION</Link>
-                                            </NavItem>
-                                            {isAuthenticated ? authLinks : guestLinks}
-                                            {/* {is_admin &&
+                        <Navbar fixed='center' dark={smallScreen} expand='sm' className={'nav-header mb-5 ' + navColor}>
+                            <Container>
+                                <NavbarToggler className='NavToggler' onClick={this.toggle} />
+                                <Collapse onClick={() => { this.setState({ isOpen: false }) }} isOpen={this.state.isOpen} navbar >
+                                    <Nav className='header-tab m-auto' navbar>
+                                        <NavItem>
+                                            <Link onClick={this.openTab.bind(this)} style={{ borderLeft: 'none' }} className={'navlink header-tablinks px-5 d-md-inline-block ' + navLink} to='/'>HOME</Link>
+                                        </NavItem>
+                                        <NavItem>
+                                            <Link onClick={this.openTab.bind(this)} className={'navlink header-tablinks px-5 d-md-inline-block ' + navLink} to='/post'>POSTS</Link>
+                                        </NavItem>
+                                        <NavItem>
+                                            <Link onClick={this.openTab.bind(this)} className={'navlink header-tablinks px-5 d-md-inline-block ' + navLink} to='/manga'>MANGA</Link>
+                                        </NavItem>
+                                        <NavItem>
+                                            <Link onClick={this.openTab.bind(this)} className={'navlink header-tablinks px-5 d-md-inline-block ' + navLink} to='/my-vision'>MY VISION</Link>
+                                        </NavItem>
+                                        {isAuthenticated ? authLinks : guestLinks}
+                                        {/* {is_admin &&
                                 <NavItem>
                                     <Link style={{ float: 'right', color: 'red' }} className={'navlink py-2 nav-link d-md-inline-block lead'} to='/admin'>
                                         <strong>Admin</strong></Link>
                                 </NavItem>
                             } */}
-                                        </Nav>
-                                    </Collapse>
-                                </Container>
-                            </Navbar>
-                        }
+                                    </Nav>
+                                </Collapse>
+                            </Container>
+                        </Navbar>
                     </div>
                 </header>
             </Fragment>

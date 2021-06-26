@@ -64,24 +64,25 @@ class ShowElements extends Component {
 
     return (
       <Fragment >
-        <ListGroup style={{ maxWidth: '600px', textAlign: 'right' }}>
-          <TransitionGroup className='pt-3 pb-3'>
-            {elements && elements.map(({ _id, page }) => (
-              <CSSTransition key={_id} timeout={500} classNames='fade'>
-                <ListGroupItem className='mt-1' style={this.getStyle()}>
-                  {isAuthenticated ?
-                    <div>
-                      <Button
-                        style={btnRemoveStyle}
-                        // style={{right: '0'}}
-                        className='remove-btn-admin'
-                        color='danger'
-                        size='sm'
-                        onClick={this.onDeleteClick.bind(this, _id)}
-                      >&#10007;</Button>
-                      <EditMangaModal mangaID={_id} />
+        <div align='center' style={bodyStyle}>
+          <ListGroup style={{ maxWidth: '600px', textAlign: 'right' }}>
+            <TransitionGroup className='pt-3 pb-3'>
+              {elements && elements.map(({ _id, page }) => (
+                <CSSTransition key={_id} timeout={500} classNames='fade'>
+                  <ListGroupItem className='mt-1' style={this.getStyle()}>
+                    {isAuthenticated ?
+                      <div>
+                        <Button
+                          style={btnRemoveStyle}
+                          // style={{right: '0'}}
+                          className='remove-btn-admin'
+                          color='danger'
+                          size='sm'
+                          onClick={this.onDeleteClick.bind(this, _id)}
+                        >&#10007;</Button>
+                        <EditMangaModal mangaID={_id} />
 
-                      {/* <Button
+                        {/* <Button
                         style={btnEditStyle}
                         className='edit-btn-admin'
                         title='ערוך'
@@ -89,14 +90,15 @@ class ShowElements extends Component {
                         size='sm'
                         onClick={this.onEditClick.bind(this, _id)}
                       >&#x2711;</Button> */}
-                    </div>
-                    : null}
-                  <span class="ml-4">{page}</span>
-                </ListGroupItem>
-              </CSSTransition>
-            ))}
-          </TransitionGroup>
-        </ListGroup>
+                      </div>
+                      : null}
+                    <span class="ml-4">{page}</span>
+                  </ListGroupItem>
+                </CSSTransition>
+              ))}
+            </TransitionGroup>
+          </ListGroup>
+        </div>
         <Modal
           align="right"
           isOpen={this.state.modal}
@@ -114,6 +116,16 @@ class ShowElements extends Component {
     );
   }
 }
+const bodyStyle = {
+      WebkitBorderRadius: '10px',
+      MozBorderRadius: '10px',
+      borderRadius: '10px',
+      margin: '0 auto',
+      backgroundColor: '#323232',
+      color: 'white',
+      width: '80%',
+};
+
 const btnRemoveStyle = {
   background: "#ff0000",
   color: "#fff",

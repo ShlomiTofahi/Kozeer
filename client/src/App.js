@@ -9,6 +9,7 @@ import { loadUser } from './actions/authActions'
 import AppNavbar from './components/AppNavbar';
 import Footer from './components/Footer';
 import Main from './components/Main';
+import PostSuggestions from './components/post/PostSuggestions'
 
 
 class App extends Component {
@@ -22,6 +23,8 @@ class App extends Component {
         <div className="App" style={bgStyle}>
           <BrowserRouter>
             <AppNavbar />
+            {/* <PostSuggestions /> */}
+
             <Main />
             <Footer />
           </BrowserRouter>

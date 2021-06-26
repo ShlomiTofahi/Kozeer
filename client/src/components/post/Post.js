@@ -182,9 +182,9 @@ class Post extends Component {
                   {/* kozeer - page 65 + page 66 + page 67 */}
                   {/* </CardText> */}
                   <CardTitle style={titleStyle} tag="h3" className="mt-2 mb-4">
-                    {
-                      post.is_manga ? <span>KOZER - </span> : null
-                    }
+                    {/* {
+                      post.is_manga ? <span>KOZEER - </span> : null
+                    } */}
                     {post.title}
                   </CardTitle>
 
@@ -440,7 +440,7 @@ const titleStyle = {
   display: '-webkit-box',
   WebkitLineClamp: '1',
   WebkitBoxOrient: 'vertical',
-  fontFamily: "'Mountains of Christmas', Tart Workshop",
+  fontFamily: "'Brawler', Cyreal",
   fontSize: window.innerWidth / 35 + 'px',
   color: 'black',
   opacity: '0.8'

@@ -125,12 +125,15 @@ class LoginModal extends Component {
         }))
     }
     render() {
+
+        const navLink = window.innerWidth <= 575 ? 'nav-link' : '';
+
         return (
             <div>
                 {
                     this.props.linkcolor === 'green' ?
                         <Link className='login-btn' onClick={this.toggle} href='#'>Connect</Link>
-                        : <Link className={'navlink header-tablinks py-2 px-5 nav-link d-md-inline-block'} onClick={this.toggle} to='#'>SIGN UP</Link>
+                        : <Link className={'navlink header-tablinks px-5 nav-link d-md-inline-block' + navLink} onClick={this.toggle} to='#'>SIGN UP</Link>
                 }
 
 

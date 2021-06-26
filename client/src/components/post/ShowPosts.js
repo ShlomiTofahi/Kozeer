@@ -135,9 +135,9 @@ class ShowPosts extends Component {
                         </Row>
                         <div className="mb-4 ml-2">
                           <CardText style={titleStyle} className="mb-2">
-                            {
-                              is_manga ? <span>KOZER - </span> : null
-                            }
+                            {/* {
+                              is_manga ? <span>KOZEER - </span> : null
+                            } */}
                             {title}
                             {/* kozeer - page 65 + page 66 + page 67 */}
                           </CardText>
