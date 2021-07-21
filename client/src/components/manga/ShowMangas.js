@@ -26,6 +26,7 @@ class ShowMangas extends Component {
     static protoType = {
         auth: PropTypes.object,
         manga: PropTypes.object,
+        chapter: PropTypes.object,
         getChapters: PropTypes.func.isRequired,
         getMangas: PropTypes.func.isRequired
     }

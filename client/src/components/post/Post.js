@@ -7,6 +7,7 @@ import {
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import PostSuggestions from './PostSuggestions'
 
 // import { Passers } from "prop-passer";
 import {
@@ -363,7 +364,7 @@ class Post extends Component {
               </Container>
 
             </div>
-
+            <PostSuggestions />
             <div className='mb-4 mt-5 mx-2' style={postBodyStyle}>
               <ShowComments postID={this.props.match.params.id} order={this.order} />
             </div>

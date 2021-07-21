@@ -1,8 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import {
   Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input, CardFooter, CardImg, Alert,
-  Collapse, Col
+  Collapse, Col, ListGroup, ListGroupItem
 } from 'reactstrap';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -11,6 +13,7 @@ import 'suneditor/dist/css/suneditor.min.css';
 
 import { addPost } from '../../actions/postActions';
 import { getMangas } from '../../actions/mangaActions';
+import { getChapters } from '../../actions/chapterActions';
 import { clearErrors } from '../../actions/errorActions';
 import { clearMsgs } from '../../actions/msgActions';
 
@@ -26,6 +29,7 @@ class AddPostModal extends Component {
     postImage: '',
     is_manga: false,
     mangasSelected: [],
+    Collapsetoggle: [],
     fadeIn: false,
     dropDownMangaOpen: false
   };
@@ -36,10 +40,12 @@ class AddPostModal extends Component {
     msg: PropTypes.object.isRequired,
     manga: PropTypes.object.isRequired,
     addPost: PropTypes.func.isRequired,
+    getChapters: PropTypes.func.isRequired,
     getMangas: PropTypes.func.isRequired,
     clearErrors: PropTypes.func.isRequired
   }
   componentDidMount() {
+    this.props.getChapters();
     this.props.getMangas();
   }
   componentDidUpdate(prevProps) {
@@ -122,6 +128,17 @@ class AddPostModal extends Component {
     this.props.addPost(newPost);
   }
 
+  CollapseHangdle = (name) => {
+    if (this.state.Collapsetoggle.includes(name)) {
+      this.setState(prevState => ({
+        Collapsetoggle: prevState.Collapsetoggle.filter(element => element !== name)
+      }));
+    } else {
+      this.setState(prevState => ({
+        Collapsetoggle: [...prevState.Collapsetoggle, name]
+      }));
+    }
+  }
 
   handleModelChange = model => {
     this.setState({ body: model });
@@ -166,14 +183,23 @@ class AddPostModal extends Component {
     const { isAuthenticated, user } = this.props.auth;
     const is_admin = (isAuthenticated && user.admin);
 
-    const { mangas } = this.props.manga;
+    // const { mangas } = this.props.manga;
+    const { chapters } = this.props.chapter;
+
     const noImageFullpath = this.state.path + 'no-image.png';
 
     var dropDownMangaSymbol = this.state.dropDownMangaOpen ? <span>&#45;</span> : <span>&#x2B;</span>
 
+    let dropDownSymbolList = []
+
+    chapters.map(({ name }) => {
+      dropDownSymbolList = [...dropDownSymbolList, this.state.Collapsetoggle.includes(name) ?
+        { name: <span>&#45;</span> } : { name: <span>&#x2B;</span> }]
+    })
+
     return (
       <div>
-        { is_admin ?
+        {is_admin ?
           <nav className="mt-2 pl-4">
             {/* <div className="input-group col-12 col-sm-8 col-md-6 col-lg-5 pb-3"> */}
             {/* <CardImg bottom className='forum-pet-image ml-1 mt-1' src={user.petImage} /> */}
@@ -226,17 +252,41 @@ class AddPostModal extends Component {
                 </div>
                 <Collapse isOpen={this.state.is_manga}>
                   <div>
-                    <Button className="collapsible" onClick={this.DropDowntoggleManga} style={{ marginBottom: '1rem' }}>Mangas <strong style={{ marginRight: '44px' }}>{dropDownMangaSymbol}</strong></Button>
+                    <Button className="collapsible" onClick={this.DropDowntoggleManga} style={{ marginBottom: '1rem', opacity: '0.7' }}>Mangas <strong style={{ marginLeft: '44px' }}>{dropDownMangaSymbol}</strong></Button>
                     <Collapse isOpen={this.state.dropDownMangaOpen}>
-                      {mangas &&
-                        mangas.map(({ _id, page }) => (
-                          <Col key={_id} className='pt-0'>
-                            <label class="checkbox_item">
-                              <input class="ml-2" onChange={this.addMangaToPost} type="checkbox" name="mangasSelected" data-tax="name" defaultValue={page} />
-                              <small>{page}</small>
-                            </label>
-                          </Col>
+
+
+
+                      <div className='chapter-list position-relative py-3 px-4'>
+                        {chapters && chapters.map(({ _id, name, mangas }, index) => (
+                          <Fragment key={_id}>
+                            <span className={'chapter-item'}>
+                              <Button
+                                block
+                                size='sm'
+                                color='info'
+                                onClick={this.CollapseHangdle.bind(this, name)}
+                                style={{ marginBottom: '1rem', opacity: '0.7' }}
+                              >{name}<strong class='pr-3' style={{ position: 'absolute', right: '0' }}>{dropDownSymbolList[index].name}</strong></Button>
+                            </span>
+
+                            <Collapse isOpen={this.state.Collapsetoggle.includes(name)}>
+
+                              <ListGroup className="manga-list">
+                                {mangas &&
+                                  mangas.sort((a, b) => Number(a.page.substring(4)) - Number(b.page.substring(4))).map(({ _id, page }) => (
+                                    <Col key={_id} className='pt-0'>
+                                      <label class="checkbox_item">
+                                        <input class="ml-2" onChange={this.addMangaToPost} type="checkbox" name="mangasSelected" data-tax="name" defaultValue={page} />
+                                        <small>{page}</small>
+                                      </label>
+                                    </Col>
+                                  ))}
+                              </ListGroup>
+                            </Collapse>
+                          </Fragment>
                         ))}
+                      </div>
                     </Collapse>
                   </div>
                 </Collapse>
@@ -324,6 +374,7 @@ const inputFormStyle = {
 };
 const mapStateToProps = state => ({
   post: state.item,
+  chapter: state.chapter,
   auth: state.auth,
   error: state.error,
   msg: state.msg,
@@ -332,5 +383,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { addPost, clearErrors, clearMsgs, getMangas }
+  { addPost, getChapters, clearErrors, clearMsgs, getMangas }
 )(AddPostModal);

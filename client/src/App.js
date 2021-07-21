@@ -9,26 +9,41 @@ import { loadUser } from './actions/authActions'
 import AppNavbar from './components/AppNavbar';
 import Footer from './components/Footer';
 import Main from './components/Main';
-import PostSuggestions from './components/post/PostSuggestions'
-
+import Over13 from './components/Over13';
+import ScrollUpButton from "react-scroll-up-button";
 
 class App extends Component {
+  state = {
+    over13: false
+  };
+
   componentDidMount() {
     store.dispatch(loadUser());
   }
+
+  onOver13Click = () => {
+    this.setState({
+      over13: !this.state.over13
+    })
+  }
+
   render() {
 
     return (
       <Provider store={store}>
-        <div className="App" style={bgStyle}>
-          <BrowserRouter>
-            <AppNavbar />
-            {/* <PostSuggestions /> */}
-
-            <Main />
-            <Footer />
-          </BrowserRouter>
-        </div>
+        {
+          !this.state.over13 ?
+            <Over13  onOver13Click={this.onOver13Click} />
+            :
+            <div className="App" style={bgStyle}>
+              <BrowserRouter>
+                <AppNavbar />
+                <Main />
+                <ScrollUpButton />
+                <Footer />
+              </BrowserRouter>
+            </div>
+        }
       </Provider>
     );
   }

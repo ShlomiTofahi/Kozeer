@@ -94,6 +94,8 @@ class PostSuggestions extends Component {
     const is_admin = (isAuthenticated && user.admin);
     // posts = posts.filter(post => !post.is_manga);
 
+    posts = posts.filter((post) => post.is_manga ).slice(0,3);
+
     const heartLoved = this.state.lovedcicked ?
       <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" className="bi bi-suit-heart-fill" viewBox="0 0 16 16">
         <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z" />
@@ -104,7 +106,7 @@ class PostSuggestions extends Component {
 
     return (
       <Fragment >
-        <Container>
+        {/* <Container> */}
           <TransitionGroup align='left' className='pt-4 pb-1'>
             <Row>
               {posts && posts.map(({ _id, title, views, postImage, loved, is_manga, mangas, comments }) => (
@@ -128,9 +130,9 @@ class PostSuggestions extends Component {
                           <Container>
                             <div className="mb-4 ml-2 mt-3">
                               <CardText style={titleStyle} className="mb-2">
-                                {
+                                {/* {
                                   is_manga ? <span>KOZER - </span> : null
-                                }
+                                } */}
                                 {title}
                               </CardText>
                             </div>
@@ -193,7 +195,7 @@ class PostSuggestions extends Component {
               ))}
             </Row>
           </TransitionGroup>
-        </Container>
+        {/* </Container> */}
       </Fragment >
     );
   }
@@ -232,13 +234,14 @@ const postFooterStyle = {
 }
 
 const titleStyle = {
-  fontFamily: "'Mountains of Christmas', Tart Workshop",
+  // fontFamily: "'Mountains of Christmas', Tart Workshop",
+  fontFamily: "'Brawler', Cyreal",
   overflow: 'hidden',
   textOverflow: 'ellipsis',
   display: '-webkit-box',
   WebkitLineClamp: '1',
   WebkitBoxOrient: 'vertical',
-  fontSize: window.innerWidth / 95 + 'px'
+  fontSize: window.innerWidth / 133 + 'px'
 }
 const postLovedStyle = {
   position: 'absolute',

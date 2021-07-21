@@ -142,19 +142,21 @@ class ShowPosts extends Component {
                             {/* kozeer - page 65 + page 66 + page 67 */}
                           </CardText>
                           <CardText className="mb-2 pb-3">
-                            <small style={bodyStyle} className='text-muted'>
-                              <SunEditor
-                                disable={true}
+                            {body !== '' &&
+                              <small style={bodyStyle} className='text-muted'>
+                                <SunEditor
+                                  disable={true}
 
-                                enableToolbar={false}
-                                showToolbar={false}
-                                setContents={body}
-                                width="100%" height="100%" setOptions={{ resizingBar: false, showPathLabel: false }} />
+                                  enableToolbar={false}
+                                  showToolbar={false}
+                                  setContents={body}
+                                  width="100%" height="100%" setOptions={{ resizingBar: false, showPathLabel: false }} />
 
-                              {/* Hi , Today im her to bring you the new 3 pages of the week,
+                                {/* Hi , Today im her to bring you the new 3 pages of the week,
                               Gomora is really nervous right now and it seems that Scar
                               did not show everything yet. */}
-                            </small>
+                              </small>
+                            }
                           </CardText>
                         </div>
                         {/* <Row>
@@ -197,7 +199,7 @@ class ShowPosts extends Component {
                               {views} views
                               <span className='text-dark post-link pl-2'>
                                 {comments.length} comments
-                             </span>
+                              </span>
                               <Link to={'/post/' + _id} className='text-dark post-link pl-2 d-block d-sm-inline' onClick={this.handleClickPost.bind(this, _id)}>
                                 Write a comment
                               </Link>
@@ -313,13 +315,14 @@ const bodyStyle = {
   fontSize: '14px',
 }
 const titleStyle = {
-  fontFamily: "'Mountains of Christmas', Tart Workshop",
+  // fontFamily: "'Mountains of Christmas', Tart Workshop",
+  fontFamily: "'Brawler', Cyreal",
   overflow: 'hidden',
   textOverflow: 'ellipsis',
   display: '-webkit-box',
   WebkitLineClamp: '1',
   WebkitBoxOrient: 'vertical',
-  fontSize: window.innerWidth / 35 + 'px'
+  fontSize: window.innerWidth / 47 + 'px'
 }
 const postLovedStyle = {
   position: 'absolute',

@@ -11,11 +11,14 @@ import { replyComment, addComment } from '../../actions/commentActions';
 import ShowPosts from './ShowPosts';
 import AddPostModal from './AddPostModal';
 
+import InstagramFeed from 'react-ig-feed'
+import 'react-ig-feed/dist/index.css'
 
 class AllPosts extends Component {
   state = {
     searchCicked: true
   };
+
   static protoType = {
     post: PropTypes.object,
     getPosts: PropTypes.func.isRequired,
@@ -24,7 +27,7 @@ class AllPosts extends Component {
 
   componentDidMount() {
     this.props.getPosts();
-   }
+  }
 
   onSearchClick = (id) => {
     this.setState({
@@ -39,16 +42,15 @@ class AllPosts extends Component {
 
     // Create Filted Item object
     const FiltedPosts = {
-        title,
+      title,
     };
 
     // Attempt to filter
     this.props.getFilterPosts(FiltedPosts);
-}
+  }
 
   render() {
     const { posts, loading } = this.props.post;
-    console.log(posts)
 
     const searchToggle = this.state.searchCicked ?
       <div style={searchLimitStyle} className="input-group">
@@ -81,7 +83,7 @@ class AllPosts extends Component {
           <div style={postHeaderStyle}>
 
             <div className='row  justify-content-between'>
-              <div 
+              <div
               // className='bg-dark col-4 col-sm-4 col-md-3 col-lg-3'
               >
                 <AddPostModal />
@@ -95,6 +97,13 @@ class AllPosts extends Component {
             <div style={{ position: 'relative', height: '333px' }}><Spinner style={spinnerStyle} color="secondary" /></div>
             : <ShowPosts elements={posts} />
           }
+
+        </div>
+        <div className='mt-3 mx-3'>
+          <InstagramFeed
+            token="IGQVJXak8yeUFESm9mUXhxSlFXcVl5N19RanlnS0NOdV9fenlNNTNOWFBka1JBTWlOUHI1Q3k0d0ZAER2o2cjctU01iVE5iUXU4Qjg5NG55X3BLaW15blR0anVKTk0zQzc3WG54MnlmS1ppaWpOSHd4WgZDZD"
+            counter="6"
+          />
         </div>
       </Fragment>
     );
@@ -125,7 +134,7 @@ const postSearchStyle = {
   // position: 'absolute',
   textAlign: 'right',
   margin: '15px',
-  paddingRight:'10px'
+  paddingRight: '10px'
   // right: '0'
 }
 const inputStyle = {
@@ -137,10 +146,10 @@ const inputStyle = {
 };
 const inputSearchStyle = {
   width: '55px',
-  marginTop:'-3px'
+  marginTop: '-3px'
 }
 const searchLimitStyle = {
-   marginTop: '-2px'
+  marginTop: '-2px'
 }
 const mapStateToProps = (state) => ({
   post: state.post,
