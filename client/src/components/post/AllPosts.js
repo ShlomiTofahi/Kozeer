@@ -11,8 +11,8 @@ import { replyComment, addComment } from '../../actions/commentActions';
 import ShowPosts from './ShowPosts';
 import AddPostModal from './AddPostModal';
 
-import InstagramFeed from 'react-ig-feed'
-import 'react-ig-feed/dist/index.css'
+// import InstagramFeed from 'react-ig-feed'
+// import 'react-ig-feed/dist/index.css'
 
 class AllPosts extends Component {
   state = {
@@ -99,12 +99,12 @@ class AllPosts extends Component {
           }
 
         </div>
-        <div className='mt-3 mx-3'>
+        {/* <div className='mt-3 mx-3'>
           <InstagramFeed
             token="IGQVJXak8yeUFESm9mUXhxSlFXcVl5N19RanlnS0NOdV9fenlNNTNOWFBka1JBTWlOUHI1Q3k0d0ZAER2o2cjctU01iVE5iUXU4Qjg5NG55X3BLaW15blR0anVKTk0zQzc3WG54MnlmS1ppaWpOSHd4WgZDZD"
             counter="6"
           />
-        </div>
+        </div> */}
       </Fragment>
     );
   }
