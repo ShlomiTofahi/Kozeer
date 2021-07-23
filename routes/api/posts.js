@@ -12,6 +12,7 @@ const Manga = require('../../models/Manga');
 // @route   GET api/posts
 // @desc    Get All Posts
 // @access  Public
+
 router.get('/', (req, res) => {
     Post.find().populate('mangas').populate('comments')
         .sort({ published_date: -1 })
@@ -86,9 +87,9 @@ router.delete('/:id', auth, (req, res) => {
                     user.save().then(() => { });
                 })
             })
-            Comment.deleteMany({ post: post._id }).then(() => {
-                post.deleteOne().then(() => res.json({ success: true }));
-            })
+            Comment.deleteMany({ post: post._id }).then(() =>
+                post.deleteOne().then(() => res.json({ success: true }))
+            );
         })
     })
         .catch(err => res.status(404).json({ success: false }));
@@ -98,10 +99,14 @@ router.delete('/:id', auth, (req, res) => {
 // @desc    Views A Post
 // @access  Publice
 router.post('/views/:id', (req, res) => {
-    Post.findById(req.params.id).then(post => {
-        post.views = post.views + 1;
-        post.save().then(() => res.json({ success: true }));
-    })
+    Post.findById(req.params.id)
+        .then(post => {
+            post.views = post.views + 1;
+            post.save().then((post) => {
+                Post.findOne(post).populate('mangas').populate('comments')
+                    .then((post) => res.json(post));
+            })
+        })
         .catch(err => res.status(404).json({ success: false }));
 });
 
@@ -109,14 +114,14 @@ router.post('/views/:id', (req, res) => {
 // @desc    Loved A Post
 // @access  Publice
 router.post('/loved/:id', (req, res) => {
-    Post.findById(req.params.id).then(post => {
-        post.loved = post.loved + 1;
-        post.save().then((post) => {
-            Post.findOne(post).populate('mangas').populate('comments').then((post) =>
-                res.json(post)
-            );
+    Post.findById(req.params.id)
+        .then(post => {
+            post.loved = post.loved + 1;
+            post.save().then((post) => {
+                Post.findOne(post).populate('mangas').populate('comments')
+                    .then((post) => res.json(post));
+            })
         })
-    })
         .catch(err => res.status(404).json({ success: false }));
 });
 

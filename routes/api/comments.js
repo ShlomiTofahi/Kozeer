@@ -34,12 +34,10 @@ router.get('/:data', (req, res) => {
 
     // if (req.params.data)
     //      order = JSON.parse(req.params.data);
-    console.log(order)
+    //console.log(order)
     Comment.find({ post: post_id }).populate('post').populate('user').populate('comment').populate({ path: 'comment', populate: { path: 'user' } }).populate({ path: 'comments', populate: { path: 'user' } })
         .sort({ published_date: order })
-        .then(comments => {
-            res.json(comments)
-        })
+        .then(comments => res.json(comments));
 });
 
 // @route   POST api/comments/reply/asguest
@@ -71,13 +69,9 @@ router.post('/reply/asguest/:data', (req, res) => {
                                 comment.comments = [...comment.comments, comment3]
                                 post.comments = post_comments;
                                 user.comments = user_comments;
-                                post.save().then(() => {
-                                    user.save().then(() => {
-                                        comment.save().then(() => {
-                                            res.json(comment3);
-                                        });
-                                    });
-                                })
+                                post.save().then(() => user.save()
+                                    .then(() => comment.save().then(() => res.json(comment3)))
+                                );
                             })
                         })
                     });
@@ -116,13 +110,11 @@ router.post('/reply/:data', auth, (req, res) => {
                                 comment.comments = [...comment.comments, comment3]
                                 post.comments = post_comments;
                                 user.comments = user_comments;
-                                post.save().then(() => {
-                                    user.save().then(() => {
-                                        comment.save().then(() => {
-                                            res.json(comment3);
-                                        });
-                                    });
-                                })
+                                post.save().then(() =>
+                                    user.save().then(() =>
+                                        comment.save().then(() => res.json(comment3))
+                                    )
+                                );
                             })
                         })
                     });
@@ -156,14 +148,8 @@ router.post('/asguest/:id', (req, res) => {
                         Comment.find({ user }).populate('post').populate('user').then(user_comments => {
 
                             post.comments = post_comments;
-                            console.log('post');
-                            console.log(post);
                             user.comments = user_comments;
-                            post.save().then(() => {
-                                user.save().then(() => {
-                                    res.json(comment);
-                                });
-                            })
+                            post.save().then(() => user.save().then(() => res.json(comment)));
                         })
                     })
                 });
@@ -181,10 +167,10 @@ router.post('/loved/:id', (req, res) => {
             comment.loved = comment.loved + 1;
             comment.save()
                 .then((comment) => {
-                    Comment.findOne(comment).populate('post').populate('user').populate('comment').populate({ path: 'comment', populate: { path: 'user' } }).populate({ path: 'comments', populate: { path: 'user' } })
-                        .then((comment) =>
-                            res.json(comment)
-                        );
+                    Comment.findOne(comment).populate('post').populate('user').populate('comment')
+                        .populate({ path: 'comment', populate: { path: 'user' } })
+                        .populate({ path: 'comments', populate: { path: 'user' } })
+                        .then((comment) => res.json(comment));
                 })
         })
         .catch(err => res.status(404).json({ success: false }));
@@ -199,9 +185,10 @@ router.post('/unloved/:id', (req, res) => {
         if (comment.loved < 0)
             comment.loved = 0;
         comment.save().then((comment) => {
-            Comment.findOne(comment).populate('post').populate('user').populate('comment').populate({ path: 'comment', populate: { path: 'user' } }).populate({ path: 'comments', populate: { path: 'user' } }).then((comment) =>
-                res.json(comment)
-            );
+            Comment.findOne(comment).populate('post').populate('user').populate('comment')
+                .populate({ path: 'comment', populate: { path: 'user' } })
+                .populate({ path: 'comments', populate: { path: 'user' } })
+                .then((comment) => res.json(comment));
         })
     })
         .catch(err => res.status(404).json({ success: false }));
@@ -226,22 +213,20 @@ router.post('/:id', auth, (req, res) => {
             });
 
             newComment.save().then(comment => {
-                Comment.findOne(comment).populate('post').populate('user').populate('comment').populate('comments').then(comment => {
-                    Comment.find({ post: req.params.id }).populate('post').populate('user').then(post_comments => {
-                        Comment.find({ user: req.user.id }).populate('post').populate('user').then(user_comments => {
-
-                            post.comments = post_comments;
-                            console.log('post');
-                            console.log(post);
-                            user.comments = user_comments;
-                            post.save().then(() => {
-                                user.save().then(() => {
-                                    res.json(comment);
-                                });
+                Comment.findOne(comment).populate('post').populate('user').populate('comment').populate('comments')
+                    .then(comment => {
+                        Comment.find({ post: req.params.id }).populate('post').populate('user')
+                            .then(post_comments => {
+                                Comment.find({ user: req.user.id }).populate('post').populate('user')
+                                    .then(user_comments => {
+                                        post.comments = post_comments;
+                                        user.comments = user_comments;
+                                        post.save().then(() => user.save()
+                                            .then(() => res.json(comment))
+                                        );
+                                    })
                             })
-                        })
-                    })
-                });
+                    });
             });
         })
     })
@@ -279,15 +264,15 @@ router.delete('/:data', auth, (req, res) => {
                         Comment.find({ post: post._id }).then(comments => {
                             post.comments = comments.filter(comment => comment._id != command_id);
 
-                            post.save().then(() => {
-                                user.save().then(() => {
-                                    comment.deleteOne().then(() => {
-                                        Comment.deleteMany({ comment: command_id }).then(() => {
+                            post.save().then(() =>
+                                user.save().then(() =>
+                                    comment.deleteOne().then(() =>
+                                        Comment.deleteMany({ comment: command_id }).then(() =>
                                             res.json({ success: true })
-                                        })
-                                    });
-                                })
-                            })
+                                        )
+                                    )
+                                )
+                            );
                         })
                     })
                 })

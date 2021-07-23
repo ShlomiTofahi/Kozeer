@@ -118,7 +118,6 @@ class Manga extends Component {
                                             </SwiperSlide>
                                             {mangas && mangas.sort((a, b) =>  Number(a.page.substring(4))-Number(b.page.substring(4))).map(({ _id, mangaImage, page, fullpage }) => (
                                                 <SwiperSlide key={_id}>
-                                                    {/* {console.log(fullpage)} */}
                                                     <div style={pageStyle} >
                                                         <CardImg onClick={this.onClickImg.bind(this, mangaImage, page)} id="myImg" className={fullpage === true ? 'fullpage-manga-slider-imgs' : 'manga-slider-imgs'} src={mangaImage} alt={page} />
                                                     </div>

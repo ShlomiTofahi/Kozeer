@@ -27,7 +27,7 @@ router.post('/userid', (req, res) => {
                 { expiresIn: 3600 },
                 (err, token) => {
                     if (err) throw err;
-                    res.json({
+                    return res.json({
                         token,
                         user: {
                             _id: user.id,
@@ -71,13 +71,11 @@ router.post('/edit/:id', auth, (req, res) => {
         email
     };
 
-    User.findById(req.params.id).then(user =>
-        user.updateOne(newUser).then(() => {
-            User.findById(req.params.id)
-                .then(user => {
-                    res.json(user)
-                })
-        }))
+    User.findById(req.params.id)
+        .then(user =>
+            user.updateOne(newUser).then(() =>
+                User.findById(req.params.id)
+                    .then(user => res.json(user))))
         .catch(err => res.status(404).json({ success: false }));
 });
 
@@ -111,14 +109,11 @@ router.post('/change-pass/:id', auth, (req, res) => {
                         if (err) throw err;
 
                         password = hash;
-                        user.updateOne({ password }).then(() => {
-                            User.findById(req.params.id)
-                                .then(user => {
-                                    res.json(user)
-                                })
-                        })
-                            .catch(err => res.status(404).json({ success: false })
-                            );
+                        user.updateOne({ password })
+                            .then(() =>
+                                User.findById(req.params.id)
+                                    .then(user => res.json(user)))
+                            .catch(err => res.status(404).json({ success: false }));
                     })
                 })
             })
@@ -152,12 +147,10 @@ router.post('/change-email/:id', auth, (req, res) => {
                         if (err) throw err;
 
                         // password = hash;
-                        user.updateOne({ email }).then(() => {
-                            User.findById(req.params.id)
-                                .then(user => {
-                                    res.json(user)
-                                })
-                        })
+                        user.updateOne({ email })
+                            .then(() =>
+                                User.findById(req.params.id)
+                                    .then(user => res.json(user)))
                             .catch(err => res.status(404).json({ success: false })
                             );
                     })
@@ -171,8 +164,8 @@ router.post('/change-email/:id', auth, (req, res) => {
 // @access  Private
 router.post('/change-pass-by-email/:id', auth, (req, res) => {
     let { validationPassword, password } = req.body;
-    console.log('change-pass-by-email')
-    console.log(req.body)
+    //console.log('change-pass-by-email')
+    //console.log(req.body)
     //Simple validation
     if (!password || !validationPassword) {
         return res.status(400).json({ msg: 'Please enter all fields' });
@@ -191,14 +184,12 @@ router.post('/change-pass-by-email/:id', auth, (req, res) => {
             bcrypt.hash(password, salt, (err, hash) => {
 
                 if (err) throw err;
-                
+
                 password = hash;
-                user.updateOne({ password }).then(() => {
-                    User.findById(req.params.id)
-                        .then(user => {
-                            res.json(user)
-                        })
-                })
+                user.updateOne({ password })
+                    .then(() =>
+                        User.findById(req.params.id)
+                            .then(user => res.json(user)))
                     .catch(err => res.status(404).json({ success: false })
                     );
             })
@@ -213,8 +204,8 @@ router.post('/change-pass-by-email/:id', auth, (req, res) => {
 // @access  Public
 router.post('/', (req, res) => {
     const { name, email, password, profileImage } = req.body;
-    console.log("_________________profileImage________________")
-    console.log(profileImage)
+    //console.log("_________________profileImage________________")
+    //console.log(profileImage)
 
     //Simple validation
     if (!name || !email || !password) {
@@ -252,7 +243,7 @@ router.post('/', (req, res) => {
                                         { expiresIn: 3600 },
                                         (err, token) => {
                                             if (err) throw err;
-                                            res.json({
+                                            return res.json({
                                                 token,
                                                 user: {
                                                     _id: user.id,

@@ -37,7 +37,7 @@ router.post('/', (req, res) => {
                         (err, token) => {
 
                             if (err) throw err;
-                            res.json({
+                            return res.json({
                                 token,
                                 user: {
                                     _id: user.id,
@@ -159,9 +159,7 @@ router.post('/verify-token', (req, res) => {
                 verified = speakeasy.totp.verify({ secret: secret, encoding: 'base32', token, window: 1 });
 
                 if (verified) {
-                    user.updateOne({ secret: '' }).then(() => {
-                        return res.json({ secret: token });
-                    })
+                    user.updateOne({ secret: '' }).then(() => res.json({ secret: token }));
                 }
                 else
                     return res.status(400).json({ msg: 'Incorrect verification code' });

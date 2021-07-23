@@ -27,10 +27,10 @@ app.post('/upload', (req, res) => {
     if (err) {
       return res.status(500).send(err);
     }
-
-    res.json({ fileName: filename, filePath: `${abspath}${filename}` });
+    return res.json({ fileName: filename, filePath: `${abspath}${filename}` });
   });
 });
+
 // Remove Endpoint
 app.post('/remove', (req, res) => {
   if (req.body === null) {

@@ -71,7 +71,6 @@ class AddChapterModal extends Component {
             name: this.state.name,
             chapterImage: this.state.chapterImage
         }
-        console.log(newChapter)
         // Add chapter via addChapter action
         this.props.addChapter(newChapter);
     }

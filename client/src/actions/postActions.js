@@ -21,7 +21,7 @@ export const getPosts = () => dispatch => {
         }
         )
         .catch(err =>
-            dispatch(returnErrors(err.response.data, err.response.status))
+            dispatch(returnErrors(err?.response?.data, err?.response?.status))
         );
 };
 
@@ -92,9 +92,12 @@ export const viewsPost = (_id) => (dispatch) => {
         .then(res =>
             dispatch({
                 type: VIEWS_POST,
+                payload: res.data
             }))
-        .catch(err =>
+        .catch(err => {
+            debugger;
             dispatch(returnErrors(err.response.data, err.response.status))
+        }
         );
 };
 
@@ -109,7 +112,7 @@ export const lovedPost = (_id) => (dispatch) => {
                 payload: res.data
             }))
         .catch(err =>
-            dispatch(returnErrors(err.response.data, err.response.status))
+            dispatch(returnErrors(err.response.data, err.response?.status))
         );
 };
 

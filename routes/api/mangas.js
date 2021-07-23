@@ -49,14 +49,10 @@ router.post('/', auth, (req, res) => {
                                         Manga.find({ chapter: chapter })
                                             .then(mangas => {
                                                 chapter.mangas = mangas;
-                                                chapter.save().then(() => {
-                                                    {
-                                                        Manga.findOne(manga).populate('chapter').populate({ path: 'chapter', populate: { path: 'mangas' } })
-                                                            .then(manga => {
-                                                                res.json(manga)
-                                                            });
-                                                    }
-                                                })
+                                                chapter.save().then(() =>
+                                                    Manga.findOne(manga).populate('chapter')
+                                                        .populate({ path: 'chapter', populate: { path: 'mangas' } })
+                                                        .then(manga => res.json(manga)));
 
                                             })
                                     });
@@ -94,10 +90,11 @@ router.post('/edit/:id', auth, (req, res) => {
         };
 
         Manga.findById(req.params.id).then(manga =>
-            manga.updateOne(newManga).then(() => {
-                Manga.findById(req.params.id).populate('chapter').populate({ path: 'chapter', populate: { path: 'mangas' } })
+            manga.updateOne(newManga).then(() =>
+                Manga.findById(req.params.id).populate('chapter')
+                    .populate({ path: 'chapter', populate: { path: 'mangas' } })
                     .then(manga => res.json(manga))
-            })
+            )
         ).catch(err => res.status(404).json({ manga }));
     })
 });

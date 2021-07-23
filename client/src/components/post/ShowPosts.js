@@ -32,14 +32,15 @@ class ShowPosts extends Component {
   }
 
   handleClickPost = (id) => {
+    debugger;
     var viewedPostList = localStorage.getItem('viewedPostList');
     if (viewedPostList == null)
       viewedPostList = [];
 
-    if (!viewedPostList.includes(String(id))) {
+    // if (!viewedPostList.includes(String(id))) {
       this.props.viewsPost(id)
-      viewedPostList = viewedPostList.concat(String(id))
-    }
+      // viewedPostList = viewedPostList.concat(String(id))
+    // }
 
     localStorage.setItem('viewedPostList', viewedPostList);
   }
