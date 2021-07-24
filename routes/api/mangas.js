@@ -103,7 +103,6 @@ router.post('/edit/:id', auth, (req, res) => {
 // @desc    Delete Manga
 // @access  Private
 router.delete('/:id', auth, (req, res) => {
-
     Manga.findById(req.params.id)
         .then(manga => {
             User.findById(req.user.id)
@@ -111,8 +110,10 @@ router.delete('/:id', auth, (req, res) => {
                 .then(user => {
                     if (user.admin) {
                         Chapter.findById(manga.chapter).populate('mangas').then(chapter => {
-                            chapter.mangas = chapter.mangas.filter(manga => manga._id != req.params.id);
-                            chapter.save().then(() => { });
+                            if (chapter) {
+                                chapter.mangas = chapter.mangas.filter(manga => manga._id != req.params.id);
+                                chapter.save();
+                            }
                             Post.findOne({ manga }).then(post => {
                                 if (post) return res.status(400).json({ msg: 'Cannot delete because there are posts under this manga' });
                                 manga.deleteOne().then(() => res.json(chapter))

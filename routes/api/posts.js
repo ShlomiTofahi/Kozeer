@@ -31,18 +31,21 @@ router.get('/:id', (req, res) => {
 // @desc    Create A Post
 // @access  Private
 router.post('/', auth, (req, res) => {
-    const { title, body, postImage, is_manga, mangasSelected } = req.body;
-    //Simple validation
-    if (!title) {
-        return res.status(400).json({ msg: 'Please enter title' });
-    }
-    if (is_manga) {
-        if (!mangasSelected.length) {
-            return res.status(400).json({ msg: 'Please select pages' });
-        }
-    }
-
     User.findById(req.user.id).then(user => {
+        if (!user.admin) {
+            return res.status(400).json({ msg: 'No permission' });
+        }
+
+        const { title, body, postImage, is_manga, mangasSelected } = req.body;
+        //Simple validation
+        if (!title) {
+            return res.status(400).json({ msg: 'Please enter title' });
+        }
+        if (is_manga) {
+            if (!mangasSelected.length) {
+                return res.status(400).json({ msg: 'Please select pages' });
+            }
+        }
 
         let newPost = new Post({
             title,
@@ -55,18 +58,90 @@ router.post('/', auth, (req, res) => {
             newPost.postImage = postImage;
 
         newPost.save().then(post => {
-            Post.findOne(post).then(post => {
+            Post.findOne(post).populate('mangas').then(post => {
                 if (is_manga) {
                     if (mangasSelected) {
                         Manga.find({ page: mangasSelected }).then(mangas => {
+                            mangas.map((manga) =>{
+                                Manga.findOne(manga).then(mangaobj => {
+                                    mangaobj.inuse = true;
+                                    mangaobj.save();
+                                })
+                            })
                             post.mangas = mangas
-                            post.save();
-                        })
+                            post.save().then((post) => res.json(post));
+                        });
                     }
                 }
-                res.json(post);
+                else{
+                    return res.json(post);
+                }
             })
         });
+    })
+
+});
+
+// @route   POST api/items/edit
+// @desc    Edit A Item
+// @access  Private
+router.post('/edit/:id', auth, (req, res) => {
+    User.findById(req.user.id).then(user => {
+        if (!user.admin) {
+            return res.status(400).json({ msg: 'No permission' });
+        }
+
+        const { title, body, postImage, is_manga, mangasSelected } = req.body;
+
+        //Simple validation
+        if (!title) {
+            return res.status(400).json({ msg: 'Please enter title' });
+        }
+        if (is_manga) {
+            if (!mangasSelected.length) {
+                return res.status(400).json({ msg: 'Please select pages' });
+            }
+        }
+
+        let newPost = new Post({
+            title,
+            body,
+            is_manga,
+            mangas: []
+        });
+
+        if (postImage != '')
+            newPost.postImage = postImage;
+
+        Post.findById(req.params.id).then(post => {
+            post.updateOne(newPost).then(() => {
+                Post.findById(req.params.id).populate('mangas').populate('comments')
+                    .then(post => {
+                        if (is_manga) {
+                            if (mangasSelected) {
+                                Manga.find({ page: mangasSelected }).then(mangas => {
+                                    post.mangas.map((manga) =>{
+                                        Manga.findOne(manga).then(mangaobj => {
+                                            mangaobj.inuse = false;
+                                            mangaobj.save();
+                                        })
+                                    })
+                                    mangas.map((manga) =>{
+                                        Manga.findOne(manga).then(mangaobj => {
+                                            mangaobj.inuse = true;
+                                            mangaobj.save();
+                                        })
+                                    })
+                                    post.mangas = mangas
+                                    post.save();
+                                })
+                            }
+                        }
+                        return res.json(post);
+                    })
+            })
+        }
+        ).catch(err => res.status(404).json({ success: false }));
     })
 });
 
@@ -87,8 +162,20 @@ router.delete('/:id', auth, (req, res) => {
                     user.save().then(() => { });
                 })
             })
-            Comment.deleteMany({ post: post._id }).then(() =>
-                post.deleteOne().then(() => res.json({ success: true }))
+            Comment.deleteMany({ post: post._id }).then(() => {
+                let mangasPost = []
+                if (post.is_manga) {
+
+                    post.mangas.map((manga) =>{
+                        mangasPost.push(manga);
+                        Manga.findOne(manga).then(mangaobj => {
+                            mangaobj.inuse = false;
+                            mangaobj.save();
+                        })
+                    })
+                }
+                post.deleteOne().then(() => res.json(mangasPost))
+            }
             );
         })
     })

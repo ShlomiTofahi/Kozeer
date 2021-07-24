@@ -36,8 +36,12 @@ export const addManga = (manga) => (dispatch, getState) => {
             })
         })
         .catch(err => {
+            err.response ?
             dispatch(
                 returnErrors(err.response.data.msg, err.response.status, 'ADD_MANGA_FAIL')
+            )
+            : dispatch(
+                returnErrors(err.message, 'ADD_MANGA_FAIL')
             );
             dispatch({
                 type: ADD_MANGA_FAIL

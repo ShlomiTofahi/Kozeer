@@ -13,6 +13,11 @@ const MangaSchema = new Schema({
         required: true,
         default: false
     },
+    inuse: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
     mangaImage: {
         type: String,
         default: ''

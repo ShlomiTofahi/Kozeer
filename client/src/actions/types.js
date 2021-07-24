@@ -24,10 +24,13 @@ export const GET_POSTS = 'GET_POSTS';
 export const POSTS_LOADING = 'POSTS_LOADING';
 export const ADD_POST = 'ADD_POST';
 export const ADD_POST_FAIL = 'ADD_POST_FAIL';
+export const EDIT_POST = 'EDIT_POST';
+export const EDIT_POST_FAIL = 'EDIT_POST_FAIL';
 export const DELETE_POST = 'DELETE_POST';
 export const VIEWS_POST = 'VIEWS_POST';
 export const LOVED_POST = 'LOVED_POST';
 export const UNLOVED_POST = 'UNLOVED_POST';
+export const EDIT_CHAPTER_FROM_POST_DELETE = 'EDIT_CHAPTER_FROM_POST_DELETE';
 
 //Comments
 export const GET_POST_COMMENTS = 'GET_POST_COMMENTS';
@@ -57,8 +60,8 @@ export const DELETE_CHAPTER = 'DELETE_CHAPTER';
 export const CHAPTERS_LOADING = 'CHAPTERS_LOADING';
 export const ADD_CHAPTER_SUCCESS = "ADD_CHAPTER_SUCCESS";
 export const ADD_CHAPTER_FAIL = "ADD_CHAPTER_FAIL";
-export const EDIT_CHAPTER = "CHAPTERS_MANGA";
-export const EDIT_CHAPTER_FAIL = "CHAPTER_MANGA_FAIL";
+export const EDIT_CHAPTER = "EDIT_CHAPTER";
+export const EDIT_CHAPTER_FAIL = "EDIT_CHAPTER_FAIL";
 export const UPDATE_CHAPTER = "UPDATE_CHAPTER";
 
 //Errors and msgs

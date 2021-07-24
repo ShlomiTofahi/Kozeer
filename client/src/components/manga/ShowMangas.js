@@ -5,9 +5,8 @@ import { ListGroup, ListGroupItem, Button, Alert, Modal, ModalHeader, ModalBody 
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { Collapse } from 'react-collapse';
 
-import { deleteManga } from '../../actions/mangaActions';
-import { getMangas } from '../../actions/mangaActions';
-import { getChapters } from '../../actions/chapterActions';
+import { getMangas, deleteManga } from '../../actions/mangaActions';
+import { getChapters ,deleteChapter } from '../../actions/chapterActions';
 import AddMangaModal from './AddMangaModal';
 import AddChapterModal from './AddChapterModal';
 import ShowElements from './ShowElements';
@@ -28,7 +27,9 @@ class ShowMangas extends Component {
         manga: PropTypes.object,
         chapter: PropTypes.object,
         getChapters: PropTypes.func.isRequired,
-        getMangas: PropTypes.func.isRequired
+        deleteChapter: PropTypes.func.isRequired,
+        getMangas: PropTypes.func.isRequired,
+        deleteManga: PropTypes.func.isRequired
     }
 
     componentDidMount() {
@@ -60,10 +61,11 @@ class ShowMangas extends Component {
         }
     }
 
-    // onEditClick = (id) => {
-    //     //TODO
-    // }
-    onDeleteClick = (id) => {
+    onDeleteChapterClick = (id) => {
+        this.props.deleteChapter(id);
+    }
+    
+    onDeleteMangaClick = (id) => {
         this.props.deleteManga(id);
     }
 
@@ -98,7 +100,7 @@ class ShowMangas extends Component {
         //     dropDownSymbol =  [...dropDownSymbol, element]
         //     })
         //     console.log(dropDownSymbol)
-
+        
         chapters.map(({ name }) => { dropDownSymbolList = [...dropDownSymbolList, this.state.Collapsetoggle.includes(name) ? { name: <span>&#45;</span> } : { name: <span>&#x2B;</span> }] })
         // console.log(dropDownSymbolList[0].name)
         const dropDownSymbol = this.state.Collapsetoggle ? <span>&#45;</span> : <span>&#x2B;</span>
@@ -126,13 +128,13 @@ class ShowMangas extends Component {
                                             onClick={this.CollapseHangdle.bind(this, name)}
                                             style={{ marginBottom: '1rem', opacity: '0.7' }}
                                         >{name}<strong class='pr-3' style={{ position: 'absolute', right: '0' }}>{dropDownSymbolList[index].name}</strong></Button>
-                                        <button onClick={this.onDeleteClick.bind(this, _id)} className="chapter-delete-btn">
+                                        <button onClick={this.onDeleteChapterClick.bind(this, _id)} className="chapter-delete-btn">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
                                                 <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
                                             </svg>
                                         </button>
-                                        <EditChapterModal mangaID={_id} />
+                                        <EditChapterModal chapterID={_id} />
                                     </span>
 
                                     <Collapse isOpened={this.state.Collapsetoggle.includes(name)}>
@@ -140,11 +142,11 @@ class ShowMangas extends Component {
 
                                         <ListGroup className="manga-list">
                                             <TransitionGroup className='pt-3 pb-3'>
-                                                {mangas && mangas.sort((a, b) => Number(a.page.substring(4)) - Number(b.page.substring(4))).map(({ _id, page, fullpage }) => (
+                                                {mangas && mangas.sort((a, b) => Number(a.page.substring(4)) - Number(b.page.substring(4))).map(({ _id, page, inuse }) => (
                                                     <CSSTransition key={_id} timeout={500} classNames='fade'>
-                                                        <ListGroupItem className={'manga-item ' + (fullpage ? 'plus' : 'minus')}>
+                                                        <ListGroupItem className={'manga-item ' + (inuse ? 'minus' : 'plus')}>
                                                             <span>{page}</span>
-                                                            <button onClick={this.onDeleteClick.bind(this, _id)} className="delete-btn">
+                                                            <button onClick={this.onDeleteMangaClick.bind(this, _id)} className="delete-btn">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                                                     <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
                                                                     <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
@@ -161,7 +163,7 @@ class ShowMangas extends Component {
                             ))}
                         </div>
 
-                        <ListGroup style={{ maxWidth: '600px', textAlign: 'right' }}>
+                        {/* <ListGroup style={{ maxWidth: '600px', textAlign: 'right' }}>
                             <TransitionGroup className='pt-3 pb-3'>
                                 {mangas && mangas.map(({ _id, page }) => (
                                     <CSSTransition key={_id} timeout={500} classNames='fade'>
@@ -174,7 +176,7 @@ class ShowMangas extends Component {
                                                         className='remove-btn-admin'
                                                         color='danger'
                                                         size='sm'
-                                                        onClick={this.onDeleteClick.bind(this, _id)}
+                                                        onClick={this.onDeleteMangaClick.bind(this, _id)}
                                                     >&#10007;</Button>
                                                     <EditMangaModal mangaID={_id} />
                                                 </div>
@@ -184,12 +186,12 @@ class ShowMangas extends Component {
                                     </CSSTransition>
                                 ))}
                             </TransitionGroup>
-                        </ListGroup>
+                        </ListGroup> */}
 
 
 
 
-                        <AddMangaModal />
+                        {/* <AddMangaModal />
 
                         <ul className="manga-list">
                             <TransitionGroup className='pt-3 pb-3'>
@@ -202,7 +204,7 @@ class ShowMangas extends Component {
                                     </CSSTransition>
                                 ))}
                             </TransitionGroup>
-                        </ul>
+                        </ul> */}
 
 
                     </div>
@@ -285,5 +287,5 @@ const mapStateToProps = (state) => ({
 
 export default connect(
     mapStateToProps,
-    { deleteManga, getMangas, getChapters, clearErrors, clearMsgs }
+    { deleteManga, getMangas, deleteChapter, getChapters, clearErrors, clearMsgs }
 )(ShowMangas);

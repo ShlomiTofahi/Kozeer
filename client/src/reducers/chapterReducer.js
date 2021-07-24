@@ -1,11 +1,11 @@
-import { GET_CHAPTERS, ADD_CHAPTER, DELETE_CHAPTER, CHAPTERS_LOADING, EDIT_CHAPTER, UPDATE_CHAPTER } from '../actions/types';
+import { GET_CHAPTERS, ADD_CHAPTER, DELETE_CHAPTER, CHAPTERS_LOADING, EDIT_CHAPTER, UPDATE_CHAPTER, EDIT_CHAPTER_FROM_POST_DELETE } from '../actions/types';
 
 const initialState = {
     chapters: [],
     loading: false
 };
 
-export default function mangaReducer(state = initialState, action) {
+export default function chapterReducer(state = initialState, action) {
     let newChapters = []
     switch (action.type) {
         case GET_CHAPTERS:
@@ -29,8 +29,10 @@ export default function mangaReducer(state = initialState, action) {
             };
         case EDIT_CHAPTER:
             newChapters = [...state.chapters];
-            var index = newChapters.findIndex(element => element._id === action.payload.chapter._id);
-            newChapters[index] = action.payload.chapter;
+            let payload = "chapter" in action.payload ? action.payload.chapter : action.payload;
+
+            var index = newChapters.findIndex(element => element._id === payload._id);
+            newChapters[index] = payload;
             newChapters = newChapters.sort((a, b) => Number(a.name.substring(7)) - Number(b.name.substring(7)))
 
             return {
@@ -42,6 +44,22 @@ export default function mangaReducer(state = initialState, action) {
             var index = newChapters.findIndex(element => element._id === action.payload._id);
             newChapters[index] = action.payload;
             newChapters = newChapters.sort((a, b) => Number(a.name.substring(7)) - Number(b.name.substring(7)))
+            return {
+                ...state,
+                chapters: newChapters
+            };
+        case EDIT_CHAPTER_FROM_POST_DELETE:
+            newChapters = [...state.chapters];
+            action.payload.map((mangaID) => {
+                newChapters.map((chapter) => {
+                    chapter.mangas.map((manga) => {
+                        if (manga._id === mangaID) {
+                            manga.inuse = false;
+                        }
+                    })
+                })
+            })
+            newChapters = newChapters.sort((a, b) => Number(a.name.substring(4)) - Number(b.name.substring(4)));
             return {
                 ...state,
                 chapters: newChapters

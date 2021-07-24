@@ -11,6 +11,7 @@ import 'suneditor/dist/css/suneditor.min.css';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import EditPostModal from './EditPostModal'
 
 import { deletePost, viewsPost, lovedPost, unlovedPost } from '../../actions/postActions';
 // import { clearErrors, returnErrors } from '../../actions/errorActions';
@@ -38,8 +39,8 @@ class ShowPosts extends Component {
       viewedPostList = [];
 
     // if (!viewedPostList.includes(String(id))) {
-      this.props.viewsPost(id)
-      // viewedPostList = viewedPostList.concat(String(id))
+    this.props.viewsPost(id)
+    // viewedPostList = viewedPostList.concat(String(id))
     // }
 
     localStorage.setItem('viewedPostList', viewedPostList);
@@ -235,6 +236,7 @@ class ShowPosts extends Component {
                         size='sm'
                         onClick={this.onDeleteClick.bind(this, _id, postImage)}
                       >&#10007;</Button>
+                      <EditPostModal postID={ _id} />
                       {/* <Button
                         style={btnEditStyle}
                         className='edit-btn-admin'
