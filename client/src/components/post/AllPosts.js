@@ -1,9 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {
-  Spinner, Container, Row, Col, Input
-} from 'reactstrap';
+import { Spinner } from 'reactstrap';
 
 import { getPosts, getFilterPosts } from '../../actions/postActions';
 import { replyComment, addComment } from '../../actions/commentActions';
@@ -22,7 +20,9 @@ class AllPosts extends Component {
   static protoType = {
     post: PropTypes.object,
     getPosts: PropTypes.func.isRequired,
-    getFilterPosts: PropTypes.func.isRequired
+    getFilterPosts: PropTypes.func.isRequired,
+    addComment: PropTypes.func.isRequired,
+    replyComment: PropTypes.func.isRequired
   }
 
   componentDidMount() {
@@ -37,7 +37,6 @@ class AllPosts extends Component {
 
   onChange = e => {
     e.preventDefault();
-    // this.setState({ [e.target.name]: e.target.value });
     let title = e.target.value
 
     // Create Filted Item object
@@ -60,32 +59,27 @@ class AllPosts extends Component {
           </svg>
         </span>
         <div style={inputSearchStyle}>
-          <input className='input-place-holder form-control pt-3 pl-2' style={inputStyle} bsSize="sm" onChange={this.onChange} type="text" name='name' placeholder="Search" />
+          <input className='input-place-holder form-control pt-3 pl-2' style={inputStyle} onChange={this.onChange} type="text" name='name' placeholder="Search" />
         </div>
-        <buttn className='post-search-btn' onClick={this.onSearchClick}>
+        <button className='post-search-btn' onClick={this.onSearchClick}>
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" className="bi bi-x" viewBox="0 0 16 16">
             <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
           </svg>
-        </buttn>
+        </button>
       </div>
-
       :
-      <buttn className='post-search-btn' onClick={this.onSearchClick}>
+      <button className='post-search-btn' onClick={this.onSearchClick}>
         <svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
           <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
         </svg>
-      </buttn>
-
+      </button>
 
     return (
       <Fragment>
         <div style={postFrameStyle}>
           <div style={postHeaderStyle}>
-
             <div className='row  justify-content-between'>
-              <div
-              // className='bg-dark col-4 col-sm-4 col-md-3 col-lg-3'
-              >
+              <div>
                 <AddPostModal />
               </div>
               <div style={postSearchStyle}>
@@ -101,7 +95,7 @@ class AllPosts extends Component {
         </div>
         <div className='mt-3 mx-3'>
           <InstagramFeed
-            token="IGQVJXak8yeUFESm9mUXhxSlFXcVl5N19RanlnS0NOdV9fenlNNTNOWFBka1JBTWlOUHI1Q3k0d0ZAER2o2cjctU01iVE5iUXU4Qjg5NG55X3BLaW15blR0anVKTk0zQzc3WG54MnlmS1ppaWpOSHd4WgZDZD"
+            token={process.env.REACT_APP_TOKEN}
             counter="6"
           />
         </div>
@@ -117,25 +111,19 @@ const spinnerStyle = {
   width: '3rem',
   height: '3rem'
 };
-
 const postFrameStyle = {
   margin: '0 auto',
   backgroundColor: '#221415dc',
   color: 'white',
   width: '65%',
 };
-
 const postHeaderStyle = {
-  // height: '100px',
   backgroundColor: '#7301056e',
 }
-
 const postSearchStyle = {
-  // position: 'absolute',
   textAlign: 'right',
   margin: '15px',
   paddingRight: '10px'
-  // right: '0'
 }
 const inputStyle = {
   backgroundColor: 'rgba(0, 0, 0, 0)',
@@ -151,6 +139,7 @@ const inputSearchStyle = {
 const searchLimitStyle = {
   marginTop: '-2px'
 }
+
 const mapStateToProps = (state) => ({
   post: state.post,
 });

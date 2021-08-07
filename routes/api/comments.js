@@ -7,8 +7,6 @@ const auth = require('../../middleware/auth');
 const Comment = require('../../models/Comment');
 //User Model
 const User = require('../../models/User');
-// //Post Model
-// const Post = require('../../models/Post');
 
 // @route   GET api/comments
 // @desc    Get All Commends
@@ -19,22 +17,11 @@ router.get('/', (req, res) => {
         .then(comments => res.json(comments))
 });
 
-// router.get('sort/:', (req, res) => {
-//     Comment.find()
-//         .sort({ published_date: -1 })
-//         .then(comments => res.json(comments))
-// });
-
 // @route   GET api/comments
 // @desc    Get All Commends of Post by Given Post Id 
 // @access  Public
 router.get('/:data', (req, res) => {
     const { post_id, order } = JSON.parse(req.params.data);
-    // let order = -1
-
-    // if (req.params.data)
-    //      order = JSON.parse(req.params.data);
-    //console.log(order)
     Comment.find({ post: post_id }).populate('post').populate('user').populate('comment').populate({ path: 'comment', populate: { path: 'user' } }).populate({ path: 'comments', populate: { path: 'user' } })
         .sort({ published_date: order })
         .then(comments => res.json(comments));
@@ -281,69 +268,5 @@ router.delete('/:data', auth, (req, res) => {
     })
         .catch(err => res.status(404).json({ success: false }));
 });
-
-// // @route   DELETE api/comments/post
-// // @desc    Delete All Post Comments
-// // @access  Private
-// router.delete('/post/:id', auth, (req, res) => {
-
-//     Comment.find({ user: req.user.id }).then(comments => {
-//         Post.findById(req.params.id).then(post => {
-//             User.findById(req.user.id).select('-password').then(user => {
-//                 user.comments = comments.filter(comment => comment.post != req.params.id);
-//                 post.comments = [];
-//                 post.save().then(() => {
-//                     user.save().then(() => {
-//                         Comment.deleteMany({ post: req.params.id }).then(() => res.json({ success: true }))
-//                     })
-//                 })
-//             })
-//         })
-//     }).catch(err => res.status(404).json({ success: false }));
-// });
-
-// // @route   DELETE api/comments/user
-// // @desc    Delete All User Comments in all Posts
-// // @access  Private
-// router.delete('/user', auth, (req, res) => {
-
-//     Post.find().populate('comments').then(posts => {
-//         User.findById(req.user.id).select('-password').select('-password').then(user => {
-//             user.comments = [];
-//             posts.map(post => {
-//                 Comment.find({ post: post._id }).then(comments => {
-
-//                     post.comments = post.comments.filter(comment => comment.user != req.user.id);
-//                     post.save();
-//                 })
-//             })
-
-//             user.save().then(() => {
-//                 Comment.deleteMany({ user: req.user.id }).then(() => res.json({ success: true }))
-//             })
-//         })
-//     }).catch(err => res.status(404).json({ success: false }));
-// });
-
-// // @route   DELETE api/posts
-// // @desc    Delete All User Comments for specific post
-// // @access  Private
-// router.delete('/user/:id', auth, (req, res) => {
-
-//     Comment.find({ post: req.params.id }).then(comments => {
-//         Post.findById(req.params.id).then(post => {
-//             User.findById(req.user.id).select('-password').then(user => {
-//                 user.comments = user.comments.filter(comment => comment.post != req.params.id)
-//                 post.comments = comments.filter(comment => comment.user != req.user.id);
-//                 post.save().then(() => {
-//                     user.save().then(() => {
-//                         Comment.deleteMany({ user: req.user.id }).then(() => res.json({ success: true }))
-//                     })
-//                 })
-//             })
-//         })
-//     }).catch(err => res.status(404).json({ success: false }));
-// });
-
 
 module.exports = router;

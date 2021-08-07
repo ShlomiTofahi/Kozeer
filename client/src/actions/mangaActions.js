@@ -1,5 +1,8 @@
 import axios from 'axios';
-import { ADD_MANGA_FAIL, GET_MANGAS, ADD_MANGA, DELETE_MANGA, MANGAS_LOADING, DELETE_FAIL, EDIT_MANGA, EDIT_MANGA_FAIL, EDIT_CHAPTER, UPDATE_CHAPTER } from './types';
+import {
+    ADD_MANGA_FAIL, GET_MANGAS, ADD_MANGA, DELETE_MANGA, MANGAS_LOADING, DELETE_FAIL,
+    EDIT_MANGA, EDIT_MANGA_FAIL, EDIT_CHAPTER, UPDATE_CHAPTER
+} from './types';
 import { tokenConfig } from './authActions';
 import { returnErrors } from './errorActions';
 import { returnMsgs } from './msgActions';
@@ -37,12 +40,12 @@ export const addManga = (manga) => (dispatch, getState) => {
         })
         .catch(err => {
             err.response ?
-            dispatch(
-                returnErrors(err.response.data.msg, err.response.status, 'ADD_MANGA_FAIL')
-            )
-            : dispatch(
-                returnErrors(err.message, 'ADD_MANGA_FAIL')
-            );
+                dispatch(
+                    returnErrors(err.response.data.msg, err.response.status, 'ADD_MANGA_FAIL')
+                )
+                : dispatch(
+                    returnErrors(err.message, 'ADD_MANGA_FAIL')
+                );
             dispatch({
                 type: ADD_MANGA_FAIL
             });

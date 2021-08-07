@@ -4,7 +4,6 @@ const bcrypt = require('bcryptjs');
 const config = require('config');
 const jwt = require('jsonwebtoken');
 const auth = require("../../middleware/auth");
-// const fs = require('fs')
 
 // //User Model
 const User = require('../../models/User');
@@ -13,7 +12,9 @@ const User = require('../../models/User');
 // @desc    Get User By Email
 // @access  Private
 router.post('/userid', (req, res) => {
-    const { email } = req.body;
+    let { email } = req.body;
+    email = email.toLowerCase();
+
     //Simple validation
     if (!email)
         return res.status(400).json({ msg: 'Please enter all fields' });
@@ -58,7 +59,8 @@ router.delete('/:id', auth, (req, res) => {
 // @access  Private
 router.post('/edit/:id', auth, (req, res) => {
 
-    const { name, profileImage, email } = req.body;
+    let { name, profileImage, email } = req.body;
+    email = email.toLowerCase();
 
     //Simple validation
     if (!name || !profileImage || !email) {
@@ -124,7 +126,8 @@ router.post('/change-pass/:id', auth, (req, res) => {
 // @desc    Change Email For A User
 // @access  Private
 router.post('/change-email/:id', auth, (req, res) => {
-    const { password, email } = req.body;
+    let { password, email } = req.body;
+    email = email.toLowerCase();
 
     //Simple validation
     if (!password || !email) {
@@ -164,9 +167,7 @@ router.post('/change-email/:id', auth, (req, res) => {
 // @access  Private
 router.post('/change-pass-by-email/:id', auth, (req, res) => {
     let { validationPassword, password } = req.body;
-    //console.log('change-pass-by-email')
-    //console.log(req.body)
-    //Simple validation
+
     if (!password || !validationPassword) {
         return res.status(400).json({ msg: 'Please enter all fields' });
     }
@@ -203,9 +204,8 @@ router.post('/change-pass-by-email/:id', auth, (req, res) => {
 // @desc    Register new user
 // @access  Public
 router.post('/', (req, res) => {
-    const { name, email, password, profileImage } = req.body;
-    //console.log("_________________profileImage________________")
-    //console.log(profileImage)
+    let { name, email, password, profileImage } = req.body;
+    email = email.toLowerCase();
 
     //Simple validation
     if (!name || !email || !password) {

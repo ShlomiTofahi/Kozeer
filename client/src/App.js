@@ -5,11 +5,13 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store'
 import { loadUser } from './actions/authActions'
+import { loadSetting } from './actions/settingActions'
 
 import AppNavbar from './components/AppNavbar';
 import Footer from './components/Footer';
 import Main from './components/Main';
 import Over13 from './components/Over13';
+import SetBgImageModal from './components/SetBgImageModal';
 import ScrollUpButton from "react-scroll-up-button";
 
 class App extends Component {
@@ -19,6 +21,7 @@ class App extends Component {
 
   componentDidMount() {
     store.dispatch(loadUser());
+    store.dispatch(loadSetting());
   }
 
   onOver13Click = () => {
@@ -27,17 +30,31 @@ class App extends Component {
     })
   }
 
-  render() {
+  bgStyle = () => {
+    let backgroundImage = `url(/images/main/bg.png)`;
+    const { setting } = store.getState().setting;
+    if (setting && setting.bgImage !== null) {
+      backgroundImage = `url(${setting.bgImage})`;
+    }
 
+    return {
+      backgroundImage: backgroundImage,
+      backgroundAttachment: 'fixed',
+      backgroundSize: 'contain',
+      backgroundPosition: 'bottom left',
+    };
+  };
+  render() {
     return (
       <Provider store={store}>
         {
           !this.state.over13 ?
-            <Over13  onOver13Click={this.onOver13Click} />
+            <Over13 onOver13Click={this.onOver13Click} />
             :
-            <div className="App" style={bgStyle}>
+            <div className="App" style={this.bgStyle()}>
               <BrowserRouter>
                 <AppNavbar />
+                <SetBgImageModal />
                 <Main />
                 <ScrollUpButton />
                 <Footer />
@@ -47,13 +64,6 @@ class App extends Component {
       </Provider>
     );
   }
-}
-
-const bgStyle = {
-  backgroundImage: `url(/images/main/bg.png)`,
-  backgroundAttachment: 'fixed',
-  backgroundSize: 'contain',
-  backgroundPosition: 'bottom left',
 }
 
 export default App;

@@ -1,8 +1,27 @@
 
 .App {
+  background-color: lightgray;
   /* text-align: center;
   max-width: 1396px; */
   overflow-x: hidden;
+}
+
+.fade-enter{
+ opacity: 0.01;
+}
+
+.fade-enter-active{
+  opacity: 1;
+  transition: opacity 1000ms ease-in;
+}
+
+.fade-exit{
+  opacity: 1;
+}
+
+.fade-exit-active{
+  opacity: 0.01;
+  transition: opacity 1000ms ease-in;
 }
 
 /*--------------start Navbar---------------*/
@@ -55,7 +74,7 @@
   box-shadow: inset 0px 0px 20px 6px rgba(0,0,0,0.1);
   font: italic small-caps 16px/1 cursive;
   border-radius: 10px;
-  color: #fff;
+  color: #ffffff;
 }
 
 .header-tab .header-tablinks {
@@ -65,16 +84,20 @@
   cursor: pointer;
   padding: 14px 16px;
   transition: 0.5s;
-  color: white;
+  /* color: white; */
   font-size: 12px;
   border-left: 1px solid #c914c3;
   
+}
+.no-outline:hover{
+  text-decoration: none;
 }
 
 .header-tab .header-tablinks:hover {
   text-decoration: none;
   text-shadow: 0.3px 0.3px 0 #7A7A7A;
-  background: linear-gradient(180deg, #fb6af7 50%, #ef39e9 50%);
+  background-color: #ffffff38;
+  /* background: linear-gradient(180deg, #fb6af7 50%, #ef39e9 50%); */
   color: #21201f;
 }
 
@@ -169,11 +192,36 @@
 /*--------------end Modal Login-----------------*/
 
 /*--------------start Post---------------*/
-.posts-Imgs{
-  /* object-fit: cover; */
-  width:10%;
-  /* height:10px; */
+
+.scrolling-box{
+  max-height: 151px;
+  overflow: auto;
+  -ms-overflow-style: none;
+  overflow: -moz-scrollbars-none;
 }
+.scrolling-box::-webkit-scrollbar {
+  width: 0.5em;
+}
+
+.scrolling-box::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.scrolling-box::-webkit-scrollbar-thumb {
+  background-color: rgba(46, 1, 1, 0.575);
+  outline: 1px solid rgb(32, 32, 32);
+}
+
+.posts-imgs{
+  /* object-fit: cover; */
+  /* width:10%; */
+  /* height:120px; */
+  width:10%;
+}
+.suggestions-posts-imgs{
+  height:120px;
+}
+
 .post-link{
   /* color: black; */
 }
@@ -256,8 +304,21 @@ input:checked + .slider:before {
 /*---swtich button---*/
 
 /*--------------end Post-----------------*/
+/*--------------start EditPostModal-----------------*/
+.edit-btn {
+  position: absolute;
+  top: 33px;
+  right: 0;
+  /* width: 30px; */
+}
+/*--------------end EditPostModal-----------------*/
+/*--------------start EditPostModal-----------------*/
+.edit-btn {
+  text-decoration: none;
+  color: #a0a0a0;
+}
 
-/*--------------start Comment-----------------*/
+/*--------------end Comment-----------------*/
 .reply-btn {
   background: none!important;
   border: none;
@@ -273,10 +334,10 @@ input:checked + .slider:before {
   text-decoration: none;
   color: #a0a0a0;
 }
-
-/*--------------end Comment-----------------*/
-
 /*--------------start Manga-----------------*/
+.manga-scrolling-box{
+  max-height: 151reply-btnpx;
+}
 .manga-slider-imgs{
   max-height: 500px;
   max-width: 380px;
@@ -548,6 +609,22 @@ input[type='number'] {
 
 /* .btn:focus, */
 
+/* .action-hover-list {
+  list-style-type: none;
+  padding: 0 30px;
+  margin-bottom: 40px;
+  opacity: 0.9;
+}
+.action-hover-list .action-item {
+  background-color: #fff;
+  box-shadow: var(--box-shadow);
+  color: #333;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  padding: 10px;
+  margin: 10px 0;
+} */
 
 .manga-list {
   list-style-type: none;
@@ -567,6 +644,11 @@ input[type='number'] {
   margin: 10px 0;
 }
 .chapter-list .chapter-item {
+  display: flex;
+  position: relative;
+}
+
+.manga-list .manga-item {
   display: flex;
   position: relative;
 }
@@ -594,6 +676,12 @@ input[type='number'] {
   opacity: 0;
   transition: opacity 0.3s ease;
 }
+.delete-post-btn{
+  position:relative;
+}
+.post-btns{
+  position:relative;
+}
 .chapter-delete-btn {
   cursor: pointer;
   background-color: #e74c3c;
@@ -610,8 +698,10 @@ input[type='number'] {
   transition: opacity 0.3s ease;
 }
 
+.action-item:hover .delete-btn,
 .manga-list .manga-item:hover .delete-btn,
 .chapter-list .chapter-item:hover .chapter-delete-btn,
+.action-item:hover .edit-btn,
 .manga-list .manga-item:hover .edit-btn,
 .chapter-list .chapter-item:hover .chapter-edit-btn{
   opacity: 1;

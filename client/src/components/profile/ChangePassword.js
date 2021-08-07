@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Collapse } from 'react-collapse';
 import {
-    Card, CardBody, Button, Form,
-    FormGroup, Label, Input, Alert, Row
+    Card, CardBody, Button, Form, FormGroup, Input, Alert
 } from 'reactstrap';
 
 import { changePassword } from '../../actions/authActions';
@@ -107,13 +106,10 @@ class ChangePassword extends Component {
                         size='sm'
                         onClick={this.CollapseHangdle}
                         style={{ marginBottom: '1rem', opacity: '0.9' }}
-                    >Change password<strong class='pr-3' style={{ position: 'absolute', right: '0' }}>{dropDownSymbol}</strong>
+                    >Change password<strong className='pr-3' style={{ position: 'absolute', right: '0' }}>{dropDownSymbol}</strong>
                     </Button>
                     <Collapse isOpened={this.state.Collapsetoggle}>
                         <Card style={bodyStyle}>
-                            {/* <CardTitle className={'mr-5 mb-2 lead'} tag="h5" style={{ display: 'inline' }}>עריכת סיסמא</CardTitle> */}
-
-
                             <CardBody className='mx-4 mt-3'>
                                 {this.state.msg ? <Alert color="danger">{this.state.msg}</Alert> : null}
                                 <Form onSubmit={this.onSubmit}>
@@ -168,19 +164,10 @@ class ChangePassword extends Component {
 }
 
 const bodyStyle = {
-    // border: '1px solid rgb(230, 230, 230)',
-    // webkitBorderRadius: '15px',
-    // mozBorderRadius: '15px',
-    // borderRadius: '15px',
-    // padding: '30px',
     height: 'auto',
     width: 'auto',
-    border: '5px solid #730104',
-
-    // webkitBoxShadow: '0 0 5px 0.1px #C7C7C7',
-    // boxSshadow: '0 0 5px 0.1px #C7C7C7'
+    border: '5px solid #730104'
 };
-
 const inputStyle = {
     backgroundColor: 'rgba(0, 0, 0, 0)',
     border: 'none',

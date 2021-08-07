@@ -66,6 +66,8 @@ app.use('/api/comments', require('./routes/api/comments'));
 app.use('/api/posts', require('./routes/api/posts'));
 app.use('/api/mangas', require('./routes/api/mangas'));
 app.use('/api/chapters', require('./routes/api/chapters'));
+app.use('/api/subscribes', require('./routes/api/subscribes'));
+app.use('/api/settings', require('./routes/api/settings'));
 
 // Serve static assets if in production
 if (process.env.NODE_ENV === 'production') {

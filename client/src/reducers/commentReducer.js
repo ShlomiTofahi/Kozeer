@@ -1,5 +1,5 @@
 import {
-    GET_POST_COMMENTS, COMMENTS_LOADING, ADD_COMMENT, DELETE_COMMENT, REPLY_COMMENT, REPLY_COMMENT_FAIL,
+    GET_POST_COMMENTS, COMMENTS_LOADING, ADD_COMMENT, DELETE_COMMENT, REPLY_COMMENT,
     LOVED_COMMENT, UNLOVED_COMMENT
 } from '../actions/types';
 
@@ -9,6 +9,8 @@ const initialState = {
 };
 
 export default function commentReducer(state = initialState, action) {
+    var newComment = [];
+    var index;
     switch (action.type) {
         case GET_POST_COMMENTS:
             return {
@@ -22,8 +24,8 @@ export default function commentReducer(state = initialState, action) {
                 comments: [action.payload, ...state.comments]
             };
         case REPLY_COMMENT:
-            var newComment = [...state.comments];
-            var index = newComment.findIndex(element => element._id === action.payload.command_id);
+            newComment = [...state.comments];
+            index = newComment.findIndex(element => element._id === action.payload.command_id);
             newComment[index].comments = [action.payload.data, ...newComment[index].comments];
             return {
                 ...state,
@@ -36,8 +38,8 @@ export default function commentReducer(state = initialState, action) {
             };
         case LOVED_COMMENT:
         case UNLOVED_COMMENT:
-            var newComment = [...state.comments];
-            var index = newComment.findIndex(element => element._id === action.payload._id);
+            newComment = [...state.comments];
+            index = newComment.findIndex(element => element._id === action.payload._id);
             newComment[index] = action.payload;
             return {
                 ...state,

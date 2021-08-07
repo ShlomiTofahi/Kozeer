@@ -81,7 +81,7 @@ class AddMangaModal extends Component {
 
     fullpageToggle = () => {
         this.setState({ fullpage: !this.state.fullpage });
-      }
+    }
 
     setRegisterModalStates = (val) => {
         if (val !== '') {
@@ -97,12 +97,13 @@ class AddMangaModal extends Component {
             formData.append('filepath', filepath);
             formData.append('abspath', this.state.path);
 
+            console.log("*remove AddMangaModal");
             axios.post('/remove', formData);
             this.setState({ mangaImage: '' });
         }
         this.setState({
             fullpage: false
-          })
+        })
     }
 
     render() {
@@ -110,7 +111,7 @@ class AddMangaModal extends Component {
 
         return (
             <div>
-                { this.props.isAuthenticated ?
+                {this.props.isAuthenticated ?
                     <Button outline
                         color='info'
                         size='sm'
@@ -126,8 +127,7 @@ class AddMangaModal extends Component {
                     toggle={this.toggle}
                     onClosed={this.close}
                 >
-                    {/* <ModalHeader toggle={this.toggle}>Add To Shopping List</ModalHeader> */}
-                    <ModalHeader cssModule={{ 'modal-title': 'w-100 text-center' }} toggle={this.toggle} ><span class="lead">Add Manga</span></ModalHeader>
+                    <ModalHeader cssModule={{ 'modal-title': 'w-100 text-center' }} toggle={this.toggle} ><span className="lead">Add Manga</span></ModalHeader>
 
                     <ModalBody>
                         {this.state.msg ? <Alert color="danger">{this.state.msg}</Alert> : null}

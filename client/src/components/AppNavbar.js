@@ -13,9 +13,9 @@ import 'swiper/components/navigation/navigation.min.css';
 import 'swiper/components/pagination/pagination.min.css';
 import 'swiper/components/scrollbar/scrollbar.min.css';
 
-// import RegisterModal from './auth/RegisterModal';
 import LoginModal from './auth/LoginModal';
 import Logout from './auth/Logout';
+import SetAttHeaderModal from './SetAttHeaderModal';
 
 SwiperCore.use([Autoplay]);
 
@@ -23,14 +23,17 @@ class AppNavbar extends Component {
     state = {
         isOpen: false,
         path: "/images/header/",
+
+        hover: '',
+        active: ''
     }
 
     static propTypes = {
-        auth: PropTypes.object.isRequired
+        auth: PropTypes.object.isRequired,
+        setting: PropTypes.object.isRequired
     }
 
-    openTab = (event) => {
-
+    openTab = (name, event) => {
         var i, tablinks;
 
         tablinks = document.getElementsByClassName("header-tablinks");
@@ -38,11 +41,30 @@ class AppNavbar extends Component {
             tablinks[i].className = tablinks[i].className.replace(" active", "");
         }
         event.currentTarget.className += " active";
+        this.toggleActive(name)
     }
 
     toggle = () => {
         this.setState({
             isOpen: !this.state.isOpen
+        });
+    }
+
+    enterToggleHover = (hover) => {
+        this.setState({
+            hover
+        });
+    }
+
+    leaveToggleHover = () => {
+        this.setState({
+            hover: ''
+        });
+    }
+
+    toggleActive = (active) => {
+        this.setState({
+            active
         });
     }
 
@@ -53,9 +75,67 @@ class AppNavbar extends Component {
         };
     };
 
+    navBarColorsStyle = () => {
+        const { setting } = this.props.setting;
+        let topColor = "#d959d5";
+        let bottomColor = "#c213bd";
+        if (setting?.headerColorTop !== null) {
+            topColor = setting.headerColorTop;
+        }
+        if (setting?.headerColorBottom !== null) {
+            bottomColor = setting.headerColorBottom;
+        }
+        return {
+            background: `linear-gradient(180deg, ${topColor} 50%, ${bottomColor} 50%)`
+        };
+    };
+
+    navTextColorsStyle = (noBorder = '', name = '') => {
+        const { setting } = this.props.setting;
+        let linkStyle = {}
+        let textColor = "#ffffff";
+        if (setting?.headerColorText !== null) {
+            textColor = setting.headerColorText;
+        }
+
+        if ((this.state.hover !== '' && this.state.hover === name) ||
+            (this.state.active !== '' && this.state.active === name)) {
+            textColor = "#21201f";
+            if (setting?.headerHoverColorText !== null) {
+                textColor = setting.headerHoverColorText;
+            }
+        }
+
+        linkStyle.color = textColor;
+        linkStyle.borderLeft = noBorder;
+
+        return linkStyle;
+    };
+
+    link = (navLink, path, name) => {
+        let border = ''
+        if (name === "HOME") {
+            border = 'none';
+        }
+        return (
+            <Link
+                className={'navlink header-tablinks px-5 d-md-inline-block no-outline ' + navLink}
+                to={path}
+                style={this.navTextColorsStyle(border, name)}
+                onClick={this.openTab.bind(this, name)}
+                onMouseEnter={this.enterToggleHover.bind(this, name)}
+                onMouseLeave={this.leaveToggleHover}>
+                {name}
+            </Link>
+        )
+    };
     render() {
-        const { isAuthenticated, user } = this.props.auth;
-        // const is_admin = (isAuthenticated && user.admin);
+        const { isAuthenticated } = this.props.auth;
+        const { setting } = this.props.setting;
+        let headerImage = `url(${this.state.path}header_bg.png)`;
+        if (setting?.headerImage !== null) {
+            headerImage = `url(${setting.headerImage})`;
+        }
 
         const smallScreen = window.innerWidth <= 575 ? true : false;
         const navColor = window.innerWidth <= 575 ? 'nav-color' : '';
@@ -67,7 +147,7 @@ class AppNavbar extends Component {
                     <Logout />
                 </NavItem>
                 <NavItem>
-                    <Link className={'navlink header-tablinks px-5 nav-link d-md-inline-block' + navLink} to='/profile'>PROFIL</Link>
+                    {this.link(navLink, '/profile', 'PROFILE')}
                 </NavItem>
             </Fragment>
         );
@@ -91,9 +171,8 @@ class AppNavbar extends Component {
         return (
             <Fragment>
                 <header className='header'>
-                    <div className='pt-3' style={{ backgroundImage: `url(${this.state.path}header_bg.png)` }}>
+                    <div className='pt-3' style={{ backgroundImage: headerImage }}>
                         <div style={{ maxWidth: String(window.innerWidth + 15.6) + 'px' }} className='row justify-content-between'>
-                            {/* <Row> */}
                             {sliders && sliders.map((slider) => (
                                 <div key={slider} className='header-img-slider'>
                                     <Swiper
@@ -107,10 +186,7 @@ class AppNavbar extends Component {
                                             disableOnInteraction: false,
                                             reverseDirection: true,
                                         }}
-                                    // onSwiper={(swiper) => console.log(swiper)}
-                                    // onSlideChange={() => console.log('slide change')}
                                     >
-                                        {/* <div> */}
                                         {slider &&
                                             slider.map((num) => (
                                                 <SwiperSlide key={num} >
@@ -118,40 +194,33 @@ class AppNavbar extends Component {
                                                 </SwiperSlide>
                                             ))
                                         }
-                                        {/* </div> */}
                                     </Swiper>
                                 </div>
                             ))
                             }
-                            {/* </Row> */}
                         </div>
                         <div style={headerLogoStyle} className='mb-3' align="center">
                             <CardImg style={logoStyle} src={'/images/header/header_kozeer_logo.png'} />
                         </div>
-                        <Navbar fixed='center' dark={smallScreen} expand='sm' className={'nav-header mb-5 ' + navColor}>
+                        <Navbar fixed='center' dark={smallScreen} expand='sm' className={'nav-header mb-5 ' + navColor} style={this.navBarColorsStyle()}>
+                            <SetAttHeaderModal />
                             <Container>
                                 <NavbarToggler className='NavToggler' onClick={this.toggle} />
                                 <Collapse onClick={() => { this.setState({ isOpen: false }) }} isOpen={this.state.isOpen} navbar >
                                     <Nav className='header-tab m-auto' navbar>
                                         <NavItem>
-                                            <Link onClick={this.openTab.bind(this)} style={{ borderLeft: 'none' }} className={'navlink header-tablinks px-5 d-md-inline-block ' + navLink} to='/'>HOME</Link>
+                                            {this.link(navLink, '/', 'HOME')}
                                         </NavItem>
                                         <NavItem>
-                                            <Link onClick={this.openTab.bind(this)} className={'navlink header-tablinks px-5 d-md-inline-block ' + navLink} to='/post'>POSTS</Link>
+                                            {this.link(navLink, '/post', 'POSTS')}
                                         </NavItem>
                                         <NavItem>
-                                            <Link onClick={this.openTab.bind(this)} className={'navlink header-tablinks px-5 d-md-inline-block ' + navLink} to='/manga'>MANGA</Link>
+                                            {this.link(navLink, '/manga', 'MANGA')}
                                         </NavItem>
                                         <NavItem>
-                                            <Link onClick={this.openTab.bind(this)} className={'navlink header-tablinks px-5 d-md-inline-block ' + navLink} to='/my-vision'>MY VISION</Link>
+                                            {this.link(navLink, '/my-vision', 'MY VISION')}
                                         </NavItem>
                                         {isAuthenticated ? authLinks : guestLinks}
-                                        {/* {is_admin &&
-                                <NavItem>
-                                    <Link style={{ float: 'right', color: 'red' }} className={'navlink py-2 nav-link d-md-inline-block lead'} to='/admin'>
-                                        <strong>Admin</strong></Link>
-                                </NavItem>
-                            } */}
                                     </Nav>
                                 </Collapse>
                             </Container>
@@ -169,7 +238,6 @@ const logoStyle = {
     top: -window.innerWidth / 25 + 'px',
     left: window.innerWidth / 4 + 'px',
     maxWidth: window.innerWidth / 2 + 'px',
-    // padding: window.innerWidth+'10px',
 }
 const headerLogoStyle = {
     position: 'relative',
@@ -178,8 +246,8 @@ const headerLogoStyle = {
 }
 
 const mapStateToProps = state => ({
-    auth: state.auth
+    auth: state.auth,
+    setting: state.setting
 });
 
 export default connect(mapStateToProps, null)(AppNavbar);
-// export default AppNavbar;

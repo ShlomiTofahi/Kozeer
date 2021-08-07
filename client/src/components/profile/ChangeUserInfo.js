@@ -2,8 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
-    Card, CardBody, Fade, CardTitle, Button, Container, Form, FormGroup, Label,
-    Input, Alert, ButtonDropdown, DropdownItem, DropdownMenu, DropdownToggle, Row
+    Card, CardBody, CardTitle, Button, Form, FormGroup, Input, Alert
 } from 'reactstrap';
 import { Redirect } from "react-router-dom";
 import axios from 'axios';
@@ -13,7 +12,6 @@ import { clearErrors } from '../../actions/errorActions';
 import { clearMsgs } from '../../actions/msgActions';
 
 import FileUpload from '../fileupload/FileUpload';
-import ChangePassword from './ChangePassword';
 
 class ChangeUserInfo extends Component {
     state = {
@@ -39,6 +37,7 @@ class ChangeUserInfo extends Component {
 
     static protoType = {
         auth: PropTypes.object,
+        msg: PropTypes.object,
         error: PropTypes.object.isRequired,
         edit: PropTypes.func.isRequired,
         clearErrors: PropTypes.func.isRequired,
@@ -55,12 +54,12 @@ class ChangeUserInfo extends Component {
 
         });
 
-        if (this.state.prevProfileImage != '')
+        if (this.state.prevProfileImage !== '')
             this.setState({ prevProfileImage: user.profileImage });
     }
 
     componentDidUpdate(prevProps) {
-        const { error, msg, isAuthenticated } = this.props;
+        const { error, msg } = this.props;
         if (error !== prevProps.error) {
             // Check for register error
             if (error.id === 'EDIT_USER_FAIL') {
@@ -106,11 +105,12 @@ class ChangeUserInfo extends Component {
 
         //delete prev image
         const noImageFullpath = this.state.path + 'no-image.png';
-        if (this.state.profileImage != this.state.prevProfileImage && this.state.prevProfileImage != noImageFullpath) {
+        if (this.state.profileImage !== this.state.prevProfileImage && this.state.prevProfileImage !== noImageFullpath) {
             const formData = new FormData();
             formData.append('filepath', this.state.prevProfileImage);
             formData.append('abspath', this.state.path);
 
+            console.log("*remove ChangeUserInfo 1");
             axios.post('/remove', formData);
         }
         this.setState({
@@ -135,11 +135,12 @@ class ChangeUserInfo extends Component {
         this.props.edit(id, NewUser);
 
         const noImageFullpath = this.state.path + 'no-image.png';
-        if (this.state.profileImage != this.state.prevProfileImage && this.state.prevProfileImage != noImageFullpath) {
+        if (this.state.profileImage !== this.state.prevProfileImage && this.state.prevProfileImage !== noImageFullpath) {
             const formData = new FormData();
             formData.append('filepath', this.state.prevProfileImage);
             formData.append('abspath', this.state.path);
 
+            console.log("*remove ChangeUserInfo 2");
             axios.post('/remove', formData);
         }
         this.setState({
@@ -154,7 +155,7 @@ class ChangeUserInfo extends Component {
 
     setRegisterModalStates = (val) => {
         this.setState({ profileImage: val });
-        if (this.state.removeImagefadeIn == false) {
+        if (this.state.removeImagefadeIn === false) {
             this.setState({ removeImagefadeIn: !this.state.removeImagefadeIn });
         }
     }
@@ -164,7 +165,7 @@ class ChangeUserInfo extends Component {
             <Fragment >
                 <div className='position-relative py-4 px-4'>
                     <Card style={bodyStyle}>
-                        <CardTitle align='center' className={'mr-5 mb-2 lead pt-3'} tag="h5" style={{ display: 'inline', fontFamily: "'Shadows Into Light', Kimberly Geswein",fontSize:'24px', opacity: '0.8'  }}>User Editing</CardTitle>
+                        <CardTitle align='center' className={'mr-5 mb-2 lead pt-3'} tag="h5" style={{ display: 'inline', fontFamily: "'Shadows Into Light', Kimberly Geswein", fontSize: '24px', opacity: '0.8' }}>User Editing</CardTitle>
                         <CardBody className='pr-4 mr-5'>
                             {this.state.msg ? <Alert color="danger">{this.state.msg}</Alert> : null}
                             <Form onSubmit={this.onSubmit}>
@@ -211,21 +212,10 @@ class ChangeUserInfo extends Component {
 }
 
 const bodyStyle = {
-    // border: '1px solid rgb(230, 230, 230)',
-    // webkitBorderRadius: '15px',
-    // mozBorderRadius: '15px',
-    // borderRadius: '15px',
     height: 'auto',
     width: 'auto',
-
-    // webkitBoxShadow: '0 0 5px 0.1px #C7C7C7',
-    // boxSshadow: '0 0 5px 0.1px #C7C7C7',
     border: '5px solid #730104'
-
-    // backgroundColor:' #292820'
-
 };
-
 const inputStyle = {
     backgroundColor: 'rgba(0, 0, 0, 0)',
     border: 'none',

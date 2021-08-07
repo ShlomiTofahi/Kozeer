@@ -89,6 +89,7 @@ class AddChapterModal extends Component {
             formData.append('filepath', filepath);
             formData.append('abspath', this.state.path);
 
+            console.log("*remove AddChapterModal");
             axios.post('/remove', formData);
             this.setState({ chapterImage: '' });
         }
@@ -99,7 +100,7 @@ class AddChapterModal extends Component {
 
         return (
             <div>
-                { this.props.isAuthenticated ?
+                {this.props.isAuthenticated ?
                     <Button outline
                         // color='info'
                         size='sm'
@@ -114,8 +115,7 @@ class AddChapterModal extends Component {
                     toggle={this.toggle}
                     onClosed={this.close}
                 >
-                    {/* <ModalHeader toggle={this.toggle}>Add To Shopping List</ModalHeader> */}
-                    <ModalHeader cssModule={{ 'modal-title': 'w-100 text-center' }} toggle={this.toggle} ><span class="lead">Add chapter</span></ModalHeader>
+                    <ModalHeader cssModule={{ 'modal-title': 'w-100 text-center' }} toggle={this.toggle} ><span className="lead">Add chapter</span></ModalHeader>
 
                     <ModalBody>
                         {this.state.msg ? <Alert color="danger">{this.state.msg}</Alert> : null}

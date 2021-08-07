@@ -6,9 +6,43 @@ import { Link } from 'react-router-dom';
 import { logout } from '../../actions/authActions';
 
 export class Logout extends Component {
+    state = {
+        hover: ""
+    }
+    static propTypes = {
+        logout: PropTypes.func.isRequired,
+        setting: PropTypes.object.isRequired
+    };
 
-    static propTypes ={
-        logout: PropTypes.func.isRequired
+    enterToggleHover = (hover) => {
+        this.setState({
+            hover
+        });
+    }
+
+    leaveToggleHover = () => {
+        this.setState({
+            hover: ''
+        });
+    }
+
+    navTextColorsStyle = () => {
+        const { setting } = this.props.setting;
+        let textColor = "#ffffff";
+        if (setting?.headerColorText !== null) {
+            textColor = setting.headerColorText;
+        }
+
+        if (this.state.hover !== '' && this.state.hover === "LOGOUT") {
+            textColor = "#21201f";
+            if (setting?.headerHoverColorText !== null) {
+                textColor = setting.headerHoverColorText;
+            }
+        }
+
+        return {
+            color: textColor
+        };
     };
 
     render() {
@@ -17,13 +51,21 @@ export class Logout extends Component {
 
         return (
             <Fragment>
-                <Link className={'navlink header-tablinks px-5 d-md-inline-block' + navLink} onClick={ this.props.logout } to='#'>LOGOUT</Link>
+                <Link className={'navlink header-tablinks px-5 d-md-inline-block no-outline ' + navLink}
+                    onClick={this.props.logout} to='#'
+                    style={this.navTextColorsStyle()}
+                    onMouseEnter={this.enterToggleHover.bind(this, "LOGOUT")}
+                    onMouseLeave={this.leaveToggleHover}>LOGOUT</Link>
             </Fragment>
         )
     };
 }
 
+const mapStateToProps = state => ({
+    setting: state.setting
+});
+
 export default connect
-(null,
-{ logout }    
-)(Logout);
+    (mapStateToProps,
+        { logout }
+    )(Logout);

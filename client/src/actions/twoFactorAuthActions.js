@@ -1,10 +1,7 @@
 import axios from 'axios';
 import { CREATE_TOKEN, CREATE_TOKEN_FAIL, VERIFY_TOKEN, VERIFY_TOKEN_FAIL } from './types';
-import { tokenConfig } from './authActions';
 import { returnErrors } from './errorActions';
 import { returnMsgs } from './msgActions';
-
-
 
 export const CreateToken = (email) => dispatch => {
     // Headers

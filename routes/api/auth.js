@@ -14,7 +14,9 @@ const User = require('../../models/User');
 // @desc    Auth user
 // @access  Public
 router.post('/', (req, res) => {
-    const { email, password } = req.body;
+    let { email, password } = req.body;
+    email = email.toLowerCase();
+
     //Simple validation
     if (!email || !password) {
         return res.status(400).json({ msg: 'Please enter all fields' });
@@ -67,7 +69,9 @@ router.get('/user', auth, (req, res) => {
 // @desc    Create Secret
 // @access  Public
 router.post('/create-token', (req, res) => {
-    const { email } = req.body;
+    let { email } = req.body;
+    email = email.toLowerCase();
+
     //Simple validation
     if (!email) {
         return res.status(400).json({ msg: 'Please enter your email' });
@@ -99,8 +103,9 @@ router.post('/create-token', (req, res) => {
                     // create reusable transporter object using the default SMTP transport
                     let transporter = nodemailer.createTransport({
                         host: 'smtp.gmail.com',
-                        port: 587,
-                        secure: false, // true for 465, false for other ports
+                        port: 465,
+                        secure: true, // true for 465, false for other ports
+                        requireTLS: true,
                         auth: {
                             user: config.get('adminMail'), // generated ethereal user
                             pass: '17David17'  // generated ethereal password
@@ -142,7 +147,9 @@ router.post('/create-token', (req, res) => {
 // @desc    Verify token and make secret perm
 // @access  Public
 router.post('/verify-token', (req, res) => {
-    const { token, email } = req.body;
+    let { token, email } = req.body;
+    email = email.toLowerCase();
+
     //Simple validation
     if (!email) {
         return res.status(400).json({ msg: 'No email entered' });

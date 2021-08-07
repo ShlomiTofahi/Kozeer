@@ -1,10 +1,9 @@
 import axios from 'axios';
-import { compareSync } from 'bcryptjs';
 import { returnErrors } from './errorActions';
 import { returnMsgs } from './msgActions';
 
 import {
-  USER_LOADED, USER_LOADING, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_SUCCESS,REGISTER_SUCCESS,
+  USER_LOADED, USER_LOADING, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_SUCCESS, REGISTER_SUCCESS,
   REGISTER_FAIL, USERS_LOADING, DELETE_USER, GET_USERS, EDIT_USER_SUCCESS, EDIT_USER_FAIL, CHANGE_PASSWORD,
   CHANGE_PASSWORD_FAIL, USER_LOADED_BY_EMAIL, USER_LOADED_BY_EMAIL_FAIL, CHANGE_EMAIL, CHANGE_EMAIL_FAIL
 } from './types';
@@ -34,32 +33,36 @@ export const loadUser = () => (dispatch, getState) => {
 export const getUserByEmail = (email) => dispatch => {
   // Headers
   const config = {
-      headers: {
-          'Content-Type': 'application/json'
-      }
+    headers: {
+      'Content-Type': 'application/json'
+    }
   };
   // Request body
   const body = JSON.stringify({ email });
 
   axios
-      .post('/api/users/userid', body, config)
-      .then(res => {
-          dispatch(
-              returnMsgs('', null, 'USER_LOADED_BY_EMAIL_SUCCESS')
-          );
-          dispatch({
-              type: USER_LOADED_BY_EMAIL,
-              payload: res.data
-          })
+    .post('/api/users/userid', body, config)
+    .then(res => {
+      dispatch(
+        returnMsgs('', null, 'USER_LOADED_BY_EMAIL_SUCCESS')
+      );
+      dispatch({
+        type: USER_LOADED_BY_EMAIL,
+        payload: res.data
       })
-      .catch(err => {
-          dispatch(
-              returnErrors(err.response.data.msg, err.response.status, 'USER_LOADED_BY_EMAIL_FAIL')
-          );
-          dispatch({
-              type: USER_LOADED_BY_EMAIL_FAIL
-          });
+    })
+    .catch(err => {
+      err.response ?
+        dispatch(
+          returnErrors(err.response.data.msg, err.response.status, 'USER_LOADED_BY_EMAIL_FAIL')
+        )
+        : dispatch(
+          returnErrors(err.message, 'USER_LOADED_BY_EMAIL_FAIL')
+        );
+      dispatch({
+        type: USER_LOADED_BY_EMAIL_FAIL
       });
+    });
 };
 
 export const getUsers = () => (dispatch, getState) => {
@@ -113,9 +116,13 @@ export const register = ({ name, email, profileImage, password }) => dispatch =>
       })
     )
     .catch(err => {
-      dispatch(
-        returnErrors(err.response.data.msg, err.response.status, 'REGISTER_FAIL')
-      );
+      err.response ?
+        dispatch(
+          returnErrors(err.response.data.msg, err.response.status, 'REGISTER_FAIL')
+        )
+        : dispatch(
+          returnErrors(err.message, 'REGISTER_FAIL')
+        );
       dispatch({
         type: REGISTER_FAIL
       });
@@ -136,9 +143,13 @@ export const changePassword = (id, data) => (dispatch, getState) => {
       })
     })
     .catch(err => {
-      dispatch(
-        returnErrors(err.response.data.msg, err.response.status, 'CHANGE_PASSWORD_FAIL')
-      );
+      err.response ?
+        dispatch(
+          returnErrors(err.response.data.msg, err.response.status, 'CHANGE_PASSWORD_FAIL')
+        )
+        : dispatch(
+          returnErrors(err.message, 'CHANGE_PASSWORD_FAIL')
+        );
       dispatch({
         type: CHANGE_PASSWORD_FAIL
       });
@@ -159,9 +170,13 @@ export const changeEmail = (id, data) => (dispatch, getState) => {
       })
     })
     .catch(err => {
-      dispatch(
-        returnErrors(err.response.data.msg, err.response.status, 'CHANGE_EMAIL_FAIL')
-      );
+      err.response ?
+        dispatch(
+          returnErrors(err.response.data.msg, err.response.status, 'CHANGE_EMAIL_FAIL')
+        )
+        : dispatch(
+          returnErrors(err.message, 'CHANGE_EMAIL_FAIL')
+        );
       dispatch({
         type: CHANGE_EMAIL_FAIL
       });
@@ -182,9 +197,13 @@ export const changePassByEmail = (id, data) => (dispatch, getState) => {
       })
     })
     .catch(err => {
-      dispatch(
-        returnErrors(err.response.data.msg, err.response.status, 'CHANGE_PASSWORD_FAIL')
-      );
+      err.response ?
+        dispatch(
+          returnErrors(err.response.data.msg, err.response.status, 'CHANGE_PASSWORD_FAIL')
+        )
+        : dispatch(
+          returnErrors(err.message, 'CHANGE_PASSWORD_FAIL')
+        );
       dispatch({
         type: CHANGE_PASSWORD_FAIL
       });
@@ -206,9 +225,13 @@ export const edit = (id, user) => (dispatch, getState) => {
       })
     })
     .catch(err => {
-      dispatch(
-        returnErrors(err.response.data.msg, err.response.status, 'EDIT_USER_FAIL')
-      );
+      err.response ?
+        dispatch(
+          returnErrors(err.response.data.msg, err.response.status, 'EDIT_USER_FAIL')
+        )
+        : dispatch(
+          returnErrors(err.message, 'EDIT_USER_FAIL')
+        );
       dispatch({
         type: EDIT_USER_FAIL
       });
@@ -238,9 +261,13 @@ export const login = ({ email, password }) => (
       })
     )
     .catch(err => {
-      dispatch(
-        returnErrors(err.response.data.msg, err.response.status, 'LOGIN_FAIL')
-      );
+      err.response ?
+        dispatch(
+          returnErrors(err.response.data.msg, err.response.status, 'LOGIN_FAIL')
+        )
+        : dispatch(
+          returnErrors(err.message, 'LOGIN_FAIL')
+        );
       dispatch({
         type: LOGIN_FAIL
       });

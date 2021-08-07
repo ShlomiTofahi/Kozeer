@@ -1,5 +1,8 @@
 import axios from 'axios';
-import { ADD_CHAPTER_FAIL, GET_CHAPTERS, ADD_CHAPTER, DELETE_CHAPTER, CHAPTERS_LOADING, DELETE_FAIL, EDIT_CHAPTER, EDIT_CHAPTER_FAIL } from './types';
+import {
+    ADD_CHAPTER_FAIL, GET_CHAPTERS, ADD_CHAPTER, DELETE_CHAPTER, CHAPTERS_LOADING, DELETE_FAIL,
+    EDIT_CHAPTER, EDIT_CHAPTER_FAIL
+} from './types';
 import { tokenConfig } from './authActions';
 import { returnErrors } from './errorActions';
 import { returnMsgs } from './msgActions';
@@ -14,8 +17,15 @@ export const getChapters = () => dispatch => {
                 type: GET_CHAPTERS,
                 payload: res.data
             }))
-        .catch(err =>
-            dispatch(returnErrors(err.response.data, err.response.status))
+        .catch(err => {
+            err.response ?
+                dispatch(
+                    returnErrors(err.response.data.msg, err.response.status)
+                )
+                : dispatch(
+                    returnErrors(err.message)
+                );
+        }
         );
 };
 

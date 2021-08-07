@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Collapse } from 'react-collapse';
 import {
-    Card, CardBody, Button, Form,
-    FormGroup, Label, Input, Alert, Row
+    Card, CardBody, Button, Form, FormGroup, Input, Alert
 } from 'reactstrap';
 
 import { changeEmail } from '../../actions/authActions';
@@ -104,8 +103,8 @@ class ChangeEmail extends Component {
                         block
                         size='sm'
                         onClick={this.CollapseHangdle}
-                        style={{ marginBottom: '1rem', opacity: '0.9'  }}
-                    >Change email<strong class='pr-3' style={{ position: 'absolute', right: '0' }}>{dropDownSymbol}</strong></Button>
+                        style={{ marginBottom: '1rem', opacity: '0.9' }}
+                    >Change email<strong className='pr-3' style={{ position: 'absolute', right: '0' }}>{dropDownSymbol}</strong></Button>
                     <Collapse isOpened={this.state.Collapsetoggle}>
                         <Card style={bodyStyle}>
                             <CardBody className='mx-4 mt-3'>
@@ -149,32 +148,16 @@ class ChangeEmail extends Component {
 }
 
 const bodyStyle = {
-    // border: '1px solid rgb(230, 230, 230)',
-    // webkitBorderRadius: '15px',
-    // mozBorderRadius: '15px',
-    // borderRadius: '15px',
-    // padding: '30px',
     height: 'auto',
     width: 'auto',
-    border: '5px solid #730104',
-
-    // webkitBoxShadow: '0 0 5px 0.1px #C7C7C7',
-    // boxSshadow: '0 0 5px 0.1px #C7C7C7'
-
+    border: '5px solid #730104'
 };
-
-const addPostInput = {
-    background: '#f7f7f7',
-    width: window.innerWidth >= 463 ? '200px' : 'null',
-    height: '24px'
-};
-
 const inputStyle = {
     backgroundColor: 'rgba(0, 0, 0, 0)',
     border: 'none',
     borderBottom: '1px solid #76735c',
     borderRadius: '1px',
-    marginTop: '-9px',
+    marginTop: '-9px'
 };
 
 const mapStateToProps = (state) => ({

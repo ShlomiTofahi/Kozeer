@@ -81,16 +81,17 @@ class RegisterModal extends Component {
     }
 
     setRegisterModalStates = (val) => {
-        if (val != '')
+        if (val !== '')
             this.setState({ profileImage: val });
     }
 
     close = () => {
         const noImageFullpath = this.state.path + 'no-image.png';
         const filepath = this.state.profileImage
-        if (filepath !== '' && filepath != noImageFullpath) {
+        if (filepath !== '' && filepath !== noImageFullpath) {
             const formData = new FormData();
             formData.append('filepath', filepath);
+            console.log("*remove registerModal");
             axios.post('/remove', formData);
             this.setState({ profileImage: '' });
         }
@@ -171,8 +172,7 @@ const inputStyle = {
 
 const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated,
-    error: state.error,
-    pet: state.pet
+    error: state.error
 });
 
 export default connect(

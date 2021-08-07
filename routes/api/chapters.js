@@ -18,14 +18,6 @@ router.get('/', (req, res) => {
         .then(Chapters => res.json(Chapters))
 });
 
-// // @route   GET api/chapters
-// // @desc    Get Post
-// // @access  Public
-// router.get('/:id', (req, res) => {
-//     Post.findById(req.params.id).populate('mangas').populate('comments')
-//         .then(post => res.json(post))
-// });
-
 // @route   POST api/chapters
 // @desc    Create A Chapter
 // @access  Private
@@ -49,9 +41,7 @@ router.post('/', auth, (req, res) => {
                         const newChapter = new Chapter({ name, chapterImage });
                         newChapter.save().then(chapter => {
                             Chapter.findOne(chapter).populate('mangas')
-                                .then(chapter => {
-                                    res.json(chapter)
-                                });
+                                .then(chapter => res.json(chapter));
                         });
                     } else {
                         return res.status(400).json({ msg: 'No permission' });
@@ -102,7 +92,7 @@ router.delete('/:id', auth, (req, res) => {
             if (user.admin) {
                 Chapter.findById(req.params.id).then(chapter => {
                     Manga.deleteMany({ chapter: chapter._id }).then(() => {
-                        Chapter.deleteOne().then(() => res.json({ success: true }));
+                        chapter.deleteOne().then(() => res.json({ success: true }));
                     })
                 })
             } else {

@@ -9,7 +9,7 @@ export default class About extends Component {
     render() {
         return (
             <Fragment>
-                <div align='center' className="wrapper animated bounceInLeft" style={bgStyle}></div>
+                <div className="" style={bgStyle}></div>
                 <div style={bodyStyle}>
                     <legend>
                         <h2 className='brand display-4 pt-4' style={window.innerWidth >= 992 ? { fontFamily: "'Shadows Into Light', Kimberly Geswein", opacity: '0.4' } : { fontFamily: "'Shadows Into Light', Kimberly Geswein", opacity: '0.4', fontSize: '2.0em' }}>
@@ -33,17 +33,15 @@ export default class About extends Component {
 
 const bgStyle = {
     backgroundImage: `url(/images/main/13page.jpg)`,
-    paddingTop: "10%",
     backgroundAttachment: 'fixed',
     backgroundSize: 'cover',
     backgroundPosition: 'bottom left',
     backgroundRepeat: 'no-repeat',
     filter: 'blur(4px)',
-    height: '721px'
+    height: "100vh",
 }
 
 const bodyStyle = {
-    backgroundColor: 'rgb(0,0,0)',
     backgroundColor: 'rgba(0,0,0, 0.4)',
     color: 'white',
     fontWeight: 'bold',

@@ -1,5 +1,8 @@
 import axios from 'axios';
-import { POSTS_LOADING, GET_POSTS, ADD_POST, ADD_POST_FAIL, EDIT_POST, EDIT_POST_FAIL, DELETE_POST, VIEWS_POST, LOVED_POST, UNLOVED_POST, EDIT_CHAPTER_FROM_POST_DELETE } from './types';
+import {
+    POSTS_LOADING, GET_POSTS, ADD_POST, ADD_POST_FAIL, EDIT_POST, EDIT_POST_FAIL, DELETE_POST, VIEWS_POST, GET_POST_BY_ID,
+    LOVED_POST, UNLOVED_POST, EDIT_CHAPTER_FROM_POST_DELETE, EDIT_CHAPTER_FROM_POST_EDIT, EDIT_CHAPTER_FROM_POST_ADD
+} from './types';
 import { tokenConfig } from './authActions';
 import { returnErrors } from './errorActions';
 import { returnMsgs } from './msgActions';
@@ -20,8 +23,43 @@ export const getPosts = () => dispatch => {
             }
         }
         )
-        .catch(err =>
-            dispatch(returnErrors(err?.response?.data, err?.response?.status))
+        .catch(err => {
+            err.response ?
+                dispatch(
+                    returnErrors(err.response.data, err.response.status)
+                )
+                : dispatch(
+                    returnErrors(err.message)
+                );
+        }
+        );
+};
+
+export const getPostById = (id) => dispatch => {
+    dispatch(setPostsLoading());
+    axios
+        .get(`/api/posts/${id}`)
+        .then(res => {
+            try {
+                dispatch({
+                    type: GET_POST_BY_ID,
+                    payload: res.data
+                })
+            }
+            catch (e) {
+                console.log(res, e)
+            }
+        }
+        )
+        .catch(err => {
+            err.response ?
+                dispatch(
+                    returnErrors(err.response.data, err.response.status)
+                )
+                : dispatch(
+                    returnErrors(err.message)
+                );
+        }
         );
 };
 
@@ -59,18 +97,34 @@ export const addPost = (post) => (dispatch, getState) => {
                 type: ADD_POST,
                 payload: res.data
             })
+            dispatch({
+                type: EDIT_CHAPTER_FROM_POST_ADD,
+                payload: { newMangas: res.data.mangas }
+            })
         })
         .catch(err => {
-            dispatch(
-                returnErrors(err.response.data.msg, err.response.status, 'ADD_POST_FAIL')
-            );
+            err.response ?
+                dispatch(
+                    returnErrors(err.response.data.msg, err.response.status, 'ADD_POST_FAIL')
+                )
+                : dispatch(
+                    returnErrors(err.message, 'ADD_POST_FAIL')
+                );
             dispatch({
                 type: ADD_POST_FAIL
             });
         });
 };
-
-export const editPost = (id, post) => (dispatch, getState) => {
+// chapterList = [];
+// const { chapters } = this.props.chapter;
+// chapters.map(({name, mangas}) =>{
+//   mangas.map(({page}) =>{
+//     if(this.state.mangasSelected.includes(page)){
+//       chapterList = [...chapterList, name]
+//     }
+//   })
+// })
+export const editPost = (id, post, prevMangas) => (dispatch, getState) => {
     axios
         .post(`/api/posts/edit/${id}`, post, tokenConfig(getState))
         .then(res => {
@@ -81,11 +135,19 @@ export const editPost = (id, post) => (dispatch, getState) => {
                 type: EDIT_POST,
                 payload: res.data
             })
+            dispatch({
+                type: EDIT_CHAPTER_FROM_POST_EDIT,
+                payload: { newMangas: post.mangasSelected, prevMangas }
+            })
         })
         .catch(err => {
-            dispatch(
-                returnErrors(err.response.data.msg, err.response.status, 'EDIT_POST_FAIL')
-            );
+            err.response ?
+                dispatch(
+                    returnErrors(err.response.data.msg, err.response.status, 'EDIT_POST_FAIL')
+                )
+                : dispatch(
+                    returnErrors(err.message, 'EDIT_POST_FAIL')
+                );
             dispatch({
                 type: EDIT_POST_FAIL
             });

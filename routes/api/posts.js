@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../../middleware/auth');
+const mailService = require('../../services/mailService');
+
 
 //Post Model
 const Post = require('../../models/Post');
@@ -8,13 +10,15 @@ const Post = require('../../models/Post');
 const User = require('../../models/User');
 //Manga Model
 const Manga = require('../../models/Manga');
+//Subscribe Model
+const Subscribe = require('../../models/Subscribe');
 
 // @route   GET api/posts
 // @desc    Get All Posts
 // @access  Public
-
 router.get('/', (req, res) => {
     Post.find().populate('mangas').populate('comments')
+        .populate({ path: 'mangas', populate: { path: 'chapter' } })
         .sort({ published_date: -1 })
         .then(posts => res.json(posts))
 });
@@ -62,18 +66,58 @@ router.post('/', auth, (req, res) => {
                 if (is_manga) {
                     if (mangasSelected) {
                         Manga.find({ page: mangasSelected }).then(mangas => {
-                            mangas.map((manga) =>{
+                            mangas.map((manga) => {
                                 Manga.findOne(manga).then(mangaobj => {
                                     mangaobj.inuse = true;
                                     mangaobj.save();
                                 })
                             })
                             post.mangas = mangas
-                            post.save().then((post) => res.json(post));
+                            Subscribe.find().then(subscribes => {
+                                let recipients = subscribes.map(subscribe => subscribe.email);
+                                let mangasTag = ''
+                                mangasSelected.sort().map((manga, index) => {
+                                    if (index + 1 !== mangasSelected.length)
+                                        mangasTag += `&nbsp;` + manga + `,&nbsp;`;
+                                    else
+                                        mangasTag += `&nbsp;` + manga + `&nbsp;`;
+
+                                })
+                                mangasTag = `<span style="color:#c914c3">&nbsp;` + mangasTag + `&nbsp;<span>`
+                                output = `
+                                <div align='center'>
+                                <h2 style="color:white;
+                                           background-color:#fb6af7;
+                                           text-align:center;
+                                           border: solid 1px #c914c3;
+                                           letter-spacing: 8px;">
+                                  New Post Arrived!!
+                                  </h2><br />
+                                <hr />
+                                <span style="font-family: Arial, Helvetica, sans-serif;
+                                font-size:16px;
+                                letter-spacing: .1rem;">
+                                <p>
+                                  Hello Kozeer's members,<br /> 
+                                  New episodes </p>`+ mangasTag + `<p style="color:black">have been posted on our site.<br /> 
+                                  For more information visit:<br /> 
+                                  <a href='www.kozeerofficial.com'>www.kozeerofficial.com</a>
+                                  <br />
+                                  <br />
+                                  Thanks, <br />
+                                  Kozeer team.
+                                </p>
+                                <hr style="color:black" />
+                                <div>
+                            `
+
+                                mailService.sendMail(recipients, output)
+                                post.save().then((post) => res.json(post));
+                            })
                         });
                     }
                 }
-                else{
+                else {
                     return res.json(post);
                 }
             })
@@ -103,36 +147,44 @@ router.post('/edit/:id', auth, (req, res) => {
             }
         }
 
-        let newPost = new Post({
+        let newPost = {
             title,
             body,
             is_manga,
-            mangas: []
-        });
+        };
 
         if (postImage != '')
             newPost.postImage = postImage;
 
-        Post.findById(req.params.id).then(post => {
+        let prevMangas = [];
+
+        Post.findById(req.params.id).populate('mangas').then(post => {
+            post.mangas.map(({ page }) => {
+                prevMangas = [...prevMangas, page]
+            })
+
             post.updateOne(newPost).then(() => {
                 Post.findById(req.params.id).populate('mangas').populate('comments')
                     .then(post => {
                         if (is_manga) {
                             if (mangasSelected) {
-                                Manga.find({ page: mangasSelected }).then(mangas => {
-                                    post.mangas.map((manga) =>{
-                                        Manga.findOne(manga).then(mangaobj => {
-                                            mangaobj.inuse = false;
-                                            mangaobj.save();
-                                        })
-                                    })
-                                    mangas.map((manga) =>{
-                                        Manga.findOne(manga).then(mangaobj => {
-                                            mangaobj.inuse = true;
-                                            mangaobj.save();
-                                        })
-                                    })
-                                    post.mangas = mangas
+                                Manga.updateMany({ page: prevMangas }, { inuse: false }, (err, mangas) => {
+                                    if (err) {
+                                        console.log(err)
+                                    }
+                                    else {
+                                    }
+                                });
+                                Manga.updateMany({ page: mangasSelected }, { inuse: true }, (err, mangas) => {
+                                    if (err) {
+                                        console.log(err)
+                                    }
+                                    else {
+                                    }
+                                });
+
+                                Manga.find({ page: mangasSelected }).then(newMangas => {
+                                    post.mangas = newMangas;
                                     post.save();
                                 })
                             }
@@ -166,7 +218,7 @@ router.delete('/:id', auth, (req, res) => {
                 let mangasPost = []
                 if (post.is_manga) {
 
-                    post.mangas.map((manga) =>{
+                    post.mangas.map((manga) => {
                         mangasPost.push(manga);
                         Manga.findOne(manga).then(mangaobj => {
                             mangaobj.inuse = false;
@@ -259,7 +311,8 @@ router.post('/filter', (req, res) => {
                     if (newPost.length) post = post.filter(element => postIdList.includes(String(element._id)));
                 }
             }
-            Post.find({ "_id": { $in: post } }).populate('mangas').populate('comments')
+            Post.find({ "_id": { $in: post } })
+                .populate('mangas').populate('comments')
                 .sort({ date: -1 })
                 .then(posts => res.json(posts))
         })

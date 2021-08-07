@@ -6,6 +6,7 @@ const initialState = {
 };
 
 export default function mangaReducer(state = initialState, action) {
+    let newMangas = [];
     switch (action.type) {
         case GET_MANGAS:
             return {
@@ -27,7 +28,7 @@ export default function mangaReducer(state = initialState, action) {
                 mangas: state.mangas.filter(manga => manga._id !== action.payload)
             };
         case EDIT_MANGA:
-            let newMangas = [...state.mangas];
+            newMangas = [...state.mangas];
             var index = newMangas.findIndex(element => element._id === action.payload._id);
             newMangas[index] = action.payload;
             newMangas = newMangas.sort((a, b) => Number(a.page.substring(4)) - Number(b.page.substring(4)));

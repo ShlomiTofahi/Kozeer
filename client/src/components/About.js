@@ -1,6 +1,14 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
-export default class About extends Component {
+import SetMyVisionModal from "./SetMyVisionModal"
+
+class About extends Component {
+
+    static propTypes = {
+        setting: PropTypes.object.isRequired
+    }
 
     aboutStyle = () => {
         return {
@@ -14,17 +22,34 @@ export default class About extends Component {
         };
     };
     render() {
+        const { setting } = this.props.setting;
+
+        let myVision = "";
+        if (setting?.myVision !== null) {
+            myVision = setting.myVision;
+        }
+        let att= [];
+        for (const c of myVision) {
+            if(c === "\n"){
+                att.push(<br />)
+            }
+            else{
+                att.push(c)
+            }
+        }
+        myVision = myVision.replace("<br />", <br />)
         return (
             <div className="wrapper animated bounceInLeft">
                 <div style={this.aboutStyle()}>
                     <legend align='center'>
-                        <h2 className='brand display-4 pt-4' style={window.innerWidth >= 992 ? { fontFamily: "'Shadows Into Light', Kimberly Geswein", opacity: '0.4' } : {fontFamily: "'Shadows Into Light', Kimberly Geswein", opacity: '0.4', fontSize: '2.0em' }}>
+                        <h2 className='brand display-4 pt-4' style={window.innerWidth >= 992 ? { fontFamily: "'Shadows Into Light', Kimberly Geswein", opacity: '0.4' } : { fontFamily: "'Shadows Into Light', Kimberly Geswein", opacity: '0.4', fontSize: '2.0em' }}>
                             MY VISION
                         </h2>
                     </legend>
-                    <p className='lead p-5'>
-                        Hello everyone,
-                        My name is David Shmuelov and I am the creator of the story.
+                    {myVision === "" ?
+                        <p className='lead p-5'>
+                            Hello everyone,
+                            My name is David Shmuelov and I am the creator of the story.
                             <br /><br />
 
                             So how did it all start?
@@ -40,8 +65,18 @@ export default class About extends Component {
                             And today after a lot of time and work we feel confident enough in our work to publish it to you,
                             I hope you enjoy it like we do.
                         </p>
+                        :<p className='lead p-5'> {att}</p>
+                    }
+                    <SetMyVisionModal />
                 </div>
             </div>
         )
     }
 }
+const mapStateToProps = state => ({
+    setting: state.setting
+});
+export default connect(
+    mapStateToProps,
+    {}
+)(About);

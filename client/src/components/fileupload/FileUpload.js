@@ -39,7 +39,7 @@ const FileUpload = (props) => {
     if (props.currImage) {
       const noImageFullpath = props.path + 'no-image.png';
 
-      if (!removeImagefadeIn && props.currImage != noImageFullpath)
+      if (!removeImagefadeIn && props.currImage !== noImageFullpath)
         setRemoveOrginalImagefadeIn(true);
       if (!filename) {
         setFilename(path.basename(props.currImage));
@@ -48,11 +48,11 @@ const FileUpload = (props) => {
 
       }
     }
-  });
+  }, [props.currImage, props.path, removeImagefadeIn, filename]);
   const onChangeFileUpload = event => {
     let file = event.target.files[0];
-    if (file && file.type != "image/png" && file.type != 'image/jpg' && file.type != 'image/jpeg'
-      && file.type != 'image/webp' && file.type != 'image/gif') {
+    if (file && file.type !== "image/png" && file.type !== 'image/jpg' && file.type !== 'image/jpeg'
+      && file.type !== 'image/webp' && file.type !== 'image/gif') {
       setMessage("File does not support. You must use .png or .jpg ");
       // return false;
     }
@@ -70,13 +70,14 @@ const FileUpload = (props) => {
     e.preventDefault();
 
     const noImageFullpath = props.path + 'no-image.png';
-    if (!firstUploaded && filepath !== '' && filepath != noImageFullpath) {
+    if (!firstUploaded && filepath !== '' && filepath !== noImageFullpath) {
 
       // (!props.currImage || props.currImage == noImageFullpath) && 
       const formData = new FormData();
       formData.append('filepath', filepath);
       formData.append('abspath', props.path);
 
+      console.log("*remove FileUpload 1");
       axios.post('/remove', formData);
     }
     setFirstUploaded(false);
@@ -111,11 +112,11 @@ const FileUpload = (props) => {
 
       setMessage('File Uploaded');
 
-      if (removeImagefadeIn == false) {
+      if (removeImagefadeIn === false) {
         setRemoveImagefadeIn(!removeImagefadeIn);
         setRemoveOrginalImagefadeIn(false);
       }
-      if (imageSubmited == false) {
+      if (imageSubmited === false) {
         setImageSubmited(true)
       }
 
@@ -132,11 +133,12 @@ const FileUpload = (props) => {
   const removeImage = () => {
 
     const noImageFullpath = props.path + 'no-image.png';
-    if (filepath != noImageFullpath) {
+    if (filepath !== noImageFullpath) {
       const formData = new FormData();
       formData.append('filepath', filepath);
       formData.append('abspath', props.path);
 
+      console.log("*remove FileUpload 2");
       axios.post('/remove', formData);
       setMessage('Image deleted successfully!')
       setImageSubmited(false)
@@ -158,11 +160,12 @@ const FileUpload = (props) => {
 
   const removeOrginalImage = () => {
     const noImageFullpath = props.path + 'no-image.png';
-    if (filepath != noImageFullpath) {
+    if (filepath !== noImageFullpath) {
       const formData = new FormData();
       formData.append('filepath', filepath);
       formData.append('abspath', props.path);
 
+      console.log("*remove FileUpload 4");
       axios.post('/remove', formData);
 
       if (props.currImage) {
@@ -201,6 +204,8 @@ const FileUpload = (props) => {
             if (filepath !== '' && filepath !== noImageFullpath && filepath !== props.prevImage) {
               const formData = new FormData();
               formData.append('filepath', filepath);
+
+              console.log("*remove FileUpload 5");
               axios.post('/remove', formData);
             }
             if (removedOrginalImage) {

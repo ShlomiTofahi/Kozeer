@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Collapse } from 'react-collapse';
 import {
-    Card, CardBody, Button, Form, ModalBody,
-    FormGroup, Label, Input, Alert, Row, Container
+    CardBody, Button, Form, ModalBody,
+    FormGroup, Input, Alert, Row, Container
 } from 'reactstrap';
 
 import { CreateToken, VerifyToken } from '../../actions/twoFactorAuthActions';
@@ -38,8 +38,11 @@ class RestPassword extends Component {
         msg: PropTypes.object.isRequired,
         twoFactorAuth: PropTypes.object.isRequired,
         changePassByEmail: PropTypes.func.isRequired,
+        getUserByEmail: PropTypes.func.isRequired,
         clearErrors: PropTypes.func.isRequired,
-        clearMsgs: PropTypes.func.isRequired
+        clearMsgs: PropTypes.func.isRequired,
+        CreateToken: PropTypes.func.isRequired,
+        VerifyToken: PropTypes.func.isRequired
     }
 
     componentDidUpdate(prevProps) {
@@ -136,7 +139,6 @@ class RestPassword extends Component {
 
     ChgPassCollapseHangdle = () => {
         const { email } = this.state;
-        let id = ''
         this.props.getUserByEmail(email);
 
         this.setState({
@@ -158,39 +160,6 @@ class RestPassword extends Component {
             visible: false
         })
     }
-
-    // bodyStyle = () => {
-    //     return {
-    //         // webkitBorderRadius: '15px',
-    //         // mozBorderRadius: '15px',
-    //         // borderRadius: '15px',
-    //         padding: '30px',
-    //         height: 'auto',
-    //         width: 'auto',
-    //         margin: '0 auto',
-    //         // webkitBoxShadow: '0 0 5px 0.1px #C7C7C7',
-    //         // boxSshadow: '0 0 5px 0.1px #C7C7C7',
-    //         border: '5px solid #730104',
-    //         color: 'black'
-    //     };
-    // };
-    // verifybodyStyle = () => {
-    //     return {
-    //         border: '1px solid rgb(230, 230, 230)',
-    //         webkitBorderRadius: '15px',
-    //         mozBorderRadius: '15px',
-    //         borderRadius: '15px',
-    //         padding: '30px',
-    //         paddingBottom: '10px',
-    //         paddingTop: '10px',
-    //         height: 'auto',
-    //         width: 'auto',
-    //         margin: '0 auto',
-    //         webkitBoxShadow: '0 0 5px 0.1px #C7C7C7',
-    //         boxSshadow: '0 0 5px 0.1px #C7C7C7',
-
-    //     };
-    // };
 
     render() {
         return (

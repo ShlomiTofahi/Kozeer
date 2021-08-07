@@ -1,9 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import {
-  Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input, CardFooter, CardImg, Alert,
-  Collapse, Col, ListGroup, ListGroupItem
+  Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Alert,
+  Collapse, Col, ListGroup
 } from 'reactstrap';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -35,19 +34,23 @@ class AddPostModal extends Component {
   };
 
   static propTypes = {
-    isAuthenticated: PropTypes.bool,
     error: PropTypes.object.isRequired,
     msg: PropTypes.object.isRequired,
+    post: PropTypes.object.isRequired,
     manga: PropTypes.object.isRequired,
+    auth: PropTypes.object.isRequired,
     addPost: PropTypes.func.isRequired,
     getChapters: PropTypes.func.isRequired,
     getMangas: PropTypes.func.isRequired,
-    clearErrors: PropTypes.func.isRequired
+    clearErrors: PropTypes.func.isRequired,
+    clearMsgs: PropTypes.func.isRequired
   }
+
   componentDidMount() {
     this.props.getChapters();
     this.props.getMangas();
   }
+
   componentDidUpdate(prevProps) {
     const { error, msg } = this.props;
     if (error !== prevProps.error) {
@@ -97,7 +100,6 @@ class AddPostModal extends Component {
     this.setState({ [e.target.name]: e.target.value });
   }
   addMangaToPost = e => {
-    // this.setState({ selectedMangas: [...this.state.selectedMangas, e.target.defaultValue ]});
     if (this.state[e.target.name].includes(e.target.defaultValue)) {
       this.setState(prevState => ({
         [e.target.name]: prevState[e.target.name].filter(element => element !== e.target.defaultValue)
@@ -167,6 +169,7 @@ class AddPostModal extends Component {
       formData.append('filepath', filepath);
       formData.append('abspath', this.state.path);
 
+      console.log("*remove AddPostModal");
       axios.post('/remove', formData);
       this.setState({ postImage: '' });
     }
@@ -183,7 +186,6 @@ class AddPostModal extends Component {
     const { isAuthenticated, user } = this.props.auth;
     const is_admin = (isAuthenticated && user.admin);
 
-    // const { mangas } = this.props.manga;
     const { chapters } = this.props.chapter;
 
     const noImageFullpath = this.state.path + 'no-image.png';
@@ -195,28 +197,23 @@ class AddPostModal extends Component {
     chapters.map(({ name }) => {
       dropDownSymbolList = [...dropDownSymbolList, this.state.Collapsetoggle.includes(name) ?
         { name: <span>&#45;</span> } : { name: <span>&#x2B;</span> }]
+        return dropDownSymbolList;
     })
 
     return (
       <div>
         {is_admin ?
           <nav className="mt-2 pl-4">
-            {/* <div className="input-group col-12 col-sm-8 col-md-6 col-lg-5 pb-3"> */}
-            {/* <CardImg bottom className='forum-pet-image ml-1 mt-1' src={user.petImage} /> */}
             <input
               style={inputStyle}
-              bsSize="sm"
               onClick={this.toggle}
               type="text"
               name='name'
               className="input-place-holder form-control input-sm pt-3 pl-2"
               placeholder={'Add post...'}
             />
-            {/* </div> */}
           </nav>
-
           : null}
-
 
         <Modal
           className="login-modal"
@@ -230,19 +227,7 @@ class AddPostModal extends Component {
             {this.state.msg ? <Alert color="danger">{this.state.msg}</Alert> : null}
             <Form onSubmit={this.onSubmit}>
               <FormGroup>
-                {/* <Label for='title'>Title</Label> */}
-                {/* <small style={{ color: '#76735c' }}><Label for='title'>Title</Label></small> */}
                 <input className='input-place-holder form-control pt-3 pl-3 mb-3' style={inputTitleStyle} onChange={this.onChange} type="text" name='title' placeholder="Enter Title.." />
-
-                {/* <Input
-                  type='text'
-                  name='title'
-                  id='title'
-                  bsSize="sm"
-                  className='mb-3 mb-2'
-                  onChange={this.onChange}
-                  style={inputFormStyle}
-                /> */}
                 <div>
                   <small className='mr-2' style={{ color: '#76735c' }}><Label for='manga'>Manga</Label></small>
                   <label className="switch">
@@ -254,9 +239,6 @@ class AddPostModal extends Component {
                   <div>
                     <Button className="collapsible" onClick={this.DropDowntoggleManga} style={{ marginBottom: '1rem', opacity: '0.7' }}>Mangas <strong style={{ marginLeft: '44px' }}>{dropDownMangaSymbol}</strong></Button>
                     <Collapse isOpen={this.state.dropDownMangaOpen}>
-
-
-
                       <div className='chapter-list position-relative py-3 px-4'>
                         {chapters && chapters.map(({ _id, name, mangas }, index) => (
                           <Fragment key={_id}>
@@ -267,23 +249,23 @@ class AddPostModal extends Component {
                                 color='info'
                                 onClick={this.CollapseHangdle.bind(this, name)}
                                 style={{ marginBottom: '1rem', opacity: '0.7' }}
-                              >{name}<strong class='pr-3' style={{ position: 'absolute', right: '0' }}>{dropDownSymbolList[index].name}</strong></Button>
+                              >{name}<strong className='pr-3' style={{ position: 'absolute', right: '0' }}>{dropDownSymbolList[index].name}</strong></Button>
                             </span>
-
                             <Collapse isOpen={this.state.Collapsetoggle.includes(name)}>
-
-                              <ListGroup className="manga-list">
-                                {mangas &&
-                                  mangas.sort((a, b) => Number(a.page.substring(4)) - Number(b.page.substring(4))).map(({ _id, page, inuse }) => (
-                                    <Col key={_id} className='pt-0'>
-                                      <label class="checkbox_item">
-                                        <small style={{ color: inuse ? "#c0392b" : "#2ecc71" }}>&#9866;</small>
-                                        <input class="ml-2" onChange={this.addMangaToPost} type="checkbox" name="mangasSelected" data-tax="name" defaultValue={page} />
-                                        <small>{page}</small>
-                                      </label>
-                                    </Col>
-                                  ))}
-                              </ListGroup>
+                              <div className="scrolling-box">
+                                <ListGroup className="manga-list">
+                                  {mangas &&
+                                    mangas.sort((a, b) => Number(a.page.substring(4)) - Number(b.page.substring(4))).map(({ _id:mangaid, page, inuse }) => (
+                                      <Col key={mangaid} className='pt-0'>
+                                        <label className="checkbox_item">
+                                          <small style={{ color: inuse ? "#c0392b" : "#2ecc71" }}>&#9866;</small>
+                                          <input className="ml-2" onChange={this.addMangaToPost} type="checkbox" name="mangasSelected" data-tax="name" defaultValue={page} />
+                                          <small>{page}</small>
+                                        </label>
+                                      </Col>
+                                    ))}
+                                </ListGroup>
+                              </div>
                             </Collapse>
                           </Fragment>
                         ))}
@@ -321,34 +303,6 @@ class AddPostModal extends Component {
   }
 }
 
-const addPostBorder = {
-  background: "white",
-  color: "#fff",
-  height: "100px",
-  width: "900px",
-  border: '1px solid rgb(230, 230, 230)',
-
-  // margin: "auto 0",
-  // padding: "0px 2.5px",
-  paddingTop: "20px",
-  // borderRadius: "50%",
-  // cursor: "pointer",
-  // float: "right",
-  webkitBoxShadow: '0 0 1px 0.1px #C7C7C7',
-  boxSshadow: '0 0 1px 0.1px #C7C7C7',
-  webkitBorderRadius: '15px',
-  mozBorderRadius: '15px',
-  borderRadius: '15px',
-};
-
-// const addPostInput = {
-//   // marginTop:'20px',
-//   background: '#f7f7f7',
-//   webkitBorderRadius: '20px',
-//   mozBorderRadius: '20px',
-//   borderRadius: '20px',
-// };
-
 const inputStyle = {
   backgroundColor: 'rgba(0, 0, 0, 0)',
   border: 'none',
@@ -366,15 +320,9 @@ const inputTitleStyle = {
   width: '350px',
   margin: '0 auto'
 };
-const inputFormStyle = {
-  backgroundColor: 'rgba(0, 0, 0, 0)',
-  border: 'none',
-  borderBottom: '1px solid #76735c',
-  borderRadius: '1px',
-  marginTop: '-9px'
-};
+
 const mapStateToProps = state => ({
-  post: state.item,
+  post: state.post,
   chapter: state.chapter,
   auth: state.auth,
   error: state.error,

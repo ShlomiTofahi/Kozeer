@@ -45,11 +45,12 @@ class DeleteProfile extends Component {
             this.props.logout();
             const noImageFullpath = this.state.path + 'no-image.png';
             const filepath = user.petImage;
-            if (filepath !== '' && filepath != noImageFullpath) {
+            if (filepath !== '' && filepath !== noImageFullpath) {
                 const formData = new FormData();
                 formData.append('filepath', filepath);
                 formData.append('abspath', this.state.path);
 
+                console.log("*remove DeleteProfile");
                 axios.post('/remove', formData);
             }
             this.setState({ redirect: '/' });
@@ -88,16 +89,13 @@ class DeleteProfile extends Component {
         return (
             <Fragment >
                 <div className='position-relative mt-5 mr-4'>
-                    {/* {this.state.msg ? <Alert color={this.state.msgAlert} isOpen={this.state.visible} toggle={this.onDismiss}>{this.state.msg}</Alert>
-                        : null} */}
-
                     <Button
                         block
                         color='danger'
                         size='sm'
                         onClick={this.CollapseHangdle}
-                        style={{ marginBottom: '1rem',  opacity: '0.9' }}
-                    >Delete profile<strong class='pr-3' style={{ position: 'absolute', right: '0' }}>{dropDownSymbol}</strong></Button>
+                        style={{ marginBottom: '1rem', opacity: '0.9' }}
+                    >Delete profile<strong className='pr-3' style={{ position: 'absolute', right: '0' }}>{dropDownSymbol}</strong></Button>
                     <Collapse isOpened={this.state.Collapsetoggle}>
                         <Card style={bodyStyle}>
                             {!is_admin ?
@@ -106,8 +104,8 @@ class DeleteProfile extends Component {
                                     <Form onSubmit={this.onSubmit}>
                                         <FormGroup>
                                             <Row>
-                                                <label class="checkbox_item">
-                                                    <input class="ml-2" onChange={this.confirmHangdle} type="checkbox" name="confirm" data-tax="level" defaultValue={true} />
+                                                <label className="checkbox_item">
+                                                    <input className="ml-2" onChange={this.confirmHangdle} type="checkbox" name="confirm" data-tax="level" defaultValue={true} />
                                                     <span> Confirm</span>
                                                 </label>
                                             </Row>
@@ -135,17 +133,9 @@ class DeleteProfile extends Component {
 }
 
 const bodyStyle = {
-    // border: '1px solid rgb(230, 230, 230)',
-    // webkitBorderRadius: '15px',
-    // mozBorderRadius: '15px',
-    // borderRadius: '15px',
-    // padding: '30px',
     height: 'auto',
     width: 'auto',
     border: '5px solid #730104',
-
-    // webkitBoxShadow: '0 0 5px 0.1px #C7C7C7',
-    // boxSshadow: '0 0 5px 0.1px #C7C7C7'
 };
 
 const mapStateToProps = (state) => ({

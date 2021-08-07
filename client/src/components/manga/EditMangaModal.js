@@ -27,6 +27,7 @@ class EditMangaModal extends Component {
         isAuthenticated: PropTypes.bool,
         error: PropTypes.object.isRequired,
         msg: PropTypes.object.isRequired,
+        manga: PropTypes.object.isRequired,
         editManga: PropTypes.func.isRequired,
         clearErrors: PropTypes.func.isRequired,
         clearMsgs: PropTypes.func.isRequired,
@@ -34,21 +35,23 @@ class EditMangaModal extends Component {
 
     componentDidMount() {
         const { mangas } = this.props.manga;
-        const manga = mangas.filter(manga => manga._id == this.props.mangaID)[0];
+        const manga = mangas.filter(manga => manga._id === this.props.mangaID)[0];
+        if (manga) {
+            this.setState({
+                page: manga.page,
+                fullpage: manga.fullpage,
+                mangaImage: manga.mangaImage,
+                prevMangaImage: manga.mangaImage
+            });
+        }
 
-        this.setState({
-            page: manga.page,
-            fullpage: manga.fullpage,
-            mangaImage: manga.mangaImage,
-            prevMangaImage: manga.mangaImage
-        });
 
-        if (this.state.prevMangaImage != '')
+        if (this.state.prevMangaImage !== '')
             this.setState({ prevMangaImage: manga.mangaImage });
     }
 
     componentDidUpdate(prevProps) {
-        const { error, msg, isAuthenticated } = this.props;
+        const { error, msg } = this.props;
         if (error !== prevProps.error) {
             // Check for edit error
             if (error.id === 'EDIT_MANGA_FAIL') {
@@ -97,11 +100,12 @@ class EditMangaModal extends Component {
 
         //delete prev image
         const noImageFullpath = this.state.path + 'no-image.png';
-        if (this.state.mangaImage != this.state.prevMangaImage && this.state.prevMangaImage != noImageFullpath) {
+        if (this.state.mangaImage !== this.state.prevMangaImage && this.state.prevMangaImage !== noImageFullpath) {
             const formData = new FormData();
             formData.append('filepath', this.state.prevMangaImage);
             formData.append('abspath', this.state.path);
 
+            console.log("*remove EditMangaModal 1");
             axios.post('/remove', formData);
         }
         this.setState({
@@ -128,11 +132,12 @@ class EditMangaModal extends Component {
 
         //delete prev image
         const noImageFullpath = this.state.path + 'no-image.png';
-        if (this.state.mangaImage != this.state.prevMangaImage && this.state.prevMangaImage != noImageFullpath) {
+        if (this.state.mangaImage !== this.state.prevMangaImage && this.state.prevMangaImage !== noImageFullpath) {
             const formData = new FormData();
             formData.append('filepath', this.state.prevMangaImage);
             formData.append('abspath', this.state.path);
 
+            console.log("*remove EditMangaModal 2");
             axios.post('/remove', formData);
         }
         this.setState({
@@ -143,7 +148,7 @@ class EditMangaModal extends Component {
 
 
     setRegisterModalStates = (val) => {
-        if (val != '')
+        if (val !== '')
             this.setState({
                 mangaImage: val
             });
@@ -151,14 +156,16 @@ class EditMangaModal extends Component {
 
     close = () => {
         const { mangas } = this.props.manga;
-        const manga = mangas.filter(manga => manga._id == this.props.mangaID)[0];
+        const manga = mangas.filter(manga => manga._id === this.props.mangaID)[0];
 
         const filepath = this.state.mangaImage
         const noImageFullpath = this.state.path + 'no-image.png';
-        if (!this.state.imageSubmited && this.state.mangaImage != this.state.prevMangaImage && filepath != noImageFullpath) {
+        if (!this.state.imageSubmited && this.state.mangaImage !== this.state.prevMangaImage && filepath !== noImageFullpath) {
             const formData = new FormData();
             formData.append('filepath', filepath);
             formData.append('abspath', this.state.path);
+
+            console.log("*remove EditMangaModal 3");
             axios.post('/remove', formData);
 
             this.setState({
@@ -194,80 +201,71 @@ class EditMangaModal extends Component {
     }
 
     render() {
-        const { mangas } = this.props.manga;
-
         //payload name for manga image
         var payload = '';
 
-        var manga = mangas.filter(manga => manga._id == this.props.mangaID)[0];
-
         return (
             <Fragment>
-                { this.props.isAuthenticated ?
-                    <button onClick = { this.toggle } className="edit-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                {this.props.isAuthenticated ?
+                    <button onClick={this.toggle} className="edit-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                            <path fillRule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
                         </svg>
                     </button>
                     : null
-    }
+                }
+
+                < Modal
+                    align="right"
+                    isOpen={this.state.modal}
+                    toggle={this.toggle}
+                    onClosed={this.close}
+                >
+                    <ModalHeader cssModule={{ 'modal-title': 'w-100 text-center' }} toggle={this.toggle} ><span className="lead">Edit Manga</span></ModalHeader>
+                    <ModalBody>
+                        {this.state.msg ? <Alert color="danger">{this.state.msg}</Alert> : null}
+                        <Form onSubmit={this.onSubmit}>
+                            <FormGroup>
+                                <Label for='page'>page</Label>
+                                <Input
+                                    type='text'
+                                    name='page'
+                                    id='page'
+                                    placeholder='page'
+                                    className='mb-2'
+                                    onChange={this.onChange}
+                                    defaultValue={this.state.page}
+                                />
+
+                                <div className='text-left'>
+                                    <small className='mr-2' style={{ color: '#76735c' }}><Label for='fullpage'>fullpage</Label></small>
+                                    <label className="switch">
+                                        <input id='fullpage' name='fullpage' type="checkbox" onChange={this.fullpageToggle} checked={this.state.fullpage} />
+                                        <span className="slider round"></span>
+                                    </label>
+                                </div>
+
+                                <FileUpload
+                                    payload={payload}
+                                    setRegisterModalStates={this.setRegisterModalStates}
+                                    path={this.state.path}
+                                    currImage={this.state.mangaImage}
+                                    prevImage={this.state.prevMangaImage}
+                                    imageSaved={this.state.imageSubmited}
+                                    removedOrginalImageAndNotSave={this.removedOrginalImageAndNotSave}
+                                    removedOrginalItemImage={this.removedOrginalMangaImage}
+                                />
 
 
-
-        < Modal
-    align = "right"
-    isOpen = { this.state.modal }
-    toggle = { this.toggle }
-    onClosed = { this.close }
-        >
-        <ModalHeader cssModule={{ 'modal-title': 'w-100 text-center' }} toggle={this.toggle} ><span class="lead">Edit Manga</span></ModalHeader>
-                    {/* <div class="item-image" align="center">
-                                <CardImg bottom className='ProductImg' src={this.state.mangaImage} alt="Card image cap" />
-                            </div> */}
-<ModalBody>
-    {this.state.msg ? <Alert color="danger">{this.state.msg}</Alert> : null}
-    <Form onSubmit={this.onSubmit}>
-        <FormGroup>
-            <Label for='page'>page</Label>
-            <Input
-                type='text'
-                name='page'
-                id='page'
-                placeholder='page'
-                className='mb-2'
-                onChange={this.onChange}
-                defaultValue={this.state.page}
-            />
-
-            <div className='text-left'>
-                <small className='mr-2' style={{ color: '#76735c' }}><Label for='fullpage'>fullpage</Label></small>
-                <label className="switch">
-                    <input id='fullpage' name='fullpage' type="checkbox" onChange={this.fullpageToggle} checked={this.state.fullpage} />
-                    <span className="slider round"></span>
-                </label>
-            </div>
-
-            <FileUpload
-                payload={payload}
-                setRegisterModalStates={this.setRegisterModalStates}
-                path={this.state.path}
-                currImage={this.state.mangaImage}
-                prevImage={this.state.prevMangaImage}
-                imageSaved={this.state.imageSubmited}
-                removedOrginalImageAndNotSave={this.removedOrginalImageAndNotSave}
-                removedOrginalItemImage={this.removedOrginalMangaImage}
-            />
-
-
-            <Button
-                color='dark'
-                style={{ marginTop: '2rem' }}
-                block
-            >Save</Button>
-        </FormGroup>
-    </Form>
-</ModalBody>
+                                <Button
+                                    color='dark'
+                                    style={{ marginTop: '2rem' }}
+                                    block
+                                >Save</Button>
+                            </FormGroup>
+                        </Form>
+                    </ModalBody>
                 </Modal >
             </Fragment >
         );

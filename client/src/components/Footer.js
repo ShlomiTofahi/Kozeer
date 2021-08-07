@@ -1,18 +1,32 @@
 import React, { Component } from 'react';
-// import { connect } from 'react-redux';
-// import { Link } from 'react-router-dom';
-import { Button, Form, FormGroup, Input, Collapse } from 'reactstrap';
+import { Button, Form, FormGroup, Input } from 'reactstrap';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
+import { addSubscribe } from '../../src/actions/subscribeActions';
 
 class Footer extends Component {
     state = {
-        subscribefadeIn: false
+        subscribefadeIn: false,
+        email: ''
     }
 
-    subscribe = () => {
+    static propTypes = {
+        addSubscribe: PropTypes.func.isRequired
+    }
+
+    onChange = e => {
+        this.setState({
+            [e.target.name]: e.target.value
+        });
+    }
+
+    subscribe = e => {
+        e.preventDefault();
         var subtxt = document.getElementById("submited");
         subtxt.innerHTML = 'Thanks for submitting!';
         window.setTimeout(this.fadeout, 2000);
-
+        this.props.addSubscribe(this.state.email)
     }
 
     fadeout = () => {
@@ -113,8 +127,15 @@ const subscribeInputStyle = {
     marginTop: '0.3rem'
 };
 
-export default Footer
-// export default connect(
-//     null,
-//     { getFilterItems }
-// )(Footer);
+const mapStateToProps = state => ({
+    post: state.post,
+    comment: state.comment,
+    auth: state.auth,
+});
+
+
+// export default Footer
+export default connect(
+    mapStateToProps,
+    { addSubscribe }
+)(Footer);

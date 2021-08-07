@@ -20,11 +20,14 @@ class LoginModal extends Component {
         logInfadeIn: false,
         registerfadeIn: false,
         restPassfadeIn: false,
+
+        hover: ''
     };
 
     static propTypes = {
         isAuthenticated: PropTypes.bool,
         error: PropTypes.object.isRequired,
+        setting: PropTypes.object.isRequired,
         login: PropTypes.func.isRequired,
         clearErrors: PropTypes.func.isRequired
     }
@@ -54,8 +57,8 @@ class LoginModal extends Component {
         this.setState({
             modal: !this.state.modal
         });
-    
-        if(this.state.modal===true && this.props.linkcolor && this.props.toggle){
+
+        if (this.state.modal === true && this.props.linkcolor && this.props.toggle) {
             this.props.toggle()
         }
     }
@@ -115,6 +118,19 @@ class LoginModal extends Component {
                 }))
         }
     }
+
+    enterToggleHover = (hover) => {
+        this.setState({
+            hover
+        });
+    }
+
+    leaveToggleHover = () => {
+        this.setState({
+            hover: ''
+        });
+    }
+
     close = () => {
         this.setState((state) => ({
             signUpfadeIn: true,
@@ -124,6 +140,26 @@ class LoginModal extends Component {
             restPassfadeIn: false,
         }))
     }
+
+    navTextColorsStyle = () => {
+        const { setting } = this.props.setting;
+        let textColor = "#ffffff";
+        if (setting?.headerColorText !== null) {
+            textColor = setting.headerColorText;
+        }
+
+        if (this.state.hover !== '' && this.state.hover === "SIGN-UP") {
+            textColor = "#21201f";
+            if (setting?.headerHoverColorText !== null) {
+                textColor = setting.headerHoverColorText;
+            }
+        }
+
+        return {
+            color: textColor
+        };
+    };
+
     render() {
 
         const navLink = window.innerWidth <= 575 ? 'nav-link' : '';
@@ -133,7 +169,11 @@ class LoginModal extends Component {
                 {
                     this.props.linkcolor === 'green' ?
                         <Link className='login-btn' onClick={this.toggle} href='#'>Connect</Link>
-                        : <Link className={'navlink header-tablinks px-5 nav-link d-md-inline-block' + navLink} onClick={this.toggle} to='#'>SIGN UP</Link>
+                        : <Link className={'navlink header-tablinks px-5 nav-link d-md-inline-block ' + navLink}
+                            onClick={this.toggle} to='#'
+                            style={this.navTextColorsStyle()}
+                            onMouseEnter={this.enterToggleHover.bind(this, "SIGN-UP")}
+                            onMouseLeave={this.leaveToggleHover}>SIGN UP</Link>
                 }
 
 
@@ -226,6 +266,7 @@ const inputStyle = {
 
 const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated,
+    setting: state.setting,
     error: state.error
 });
 

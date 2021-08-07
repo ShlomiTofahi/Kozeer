@@ -1,9 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import {
-  Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input, CardFooter, CardImg, Alert,
-  Collapse, Col, ListGroup, ListGroupItem
+  Button, Modal, ModalHeader, ModalBody, Form, FormGroup,
+  Label, Alert, Collapse, Col, ListGroup,
 } from 'reactstrap';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -22,51 +21,68 @@ import FileUpload from '../fileupload/FileUpload';
 class EditPostModal extends Component {
   state = {
     path: '/uploads/posts/',
-    modal: false,
 
     title: '',
     body: '',
     postImage: '',
     is_manga: false,
     mangasSelected: [],
-    Collapsetoggle: [],
+    chaptersSelected: [],
+    modal: false,
     fadeIn: false,
+    Collapsetoggle: [],
     dropDownMangaOpen: false,
+
     imageSubmited: false,
     removedOrginalImageAndNotSave: false,
     prevPostImage: '',
-
+    prevMangas: [],
+    submited: false
   };
 
   static propTypes = {
-    isAuthenticated: PropTypes.bool,
     error: PropTypes.object.isRequired,
     msg: PropTypes.object.isRequired,
     manga: PropTypes.object.isRequired,
+    auth: PropTypes.object.isRequired,
+    post: PropTypes.object.isRequired,
+    chapter: PropTypes.object.isRequired,
     editPost: PropTypes.func.isRequired,
     getChapters: PropTypes.func.isRequired,
     getMangas: PropTypes.func.isRequired,
-    clearErrors: PropTypes.func.isRequired
+    clearErrors: PropTypes.func.isRequired,
+    clearMsgs: PropTypes.func.isRequired
   }
 
   componentDidMount() {
     const { posts } = this.props.post;
-    const post = posts.filter(post => post._id == this.props.postID)[0];
-    
-    this.setState({
-      title: post.title,
-      body: post.body,
-      is_manga: post.is_manga,
-      mangasSelected: post.mangasSelected,
-      postImage: post.postImage,
-      prevPostImage: post.postImage
-    });
-
-    // if (this.state.prevPostImage != '')
-    // this.setState({ prevPostImage: post.postImage   });
-
-    this.props.getChapters();
-    this.props.getMangas();
+    const post = posts.filter(post => post._id === this.props.postID)[0];
+    let mangasSelected = [];
+    let chaptersSelected = [];
+    if (post?.is_manga) {
+      this.setState({
+        dropDownMangaOpen: true
+      });
+      post.mangas.map(({ page, chapter }) => {
+        if (chaptersSelected.indexOf(chapter.name) === -1) chaptersSelected.push(chapter.name);
+        mangasSelected.push(page);
+        return mangasSelected;
+      })
+    }
+    chaptersSelected.map((chapter) => this.CollapseHangdle(chapter))
+    if(post !== undefined){
+      this.setState({
+        title: post.title,
+        body: post.body,
+        is_manga: post.is_manga,
+        postImage: post.postImage,
+        prevPostImage: post.postImage,
+        mangasSelected,
+        chaptersSelected,
+        prevMangas: mangasSelected,
+        submited: false
+      });
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -81,7 +97,8 @@ class EditPostModal extends Component {
     }
     //If edited, close modal
     if (this.state.modal) {
-      if (!this.state.removedOrginalImageAndNotSave && msg && msg.id === 'EDIT_ITEM_SUCCESS') {
+      if (!this.state.removedOrginalImageAndNotSave && msg && msg.id === 'EDIT_POST_SUCCESS') {
+        this.setState({ submited: true })
         this.toggle();
       }
     }
@@ -105,12 +122,7 @@ class EditPostModal extends Component {
     });
   };
 
-  onChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
-  }
-
   addMangaToPost = e => {
-    // this.setState({ selectedMangas: [...this.state.selectedMangas, e.target.defaultValue ]});
     if (this.state[e.target.name].includes(e.target.defaultValue)) {
       this.setState(prevState => ({
         [e.target.name]: prevState[e.target.name].filter(element => element !== e.target.defaultValue)
@@ -122,13 +134,20 @@ class EditPostModal extends Component {
     }
   }
 
+  onChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  }
+
+
   onSubmit = e => {
     e.preventDefault();
 
     const { title, body, postImage, is_manga } = this.state;
     let { mangasSelected } = this.state;
-    if (!is_manga)
+
+    if (!is_manga) {
       mangasSelected = [];
+    }
 
     const newPost = {
       title,
@@ -138,11 +157,72 @@ class EditPostModal extends Component {
       mangasSelected
     }
 
-    this.props.editPost(this.props.postID, newPost);
+    this.props.editPost(this.props.postID, newPost, this.state.prevMangas);
+
+    //delete prev image
+    const noImageFullpath = this.state.path + 'no-image.png';
+    if (this.state.postImage !== this.state.prevPostImage && this.state.prevPostImage !== noImageFullpath) {
+      const formData = new FormData();
+      formData.append('filepath', this.state.prevPostImage);
+      formData.append('abspath', this.state.path);
+
+      console.log("*remove EditPostModal 1");
+      axios.post('/remove', formData);
+    }
+    this.setState({
+      imageSubmited: true,
+      removedOrginalImageAndNotSave: false
+    });
+  }
+
+  removedOrginalImageAndNotSave = () => {
+    const { title, body, postImage, is_manga } = this.state;
+    let { mangasSelected } = this.state;
+
+    if (!is_manga) {
+      mangasSelected = [];
+    }
+
+    const newPost = {
+      title,
+      body,
+      postImage,
+      is_manga,
+      mangasSelected
+    }
+
+    // Attempt to edit
+    this.props.editPost(this.props.postID, newPost, this.state.prevMangas);
+
+    //delete prev image
+    const noImageFullpath = this.state.path + 'no-image.png';
+    if (this.state.postImage !== this.state.prevPostImage && this.state.prevPostImage !== noImageFullpath) {
+      const formData = new FormData();
+      formData.append('filepath', this.state.prevPostImage);
+      formData.append('abspath', this.state.path);
+
+      console.log("*remove EditPostModal 3");
+      axios.post('/remove', formData);
+    }
+    this.setState({
+      imageSubmited: true,
+      removedOrginalImageAndNotSave: true
+    });
+  }
+
+  setRegisterModalStates = (val) => {
+    if (val !== '')
+      this.setState({ postImage: val });
+  }
+
+  removedOrginalPostImage = () => {
+    this.setState({
+      removedOrginalImageAndNotSave: true
+    });
   }
 
   CollapseHangdle = (name) => {
-    if (this.state.Collapsetoggle.includes(name)) {
+    if (this.state.Collapsetoggle?.includes(name)) {
       this.setState(prevState => ({
         Collapsetoggle: prevState.Collapsetoggle.filter(element => element !== name)
       }));
@@ -161,37 +241,77 @@ class EditPostModal extends Component {
     this.setState({ is_manga: !this.state.is_manga });
   }
 
-  setRegisterModalStates = (val) => {
-    if (val !== '')
-      this.setState({ postImage: val });
-  }
-
   DropDowntoggleManga = () => {
     this.setState({
       dropDownMangaOpen: !this.state.dropDownMangaOpen
     });
   }
 
+  Capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
   close = () => {
     const { posts } = this.props.post;
-    const post = posts.filter(post => post._id == this.props.postID)[0];
+    const post = posts.filter(post => post._id === this.props.postID)[0];
+    let chapterList = [];
 
-    const noImageFullpath = this.state.path + 'no-image.png';
-    const filepath = this.state.postImage
-    if (filepath !== '' && filepath !== noImageFullpath) {
-      const formData = new FormData();
-      formData.append('filepath', filepath);
-      formData.append('abspath', this.state.path);
-
-      axios.post('/remove', formData);
+    if (!this.state.submited) {
+      //return to entry states
+      let mangasSelected = [];
+      let chaptersSelected = [];
+      if (post.is_manga) {
+        this.setState({
+          dropDownMangaOpen: true
+        });
+        post.mangas.map(({ page, chapter }) => {
+          if (chaptersSelected.indexOf(chapter.name) === -1) chaptersSelected.push(chapter.name);
+          mangasSelected.push(page);
+          return mangasSelected;
+        })
+      }
+      chapterList = [];
+      chaptersSelected.map((chapter) => {
+        chapterList = [...chapterList, chapter];
+        return chapterList;
+      })
       this.setState({
         title: post.title,
         body: post.body,
         is_manga: post.is_manga,
-        mangasSelected: post.mangasSelected,
         postImage: post.postImage,
-        prevPostImage: post.postImage
+        prevPostImage: post.postImage,
+        mangasSelected,
+        chaptersSelected
       });
+    } else {
+      chapterList = [];
+      const { chapters } = this.props.chapter;
+      chapters.map(({ name, mangas }) =>
+        mangas.map(({ page }) => {
+          if (this.state.mangasSelected.includes(page))
+            chapterList = [...chapterList, name];
+          return chapterList;
+        })
+      )
+    }
+
+    this.setState({
+      Collapsetoggle: chapterList
+    });
+
+    const noImageFullpath = this.state.path + 'no-image.png';
+    const filepath = this.state.postImage
+
+    if (!this.state.imageSubmited && filepath !== this.state.prevPostImage && filepath !== noImageFullpath) {
+
+      const formData = new FormData();
+      formData.append('filepath', filepath);
+      formData.append('abspath', this.state.path);
+
+      console.log("*remove EditPostModal 2");
+      axios.post('/remove', formData);
+
     }
     else {
       this.setState({
@@ -199,78 +319,46 @@ class EditPostModal extends Component {
         prevPostImage: post.postImage
       });
     }
+
     if (this.state.removedOrginalImageAndNotSave) {
       this.removedOrginalImageAndNotSave();
     }
-    // this.setState({
-    //   is_manga: false,
-    //   dropDownMangaOpen: false
-    // })
-  }
-  Capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
-
-  removedOrginalImageAndNotSave = () => {
-    var { title, body, postImage, is_manga, mangasSelected } = this.state;
-
-    const newPost = {
-      title,
-      body,
-      postImage,
-      is_manga,
-      mangasSelected
-    }
-
-
-    // Attempt to edit
-    this.props.editItem(this.props.postID, newPost);
-
-    //delete prev image
-    const noImageFullpath = this.state.path + 'no-image.png';
-    if (this.state.postImage != this.state.prevPostImage && this.state.prevPostImage != noImageFullpath) {
-      const formData = new FormData();
-      formData.append('filepath', this.state.prevPostImage);
-      formData.append('abspath', this.state.path);
-
-      axios.post('/remove', formData);
-    }
-    this.setState({
-      imageSubmited: true,
-      removedOrginalImageAndNotSave: true
-    });
   }
 
   render() {
     const { isAuthenticated, user } = this.props.auth;
     const is_admin = (isAuthenticated && user.admin);
 
-    // const { mangas } = this.props.manga;
     const { chapters } = this.props.chapter;
-
-    const noImageFullpath = this.state.path + 'no-image.png';
 
     var dropDownMangaSymbol = this.state.dropDownMangaOpen ? <span>&#45;</span> : <span>&#x2B;</span>
 
     let dropDownSymbolList = []
 
     chapters.map(({ name }) => {
-      dropDownSymbolList = [...dropDownSymbolList, this.state.Collapsetoggle.includes(name) ?
+      dropDownSymbolList = [...dropDownSymbolList, this.state.Collapsetoggle?.includes(name) ?
         { name: <span>&#45;</span> } : { name: <span>&#x2B;</span> }]
+      return dropDownSymbolList;
     })
 
     return (
       <div>
         {is_admin ?
-          <Button
-            title="edit"
-            color='warning'
-            size='sm'
-            onClick={this.toggle}
-          ><i class="fa fa-pencil" style={{ color: 'white' }} ria-hidden="true"></i></Button>
-          : null}
-
-
+          <button onClick={this.toggle} className="edit-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
+              <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+              <path fillRule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+            </svg>
+          </button>
+          : null
+          //   < Button
+          //     title="edit"
+          // color='warning'
+          // size='sm'
+          // onClick={this.toggle}
+          //   ><i className="fa fa-pencil" style={{ color: 'white' }} ria-hidden="true"></i></Button>
+          //   : null
+        }
         <Modal
           className="login-modal"
           align="left"
@@ -283,22 +371,10 @@ class EditPostModal extends Component {
             {this.state.msg ? <Alert color="danger">{this.state.msg}</Alert> : null}
             <Form onSubmit={this.onSubmit}>
               <FormGroup>
-                {/* <Label for='title'>Title</Label> */}
-                {/* <small style={{ color: '#76735c' }}><Label for='title'>Title</Label></small> */}
                 <input className='input-place-holder form-control pt-3 pl-3 mb-3'
-                 style={inputTitleStyle} onChange={this.onChange} 
-                 type="text" name='title' placeholder="Enter Title.."
-                 defaultValue={this.state.title} />
-
-                {/* <Input
-                  type='text'
-                  name='title'
-                  id='title'
-                  bsSize="sm"
-                  className='mb-3 mb-2'
-                  onChange={this.onChange}
-                  style={inputFormStyle}
-                /> */}
+                  style={inputTitleStyle} onChange={this.onChange}
+                  type="text" name='title' placeholder="Enter Title.."
+                  defaultValue={this.state.title} />
                 <div>
                   <small className='mr-2' style={{ color: '#76735c' }}><Label for='manga'>Manga</Label></small>
                   <label className="switch">
@@ -310,9 +386,6 @@ class EditPostModal extends Component {
                   <div>
                     <Button className="collapsible" onClick={this.DropDowntoggleManga} style={{ marginBottom: '1rem', opacity: '0.7' }}>Mangas <strong style={{ marginLeft: '44px' }}>{dropDownMangaSymbol}</strong></Button>
                     <Collapse isOpen={this.state.dropDownMangaOpen}>
-
-
-
                       <div className='chapter-list position-relative py-3 px-4'>
                         {chapters && chapters.map(({ _id, name, mangas }, index) => (
                           <Fragment key={_id}>
@@ -323,22 +396,24 @@ class EditPostModal extends Component {
                                 color='info'
                                 onClick={this.CollapseHangdle.bind(this, name)}
                                 style={{ marginBottom: '1rem', opacity: '0.7' }}
-                              >{name}<strong class='pr-3' style={{ position: 'absolute', right: '0' }}>{dropDownSymbolList[index].name}</strong></Button>
+                              >{name}<strong className='pr-3' style={{ position: 'absolute', right: '0' }}>{dropDownSymbolList[index].name}</strong></Button>
                             </span>
 
                             <Collapse isOpen={this.state.Collapsetoggle.includes(name)}>
-
-                              <ListGroup className="manga-list">
-                                {mangas &&
-                                  mangas.sort((a, b) => Number(a.page.substring(4)) - Number(b.page.substring(4))).map(({ _id, page }) => (
-                                    <Col key={_id} className='pt-0'>
-                                      <label class="checkbox_item">
-                                        <input class="ml-2" onChange={this.addMangaToPost} type="checkbox" checked={this.state?.mangasSelected?.includes(page)} name="mangasSelected" data-tax="name" defaultValue={page} />
-                                        <small>{page}</small>
-                                      </label>
-                                    </Col>
-                                  ))}
-                              </ListGroup>
+                              <div className="scrolling-box">
+                                <ListGroup className="manga-list">
+                                  {mangas &&
+                                    mangas.sort((a, b) => Number(a.page.substring(4)) - Number(b.page.substring(4))).map(({ _id:mangaid, page, inuse }) => (
+                                      <Col key={mangaid} className='pt-0'>
+                                        <label className="checkbox_item">
+                                          <small style={{ color: inuse ? "#c0392b" : "#2ecc71" }}>&#9866;</small>
+                                          <input className="ml-2" onChange={this.addMangaToPost} type="checkbox" checked={this.state?.mangasSelected?.includes(page)} name="mangasSelected" data-tax="name" defaultValue={page} />
+                                          <small>{page}</small>
+                                        </label>
+                                      </Col>
+                                    ))}
+                                </ListGroup>
+                              </div>
                             </Collapse>
                           </Fragment>
                         ))}
@@ -360,7 +435,11 @@ class EditPostModal extends Component {
                 <FileUpload
                   setRegisterModalStates={this.setRegisterModalStates}
                   path={this.state.path}
-                  currImage={noImageFullpath}
+                  currImage={this.state.postImage}
+                  prevImage={this.state.prevPostImage}
+                  imageSaved={this.state.imageSubmited}
+                  removedOrginalImageAndNotSave={this.removedOrginalImageAndNotSave}
+                  removedOrginalItemImage={this.removedOrginalPostImage}
                 />
 
                 <Button
@@ -372,47 +451,11 @@ class EditPostModal extends Component {
             </Form>
           </ModalBody>
         </Modal>
-      </div>
+      </div >
     );
   }
 }
 
-const addPostBorder = {
-  background: "white",
-  color: "#fff",
-  height: "100px",
-  width: "900px",
-  border: '1px solid rgb(230, 230, 230)',
-
-  // margin: "auto 0",
-  // padding: "0px 2.5px",
-  paddingTop: "20px",
-  // borderRadius: "50%",
-  // cursor: "pointer",
-  // float: "right",
-  webkitBoxShadow: '0 0 1px 0.1px #C7C7C7',
-  boxSshadow: '0 0 1px 0.1px #C7C7C7',
-  webkitBorderRadius: '15px',
-  mozBorderRadius: '15px',
-  borderRadius: '15px',
-};
-
-// const addPostInput = {
-//   // marginTop:'20px',
-//   background: '#f7f7f7',
-//   webkitBorderRadius: '20px',
-//   mozBorderRadius: '20px',
-//   borderRadius: '20px',
-// };
-
-const inputStyle = {
-  backgroundColor: 'rgba(0, 0, 0, 0)',
-  border: 'none',
-  borderBottom: '1px solid rgba(255, 255, 255, 0.411)',
-  borderRadius: '1px',
-  marginTop: '-9px',
-  width: '70px'
-};
 const inputTitleStyle = {
   backgroundColor: 'rgba(0, 0, 0, 0)',
   border: 'none',
@@ -422,13 +465,7 @@ const inputTitleStyle = {
   width: '350px',
   margin: '0 auto'
 };
-const inputFormStyle = {
-  backgroundColor: 'rgba(0, 0, 0, 0)',
-  border: 'none',
-  borderBottom: '1px solid #76735c',
-  borderRadius: '1px',
-  marginTop: '-9px'
-};
+
 const mapStateToProps = state => ({
   post: state.post,
   chapter: state.chapter,

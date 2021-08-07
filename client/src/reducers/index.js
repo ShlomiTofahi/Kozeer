@@ -7,10 +7,8 @@ import msgReducer from './msgReducer';
 import authReducer from './authReducer';
 import chapterReducer from './chapterReducer';
 import mangaReducer from './mangaReducer';
+import settingReducer from './settingReducer';
 import twoFactorAuthReducer from './twoFactorAuthReducer';
-
-// import twoFactorAuthReducer from './twoFactorAuthReducer';
-// import contactsReducer from './contactsReducer';
 
 export default combineReducers({
     post: postReducer,
@@ -20,7 +18,6 @@ export default combineReducers({
     auth: authReducer,
     chapter: chapterReducer,
     manga: mangaReducer,
+    setting: settingReducer,
     twoFactorAuth: twoFactorAuthReducer,
-
-    // contacts: contactsReducer
 });
