@@ -79,10 +79,10 @@ class AppNavbar extends Component {
         const { setting } = this.props.setting;
         let topColor = "#d959d5";
         let bottomColor = "#c213bd";
-        if (setting?.headerColorTop !== null) {
+        if (setting && setting?.headerColorTop !== null) {
             topColor = setting.headerColorTop;
         }
-        if (setting?.headerColorBottom !== null) {
+        if (setting && setting?.headerColorBottom !== null) {
             bottomColor = setting.headerColorBottom;
         }
         return {
@@ -94,14 +94,14 @@ class AppNavbar extends Component {
         const { setting } = this.props.setting;
         let linkStyle = {}
         let textColor = "#ffffff";
-        if (setting?.headerColorText !== null) {
+        if (setting && setting?.headerColorText !== null) {
             textColor = setting.headerColorText;
         }
 
         if ((this.state.hover !== '' && this.state.hover === name) ||
             (this.state.active !== '' && this.state.active === name)) {
             textColor = "#21201f";
-            if (setting?.headerHoverColorText !== null) {
+            if (setting && setting?.headerHoverColorText !== null) {
                 textColor = setting.headerHoverColorText;
             }
         }
@@ -119,7 +119,7 @@ class AppNavbar extends Component {
         }
         return (
             <Link
-                className={'navlink header-tablinks px-5 d-md-inline-block no-outline ' + navLink}
+                className={'navlink header-tablinks px-3 px-md-4 px-lg-5 d-md-inline-block no-outline ' + navLink}
                 to={path}
                 style={this.navTextColorsStyle(border, name)}
                 onClick={this.openTab.bind(this, name)}
@@ -133,13 +133,13 @@ class AppNavbar extends Component {
         const { isAuthenticated } = this.props.auth;
         const { setting } = this.props.setting;
         let headerImage = `url(${this.state.path}header_bg.png)`;
-        if (setting?.headerImage !== null) {
+        if (setting && setting?.headerImage !== null) {
             headerImage = `url(${setting.headerImage})`;
         }
 
-        const smallScreen = window.innerWidth <= 575 ? true : false;
-        const navColor = window.innerWidth <= 575 ? 'nav-color' : '';
-        const navLink = window.innerWidth <= 575 ? 'nav-link' : '';
+        const smallScreen = window.innerWidth < 992 ? true : false;
+        const navColor = window.innerWidth < 992 ? 'nav-color' : '';
+        const navLink = window.innerWidth < 992 ? 'nav-link' : '';
 
         const authLinks = (
             <Fragment>
@@ -199,10 +199,10 @@ class AppNavbar extends Component {
                             ))
                             }
                         </div>
-                        <div style={headerLogoStyle} className='mb-3' align="center">
-                            <CardImg style={logoStyle} src={'/images/header/header_kozeer_logo.png'} />
+                        <div style={window.innerWidth >= 992 ? headerLogoStyle : small_headerLogoStyle} className='mb-3' align="center">
+                            <CardImg style={window.innerWidth >= 992 ? logoStyle : small_logoStyle} src={'/images/header/header_kozeer_logo.png'} />
                         </div>
-                        <Navbar fixed='center' dark={smallScreen} expand='sm' className={'nav-header mb-5 ' + navColor} style={this.navBarColorsStyle()}>
+                        <Navbar fixed='center' dark={smallScreen} expand='lg' className={'nav-header mb-5 ' + navColor} style={this.navBarColorsStyle()}>
                             <SetAttHeaderModal />
                             <Container>
                                 <NavbarToggler className='NavToggler' onClick={this.toggle} />
@@ -232,17 +232,36 @@ class AppNavbar extends Component {
     }
 }
 
+const small_logoStyle = {
+    position: 'absolute',
+    zIndex: '1',
+    top: -window.innerWidth / 25 + 'px',
+    left:0,
+    right:0,
+    marginLeft:"auto",
+    marginRight:"auto",
+    maxWidth: window.innerWidth / 1.1 + 'px',
+}
 const logoStyle = {
     position: 'absolute',
     zIndex: '1',
     top: -window.innerWidth / 25 + 'px',
-    left: window.innerWidth / 4 + 'px',
+    // left: window.innerWidth / 4 + 'px',
+    left:0,
+    right:0,
+    marginLeft:"auto",
+    marginRight:"auto",
     maxWidth: window.innerWidth / 2 + 'px',
 }
 const headerLogoStyle = {
     position: 'relative',
     margin: '0 auto',
     paddingTop: window.innerWidth / 4.57 + 'px'
+}
+const small_headerLogoStyle = {
+    position: 'relative',
+    margin: '0 auto',
+    paddingTop: window.innerWidth / 2.4 + 'px'
 }
 
 const mapStateToProps = state => ({

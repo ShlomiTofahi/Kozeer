@@ -198,7 +198,7 @@ class SetBgImageModal extends Component {
         return (
             <div>
                 {is_admin ?
-                    <Link className={'navlink header-tablinks pl-5 d-md-inline-block ' + navLink} onClick={this.toggle} to='#'
+                    <Link className={'navlink header-tablinks pl-4 d-md-inline-block ' + navLink} onClick={this.toggle} to='#'
                         style={this.navTextColorsStyle()}
                         onMouseEnter={this.toggleHover}
                         onMouseLeave={this.toggleHover}>

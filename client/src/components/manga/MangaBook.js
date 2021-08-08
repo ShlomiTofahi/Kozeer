@@ -60,7 +60,7 @@ class Manga extends Component {
         }
     };
 
-    aboutStyle = () => {
+    frameStyle = () => {
         return {
             WebkitBorderRadius: '10px',
             MozBorderRadius: '10px',
@@ -68,7 +68,7 @@ class Manga extends Component {
             margin: '0 auto',
             backgroundColor: '#323232',
             color: 'white',
-            width: '80%',
+            width: window.innerWidth >= 992 ? '85%' : '100%',
         };
     };
     mangaStyle = () => {
@@ -78,7 +78,7 @@ class Manga extends Component {
             borderRadius: '10px',
             margin: '0 auto',
             color: 'white',
-            maxWidth: String(window.innerWidth / 1.7) + 'px',
+            maxWidth: window.innerWidth >= 576 ?(window.innerWidth >= 992 ? String(window.innerWidth / 1.7 ) + 'px' : String(window.innerWidth / 1.25) + 'px')  :String(window.innerWidth / 1.31) + 'px',
             maxHeight: '1000px',
             paddingTop: '100px',
             paddingBottom: '100px',
@@ -98,7 +98,7 @@ class Manga extends Component {
 
         return (
             <div className="wrapper animated bounceInLeft">
-                <div align='center' style={this.aboutStyle()}>
+                <div align='center' style={this.frameStyle()}>
                     <legend align='center'>
                         <h2 className='brand display-4 pt-4 pb-1' style={window.innerWidth >= 992 ? { fontFamily: "'Shadows Into Light', Kimberly Geswein", opacity: '0.4' } : { fontFamily: "'Shadows Into Light', Kimberly Geswein", opacity: '0.4', fontSize: '2.0em' }}>
                             MANGA CHAPTERS
@@ -110,7 +110,7 @@ class Manga extends Component {
                                 spaceBetween={30}
                                 speed={2000}
                                 slidesPerView={2}
-                                navigation
+                                navigation={window.innerWidth >= 992}
                                 pagination={{ clickable: true }}
                                 allowTouchMove={true}
                                 loop={false}
@@ -152,7 +152,7 @@ class Manga extends Component {
                         <img className="modal-content" id="img01" alt="" />
                         <div id="caption"></div>
                     </div>
-                    <div className='lead pl-5 pb-4'>
+                    <div className='lead  pb-4'>
                         <p>
                             CHAPTER 1 - THE EXPERIMENT
                             <br />
@@ -169,7 +169,9 @@ class Manga extends Component {
                         {
                             is_admin &&
                             <Fragment>
-                                <div style={{ border: "dashed 1px gray", width: "25%" }} align="left">
+                                <div style={{ border: "dashed 1px gray",
+                                 width: window.innerWidth >= 576 ?(window.innerWidth >= 992 ? '25%' : '35%')  :'75%' }}
+                                  align="left">
                                     <div className="pl-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" className="bi bi-gear mr-2" viewBox="0 0 16 16">
                                             <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z" />
@@ -186,7 +188,6 @@ class Manga extends Component {
                                             Manga List
                                         </Link>
                                     </div>
-
                                 </div>
                             </Fragment>
                         }

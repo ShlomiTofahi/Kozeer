@@ -51,7 +51,7 @@ export class Logout extends Component {
 
         return (
             <Fragment>
-                <Link className={'navlink header-tablinks px-5 d-md-inline-block no-outline ' + navLink}
+                <Link className={'navlink header-tablinks px-3 px-md-4 px-lg-5 d-md-inline-block no-outline ' + navLink}
                     onClick={this.props.logout} to='#'
                     style={this.navTextColorsStyle()}
                     onMouseEnter={this.enterToggleHover.bind(this, "LOGOUT")}

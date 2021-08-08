@@ -365,7 +365,7 @@ class Post extends Component {
 const postFrameStyle = {
   margin: '0 auto',
   backgroundColor: '#221415dc',
-  width: '65%',
+  width: window.innerWidth >= 992 ? '65%' : "90%"
 };
 const postBodyStyle = {
   background: "white",

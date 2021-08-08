@@ -115,7 +115,7 @@ const postFrameStyle = {
   margin: '0 auto',
   backgroundColor: '#221415dc',
   color: 'white',
-  width: '65%',
+  width: window.innerWidth >= 992 ? '65%' : "90%",
 };
 const postHeaderStyle = {
   backgroundColor: '#7301056e',

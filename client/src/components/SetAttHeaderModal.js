@@ -214,7 +214,7 @@ class SetAttHeaderModal extends Component {
         return (
             <div>
                 {is_admin ?
-                    <Link className={'header-tablinks navlink pl-5 d-md-inline-block no-outline ' + navLink}
+                    <Link className={'header-tablinks navlink pl-4 d-md-inline-block no-outline ' + navLink}
                         onClick={this.toggle} to='#'
                         style={this.navTextColorsStyle()}
                         onMouseEnter={this.toggleHover}

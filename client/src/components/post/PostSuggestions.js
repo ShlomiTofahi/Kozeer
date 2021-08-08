@@ -114,14 +114,13 @@ class PostSuggestions extends Component {
                           : <CardImg className='suggestions-posts-imgs' style={postImgStyle} src={postImage} />
                       }
                       <Col>
-                        <Container>
+                        {/* <Container> */}
                           <div className="mb-4 ml-2 mt-3">
                             <CardText style={titleStyle} className="mb-2">
                               {title}
                             </CardText>
                           </div>
-
-                        </Container>
+                        {/* </Container> */}
                       </Col>
                     </Link>
 
@@ -216,7 +215,8 @@ const titleStyle = {
   display: '-webkit-box',
   WebkitLineClamp: '1',
   WebkitBoxOrient: 'vertical',
-  fontSize: window.innerWidth / 133 + 'px'
+  fontSize: window.innerWidth >= 576 ?(window.innerWidth >= 992 ? '0.911vw' : '1vw')  :'3.7vw'
+  // fontSize: window.innerWidth >= 576 ? window.innerWidth / 133 + 'px' : '2.4vw',
 }
 const postLovedStyle = {
   position: 'absolute',

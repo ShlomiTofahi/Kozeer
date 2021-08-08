@@ -89,6 +89,12 @@
   border-left: 1px solid #c914c3;
   
 }
+/* @media screen and (max-width: 992px) {
+ .header-tab .header-tablinks{
+    font-size: 8px;
+  }
+} */
+
 .no-outline:hover{
   text-decoration: none;
 }
@@ -336,7 +342,7 @@ input:checked + .slider:before {
 }
 /*--------------start Manga-----------------*/
 .manga-scrolling-box{
-  max-height: 151reply-btnpx;
+  max-height: 300px;
 }
 .manga-slider-imgs{
   max-height: 500px;

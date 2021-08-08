@@ -12,7 +12,7 @@ export default class About extends Component {
                 <div className="" style={bgStyle}></div>
                 <div style={bodyStyle}>
                     <legend>
-                        <h2 className='brand display-4 pt-4' style={window.innerWidth >= 992 ? { fontFamily: "'Shadows Into Light', Kimberly Geswein", opacity: '0.4' } : { fontFamily: "'Shadows Into Light', Kimberly Geswein", opacity: '0.4', fontSize: '2.0em' }}>
+                        <h2 className='brand display-4 pt-4' style={window.innerWidth >= 992 ? { fontFamily: "'Shadows Into Light', Kimberly Geswein", opacity: '0.4' } : { fontFamily: "'Shadows Into Light', Kimberly Geswein", opacity: '0.4', fontSize: '1.74em' }}>
                             OVER 13?
                         </h2>
                     </legend>
@@ -51,7 +51,7 @@ const bodyStyle = {
     left: '50%',
     transform: ' translate(-50%, -50%)',
     zIndex: '2',
-    width: '50%',
+    width: window.innerWidth >= 992 ? '40%' : '80%',
     padding: '20px',
     textAlign: 'center',
     fontFamily: 'Arial, Helvetica, sans-serif'

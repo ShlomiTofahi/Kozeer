@@ -112,8 +112,8 @@ class ShowComments extends Component {
 
     return (
       <Fragment>
-        <Container className='px-1 px-sm-4 px-md-5 px-lg-5  pt-4 pb-5'>
-          <Container className='px-1 px-sm-4 px-md-5 px-lg-5'>
+        <Container className='px-1 px-sm-4 px-md-5 px-lg-5  pt-5 pb-5'>
+          {/* <Container className='px-1 px-sm-4 px-md-5 px-lg-5'> */}
             <Col>
               <Row>
                 <div className="input-group mt-3">
@@ -263,7 +263,7 @@ class ShowComments extends Component {
                 </Card>
               ))}
             </Card>
-          </Container>
+          {/* </Container> */}
         </Container>
       </Fragment>
     );

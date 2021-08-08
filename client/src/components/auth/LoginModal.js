@@ -169,7 +169,7 @@ class LoginModal extends Component {
                 {
                     this.props.linkcolor === 'green' ?
                         <Link className='login-btn' onClick={this.toggle} href='#'>Connect</Link>
-                        : <Link className={'navlink header-tablinks px-5 nav-link d-md-inline-block ' + navLink}
+                        : <Link className={'navlink header-tablinks px-3 px-md-4 px-lg-5 nav-link d-md-inline-block ' + navLink}
                             onClick={this.toggle} to='#'
                             style={this.navTextColorsStyle()}
                             onMouseEnter={this.enterToggleHover.bind(this, "SIGN-UP")}
