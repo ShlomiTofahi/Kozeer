@@ -231,7 +231,7 @@ class SetAttHeaderModal extends Component {
                     isOpen={this.state.modal}
                     toggle={this.toggle}
                     onClosed={this.close}
-                    className="login-modal"
+                    className="dark-modal"
                 >
                     {/* <ModalHeader toggle={this.toggle}>Add To Shopping List</ModalHeader> */}
                     <ModalHeader cssModule={{ 'modal-title': 'w-100 text-center' }} toggle={this.toggle} ><span className="lead">Header Setting</span></ModalHeader>

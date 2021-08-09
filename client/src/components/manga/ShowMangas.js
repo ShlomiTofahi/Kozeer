@@ -107,11 +107,11 @@ class ShowMangas extends Component {
             <Fragment >
                 <div className="tabcontent2">
                     <div align='center' style={bodyStyle}>
-                        <div className='chapter-list position-relative mx-5 py-3 px-4'>
+                        <div className='chapter-list position-relative mx-4 py-3 px-5'>
                             <AddChapterModal />
                             {chapters && chapters.map(({ _id, name, mangas }, index) => (
                                 <Fragment key={_id}>
-                                    <span className={'chapter-item'}>
+                                    <span className='chapter-item'>
                                         <Button
                                             block
                                             size='sm'
@@ -138,13 +138,13 @@ class ShowMangas extends Component {
                                                             <CSSTransition key={mangaid} timeout={500} classNames='fade'>
                                                                 <ListGroupItem className={'manga-item ' + (inuse ? 'minus' : 'plus')}>
                                                                     <span>{page}</span>
-                                                                    <button onClick={this.onDeleteMangaClick.bind(this, _id)} className="delete-btn">
+                                                                    <button onClick={this.onDeleteMangaClick.bind(this, mangaid)} className="delete-btn">
                                                                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
                                                                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
                                                                             <path fillRule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
                                                                         </svg>
                                                                     </button>
-                                                                    <EditMangaModal mangaID={_id} />
+                                                                    <EditMangaModal mangaID={mangaid} />
                                                                 </ListGroupItem>
                                                             </CSSTransition>
                                                     ))}

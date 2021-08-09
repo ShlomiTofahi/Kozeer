@@ -197,7 +197,7 @@ class AddPostModal extends Component {
     chapters.map(({ name }) => {
       dropDownSymbolList = [...dropDownSymbolList, this.state.Collapsetoggle.includes(name) ?
         { name: <span>&#45;</span> } : { name: <span>&#x2B;</span> }]
-        return dropDownSymbolList;
+      return dropDownSymbolList;
     })
 
     return (
@@ -216,7 +216,7 @@ class AddPostModal extends Component {
           : null}
 
         <Modal
-          className="login-modal"
+          className="dark-modal"
           align="left"
           isOpen={this.state.modal}
           toggle={this.toggle}
@@ -237,7 +237,7 @@ class AddPostModal extends Component {
                 </div>
                 <Collapse isOpen={this.state.is_manga}>
                   <div>
-                    <Button className="collapsible" onClick={this.DropDowntoggleManga} style={{ marginBottom: '1rem', opacity: '0.7' }}>Mangas <strong style={{ marginLeft: '44px' }}>{dropDownMangaSymbol}</strong></Button>
+                    <Button size="sm" className="collapsible" onClick={this.DropDowntoggleManga} style={{ marginBottom: '1rem', opacity: '0.7' }}>Mangas <strong style={{ marginLeft: '44px' }}>{dropDownMangaSymbol}</strong></Button>
                     <Collapse isOpen={this.state.dropDownMangaOpen}>
                       <div className='chapter-list position-relative py-3 px-4'>
                         {chapters && chapters.map(({ _id, name, mangas }, index) => (
@@ -255,7 +255,7 @@ class AddPostModal extends Component {
                               <div className="scrolling-box">
                                 <ListGroup className="manga-list">
                                   {mangas &&
-                                    mangas.sort((a, b) => Number(a.page.substring(4)) - Number(b.page.substring(4))).map(({ _id:mangaid, page, inuse }) => (
+                                    mangas.sort((a, b) => Number(a.page.substring(4)) - Number(b.page.substring(4))).map(({ _id: mangaid, page, inuse }) => (
                                       <Col key={mangaid} className='pt-0'>
                                         <label className="checkbox_item">
                                           <small style={{ color: inuse ? "#c0392b" : "#2ecc71" }}>&#9866;</small>
@@ -290,6 +290,8 @@ class AddPostModal extends Component {
                 />
 
                 <Button
+                  className='green-style-btn mt-4'
+                  size="sm"
                   color='dark'
                   style={{ marginTop: '2rem' }}
                   block

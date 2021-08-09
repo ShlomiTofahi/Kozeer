@@ -156,7 +156,7 @@ class AddComment extends Component {
           isOpen={this.state.modal}
           toggle={this.toggle}
           onClosed={this.close}
-          className="login-modal"
+          className="dark-modal"
         >
           <ModalHeader className='mt-3' cssModule={{ 'modal-title': 'w-100 text-center' }} toggle={this.toggle}></ModalHeader>
           <ModalBody>

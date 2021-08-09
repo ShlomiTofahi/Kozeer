@@ -177,7 +177,7 @@ class LoginModal extends Component {
                 }
 
 
-                <Modal align="center" isOpen={this.state.modal} toggle={this.toggle} onClosed={this.close} className="login-modal">
+                <Modal align="center" isOpen={this.state.modal} toggle={this.toggle} onClosed={this.close} className="dark-modal">
                     <Collapse isOpen={this.state.signUpfadeIn}>
                         <ModalHeader style={{ fontFamily: "'Indie Flower', Kimberly Geswein" }} cssModule={{ 'modal-title': 'w-100 text-center' }} toggle={this.toggle}><span style={{ 'fontSize': '30px' }} >SIGN Up</span></ModalHeader>
                         <ModalBody>

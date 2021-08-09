@@ -160,7 +160,7 @@
 /*--------------end Footer---------------*/
 
 /*--------------start Modal Login---------------*/
-.login-modal .modal-content{
+.dark-modal .modal-content{
   background-color: #292820;
   color: rgba(255, 255, 255, 0.712);
 }
@@ -204,6 +204,7 @@
   overflow: auto;
   -ms-overflow-style: none;
   overflow: -moz-scrollbars-none;
+  
 }
 .scrolling-box::-webkit-scrollbar {
   width: 0.5em;
@@ -634,7 +635,7 @@ input[type='number'] {
 
 .manga-list {
   list-style-type: none;
-  padding: 0 30px;
+  padding: 0 55px;
   margin-bottom: 40px;
   opacity: 0.9;
 }
@@ -646,8 +647,10 @@ input[type='number'] {
   display: flex;
   justify-content: space-between;
   position: relative;
-  padding: 10px;
+  /* padding: 10px; */
   margin: 10px 0;
+  max-height:40px ;
+  align-items: center;
 }
 .chapter-list .chapter-item {
   display: flex;

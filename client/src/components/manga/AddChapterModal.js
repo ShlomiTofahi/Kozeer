@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Alert } from 'reactstrap';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -114,6 +114,7 @@ class AddChapterModal extends Component {
                     isOpen={this.state.modal}
                     toggle={this.toggle}
                     onClosed={this.close}
+                    className="dark-modal"
                 >
                     <ModalHeader cssModule={{ 'modal-title': 'w-100 text-center' }} toggle={this.toggle} ><span className="lead">Add chapter</span></ModalHeader>
 
@@ -122,15 +123,8 @@ class AddChapterModal extends Component {
 
                         <Form onSubmit={this.onSubmit}>
                             <FormGroup>
-                                <Label for='item'>chapter</Label>
-                                <Input
-                                    type='text'
-                                    name='name'
-                                    id='name'
-                                    placeholder='Enter chapter...'
-                                    className='mb-2'
-                                    onChange={this.onChange}
-                                />
+                                
+                                <input className='input-place-holder form-control pt-3 pl-3 mb-5 mt-3' style={LineInputStyle} onChange={this.onChange} type="text" name='name'  id='name' placeholder="Enter chapter..." />
 
                                 <FileUpload
                                     setRegisterModalStates={this.setRegisterModalStates}
@@ -139,6 +133,8 @@ class AddChapterModal extends Component {
                                 />
 
                                 <Button
+                                    className='green-style-btn mt-4'
+                                    size="sm"
                                     color='dark'
                                     style={{ marginTop: '2rem' }}
                                     block
@@ -151,6 +147,16 @@ class AddChapterModal extends Component {
         );
     }
 }
+
+const LineInputStyle = {
+    backgroundColor: 'rgba(0, 0, 0, 0)',
+    border: 'none',
+    borderBottom: '1px solid rgba(255, 255, 255, 0.411)',
+    borderRadius: '1px',
+    marginTop: '-9px',
+    width: '350px',
+    margin: '0 auto'
+  };
 
 const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated,

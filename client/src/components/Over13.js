@@ -52,7 +52,7 @@ const bodyStyle = {
     transform: ' translate(-50%, -50%)',
     zIndex: '2',
     width: window.innerWidth >= 992 ? '40%' : '80%',
-    padding: '20px',
+    padding: window.innerWidth >= 992 ? '20px' : '',
     textAlign: 'center',
     fontFamily: 'Arial, Helvetica, sans-serif'
 }

@@ -44,7 +44,7 @@ class SetMyVisionModal extends Component {
 
         //If added chapter, close modal
         if (this.state.modal) {
-            if (    msg && msg.id === 'EDIT_SETTINGS_SUCCESS') {
+            if (msg && msg.id === 'EDIT_SETTINGS_SUCCESS') {
                 this.toggle();
             }
         }
@@ -75,6 +75,13 @@ class SetMyVisionModal extends Component {
         this.props.editSetting(newSetting);
     }
 
+    handleKeyDown(e) {
+        e.target.style.height = 'inherit';
+        e.target.style.height = `${e.target.scrollHeight}px`; 
+        // In case you have a limitation
+        // e.target.style.height = `${Math.min(e.target.scrollHeight, limit)}px`;
+      }
+
     render() {
         const { isAuthenticated, user } = this.props.auth;
         const is_admin = (isAuthenticated && user.admin);
@@ -82,7 +89,7 @@ class SetMyVisionModal extends Component {
         return (
             <Fragment>
                 {is_admin ?
-                    <Link className={'login-btn pl-2 d-block d-sm-inline'} onClick={this.toggle} to='#'>
+                    <Link className={'login-btn ml-5 d-block d-sm-inline'} onClick={this.toggle} to='#'>
                         Edit Cover Book Image
                     </Link>
                     : null}
@@ -92,7 +99,7 @@ class SetMyVisionModal extends Component {
                     isOpen={this.state.modal}
                     toggle={this.toggle}
                     onClosed={this.close}
-                    className="login-modal"
+                    className="dark-modal"
                 >
                     {/* <ModalHeader toggle={this.toggle}>Add To Shopping List</ModalHeader> */}
                     <ModalHeader cssModule={{ 'modal-title': 'w-100 text-center' }} toggle={this.toggle} ><span className="lead">Backgoud Image Setting</span></ModalHeader>
@@ -103,11 +110,12 @@ class SetMyVisionModal extends Component {
                         <Form onSubmit={this.onSubmit}>
                             <FormGroup>
                                 <small className='pt-3' style={{ color: '#76735c' }}><Label>My vision:</Label></small>
-                                <textarea style={{width: "100%"}} onChange={this.onChange} name="myVision" value={this.state.myVision}></textarea>
+                                <textarea style={{ width: "100%" }} onChange={this.onChange} name="myVision" value={this.state.myVision} onKeyDown={this.handleKeyDown}></textarea>
 
                                 <Button
-                                    color='dark'
+                                    className='green-style-btn mt-4'
                                     size="sm"
+                                    color='dark'
                                     style={{ marginTop: '2rem' }}
                                     block
                                 >Save</Button>

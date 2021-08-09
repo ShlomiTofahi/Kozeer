@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Alert } from 'reactstrap';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -26,7 +26,7 @@ class EditChapterModal extends Component {
         auth: PropTypes.object.isRequired,
         error: PropTypes.object.isRequired,
         msg: PropTypes.object.isRequired,
-        chapter: PropTypes.func.isRequired,
+        chapter: PropTypes.object.isRequired,
         clearErrors: PropTypes.func.isRequired,
         clearMsgs: PropTypes.func.isRequired,
         editChapter: PropTypes.func.isRequired
@@ -207,22 +207,15 @@ class EditChapterModal extends Component {
                     isOpen={this.state.modal}
                     toggle={this.toggle}
                     onClosed={this.close}
+                    className="dark-modal"
                 >
                     <ModalHeader cssModule={{ 'modal-title': 'w-100 text-center' }} toggle={this.toggle} ><span className="lead">Edit Chapter</span></ModalHeader>
                     <ModalBody>
                         {this.state.msg ? <Alert color="danger">{this.state.msg}</Alert> : null}
                         <Form onSubmit={this.onSubmit}>
                             <FormGroup>
-                                <Label for='name'>name</Label>
-                                <Input
-                                    type='text'
-                                    name='name'
-                                    id='name'
-                                    placeholder='name'
-                                    className='mb-2'
-                                    onChange={this.onChange}
-                                    defaultValue={this.state.name}
-                                />
+
+                                <input className='input-place-holder form-control pt-3 pl-3 mb-5 mt-3' defaultValue={this.state.name} style={LineInputStyle} onChange={this.onChange} type="text" name='name' id='name' placeholder="Enter chapter..." />
 
                                 <FileUpload
                                     payload={payload}
@@ -236,6 +229,8 @@ class EditChapterModal extends Component {
                                 />
 
                                 <Button
+                                    className='green-style-btn mt-4'
+                                    size="sm"
                                     color='dark'
                                     style={{ marginTop: '2rem' }}
                                     block
@@ -248,6 +243,16 @@ class EditChapterModal extends Component {
         );
     }
 }
+
+const LineInputStyle = {
+    backgroundColor: 'rgba(0, 0, 0, 0)',
+    border: 'none',
+    borderBottom: '1px solid rgba(255, 255, 255, 0.411)',
+    borderRadius: '1px',
+    marginTop: '-9px',
+    width: '350px',
+    margin: '0 auto'
+};
 
 const mapStateToProps = state => ({
     chapter: state.chapter,

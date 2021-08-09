@@ -171,7 +171,7 @@ class SetCoverBookImageModal extends Component {
             <Fragment>
                 {is_admin ?
                     <Link className={'login-btn pl-2 d-block d-sm-inline'} onClick={this.toggle} to='#'>
-                            Edit Cover Book Image
+                        Edit Cover Book Image
                     </Link>
                     : null}
 
@@ -180,7 +180,7 @@ class SetCoverBookImageModal extends Component {
                     isOpen={this.state.modal}
                     toggle={this.toggle}
                     onClosed={this.close}
-                    className="login-modal"
+                    className="dark-modal"
                 >
                     {/* <ModalHeader toggle={this.toggle}>Add To Shopping List</ModalHeader> */}
                     <ModalHeader cssModule={{ 'modal-title': 'w-100 text-center' }} toggle={this.toggle} ><span className="lead">Backgoud Image Setting</span></ModalHeader>
@@ -201,9 +201,11 @@ class SetCoverBookImageModal extends Component {
                                     removedOrginalItemImage={this.removedOrginalImage}
                                 />
 
+
                                 <Button
-                                    color='dark'
+                                    className='green-style-btn mt-4'
                                     size="sm"
+                                    color='dark'
                                     style={{ marginTop: '2rem' }}
                                     block
                                 >Save</Button>

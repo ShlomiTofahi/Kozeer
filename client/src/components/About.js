@@ -18,7 +18,8 @@ class About extends Component {
             margin: '0 auto',
             backgroundColor: '#323232',
             color: 'white',
-            width: '50%',
+            width: window.innerWidth >= 992 ? '50%' : '90%',
+            paddingBottom:'24px'
         };
     };
     render() {

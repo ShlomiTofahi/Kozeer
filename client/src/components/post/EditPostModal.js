@@ -70,7 +70,7 @@ class EditPostModal extends Component {
       })
     }
     chaptersSelected.map((chapter) => this.CollapseHangdle(chapter))
-    if(post !== undefined){
+    if (post !== undefined) {
       this.setState({
         title: post.title,
         body: post.body,
@@ -360,7 +360,7 @@ class EditPostModal extends Component {
           //   : null
         }
         <Modal
-          className="login-modal"
+          className="dark-modal"
           align="left"
           isOpen={this.state.modal}
           toggle={this.toggle}
@@ -384,7 +384,7 @@ class EditPostModal extends Component {
                 </div>
                 <Collapse isOpen={this.state.is_manga}>
                   <div>
-                    <Button className="collapsible" onClick={this.DropDowntoggleManga} style={{ marginBottom: '1rem', opacity: '0.7' }}>Mangas <strong style={{ marginLeft: '44px' }}>{dropDownMangaSymbol}</strong></Button>
+                    <Button size="sm" className="collapsible" onClick={this.DropDowntoggleManga} style={{ marginBottom: '1rem', opacity: '0.7' }}>Mangas <strong style={{ marginLeft: '44px' }}>{dropDownMangaSymbol}</strong></Button>
                     <Collapse isOpen={this.state.dropDownMangaOpen}>
                       <div className='chapter-list position-relative py-3 px-4'>
                         {chapters && chapters.map(({ _id, name, mangas }, index) => (
@@ -403,7 +403,7 @@ class EditPostModal extends Component {
                               <div className="scrolling-box">
                                 <ListGroup className="manga-list">
                                   {mangas &&
-                                    mangas.sort((a, b) => Number(a.page.substring(4)) - Number(b.page.substring(4))).map(({ _id:mangaid, page, inuse }) => (
+                                    mangas.sort((a, b) => Number(a.page.substring(4)) - Number(b.page.substring(4))).map(({ _id: mangaid, page, inuse }) => (
                                       <Col key={mangaid} className='pt-0'>
                                         <label className="checkbox_item">
                                           <small style={{ color: inuse ? "#c0392b" : "#2ecc71" }}>&#9866;</small>
@@ -443,6 +443,8 @@ class EditPostModal extends Component {
                 />
 
                 <Button
+                  className='green-style-btn mt-4'
+                  size="sm"
                   color='dark'
                   style={{ marginTop: '2rem' }}
                   block

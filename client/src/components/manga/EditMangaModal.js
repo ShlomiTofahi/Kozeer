@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Alert } from 'reactstrap';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -35,7 +35,9 @@ class EditMangaModal extends Component {
 
     componentDidMount() {
         const { mangas } = this.props.manga;
-        const manga = mangas.filter(manga => manga._id === this.props.mangaID)[0];
+        const manga = mangas.filter(manga => 
+            manga._id === this.props.mangaID)[0];
+
         if (manga) {
             this.setState({
                 page: manga.page,
@@ -207,7 +209,7 @@ class EditMangaModal extends Component {
         return (
             <Fragment>
                 {this.props.isAuthenticated ?
-                    <button onClick={this.toggle} className="edit-btn">
+                    <button onClick={this.toggle} className="edit-btn" >
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                             <path fillRule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
@@ -216,27 +218,20 @@ class EditMangaModal extends Component {
                     : null
                 }
 
-                < Modal
+                 < Modal
                     align="right"
                     isOpen={this.state.modal}
                     toggle={this.toggle}
                     onClosed={this.close}
+                    className="dark-modal"
                 >
                     <ModalHeader cssModule={{ 'modal-title': 'w-100 text-center' }} toggle={this.toggle} ><span className="lead">Edit Manga</span></ModalHeader>
                     <ModalBody>
                         {this.state.msg ? <Alert color="danger">{this.state.msg}</Alert> : null}
                         <Form onSubmit={this.onSubmit}>
                             <FormGroup>
-                                <Label for='page'>page</Label>
-                                <Input
-                                    type='text'
-                                    name='page'
-                                    id='page'
-                                    placeholder='page'
-                                    className='mb-2'
-                                    onChange={this.onChange}
-                                    defaultValue={this.state.page}
-                                />
+
+                            <input className='input-place-holder form-control pt-3 pl-3 mb-5 mt-3' defaultValue={this.state.page} style={LineInputStyle} onChange={this.onChange} type="text" name='page' id='page' placeholder="Enter page..." />
 
                                 <div className='text-left'>
                                     <small className='mr-2' style={{ color: '#76735c' }}><Label for='fullpage'>fullpage</Label></small>
@@ -257,8 +252,9 @@ class EditMangaModal extends Component {
                                     removedOrginalItemImage={this.removedOrginalMangaImage}
                                 />
 
-
                                 <Button
+                                    className='green-style-btn mt-4'
+                                    size="sm"
                                     color='dark'
                                     style={{ marginTop: '2rem' }}
                                     block
@@ -271,6 +267,16 @@ class EditMangaModal extends Component {
         );
     }
 }
+
+const LineInputStyle = {
+    backgroundColor: 'rgba(0, 0, 0, 0)',
+    border: 'none',
+    borderBottom: '1px solid rgba(255, 255, 255, 0.411)',
+    borderRadius: '1px',
+    marginTop: '-9px',
+    width: '350px',
+    margin: '0 auto'
+};
 
 const mapStateToProps = state => ({
     manga: state.manga,
