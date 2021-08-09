@@ -46,7 +46,7 @@ class Footer extends Component {
         return (
             <footer style={this.shdowStyle()} className="text-lg-start mt-5">
                 <div className="container p-4">
-                    <div className="row offset-2">
+                    <div className={window.innerWidth >= 576 ? "row offset-2" : "row"}>
                         <div className="col-lg-6 col-md-6 mb-4 mb-md-0">
                             <ul className="list-unstyled  mb-0 pt-1">
                                 <li className='mb-4'>

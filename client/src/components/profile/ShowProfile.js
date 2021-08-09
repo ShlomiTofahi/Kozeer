@@ -70,14 +70,14 @@ class ShowProfile extends Component {
     }
 }
 
-const bodyStyle = {
-    maxWidth: '320px',
+const bodyStyle = { 
+    maxWidth: window.innerWidth >= 576 ?(window.innerWidth >= 992 ? '45%' : '55%')  :'92%',
     border: '5px solid #730104'
 };
 const FrameStyle = {
     margin: '0 auto',
     backgroundColor: '#221415dc',
-    width: '65%',
+    width: window.innerWidth >= 992 ? '65%' : '90%',
 };
 
 const mapStateToProps = (state) => ({
