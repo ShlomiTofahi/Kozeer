@@ -11,6 +11,7 @@ import AppNavbar from './components/AppNavbar';
 import Footer from './components/Footer';
 import Main from './components/Main';
 import Over13 from './components/Over13';
+import SetAttHeaderModal from './components/SetAttHeaderModal';
 import SetBgImageModal from './components/SetBgImageModal';
 import ScrollUpButton from "react-scroll-up-button";
 
@@ -33,8 +34,8 @@ class App extends Component {
   bgStyle = () => {
     let backgroundImage = `url(/images/main/bg.png)`;
     const { setting } = store.getState().setting;
-    if (setting && setting.bgImage !== null) {
-      backgroundImage = `url(${setting.bgImage})`;
+    if (setting && setting?.bgImage !== null) {
+      backgroundImage = `url(${setting?.bgImage})`;
     }
 
     return {
@@ -43,6 +44,13 @@ class App extends Component {
       backgroundSize: 'contain',
       backgroundPosition: 'bottom left',
     };
+  };
+  adminBtns = () => {
+    return {
+      display: 'flex',
+      flexrap: 'wrap',
+      marginLeft: '8px'
+    }
   };
   render() {
     return (
@@ -54,7 +62,10 @@ class App extends Component {
             <div className="App" style={this.bgStyle()}>
               <BrowserRouter>
                 <AppNavbar />
+                <div style={this.adminBtns()}>
+                <SetAttHeaderModal />
                 <SetBgImageModal />
+                </div>
                 <Main />
                 <ScrollUpButton />
                 <Footer />

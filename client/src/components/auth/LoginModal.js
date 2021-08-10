@@ -144,14 +144,14 @@ class LoginModal extends Component {
     navTextColorsStyle = () => {
         const { setting } = this.props.setting;
         let textColor = "#ffffff";
-        if (setting?.headerColorText !== null) {
-            textColor = setting.headerColorText;
+        if (setting && setting?.headerColorText !== null) {
+            textColor = setting?.headerColorText;
         }
 
         if (this.state.hover !== '' && this.state.hover === "SIGN-UP") {
             textColor = "#21201f";
-            if (setting?.headerHoverColorText !== null) {
-                textColor = setting.headerHoverColorText;
+            if (setting && setting?.headerHoverColorText !== null) {
+                textColor = setting?.headerHoverColorText;
             }
         }
 
@@ -162,14 +162,14 @@ class LoginModal extends Component {
 
     render() {
 
-        const navLink = window.innerWidth <= 575 ? 'nav-link' : '';
+        const navLink = window.innerWidth < 992 ? 'nav-link' : '';
 
         return (
             <div>
                 {
                     this.props.linkcolor === 'green' ?
                         <Link className='login-btn' onClick={this.toggle} href='#'>Connect</Link>
-                        : <Link className={'navlink header-tablinks px-3 px-md-4 px-lg-5 nav-link d-md-inline-block ' + navLink}
+                        : <Link className={'navlink header-tablinks px-3 px-md-4 px-lg-5 d-md-inline-block ' + navLink}
                             onClick={this.toggle} to='#'
                             style={this.navTextColorsStyle()}
                             onMouseEnter={this.enterToggleHover.bind(this, "SIGN-UP")}

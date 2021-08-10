@@ -92,8 +92,8 @@ class Manga extends Component {
         const { setting } = this.props.setting;
 
         let coverBookImage = "";
-        if (setting?.coverBookImage !== null) {
-            coverBookImage = setting.coverBookImage;
+        if (setting && setting?.coverBookImage !== null) {
+            coverBookImage = setting?.coverBookImage;
         }
 
         return (

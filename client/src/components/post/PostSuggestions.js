@@ -94,7 +94,7 @@ class PostSuggestions extends Component {
 
     return (
       <Fragment >
-        <TransitionGroup align='left' className='action-hover-list pt-4 pb-1'>
+        <TransitionGroup align='center' className='action-hover-list pt-4 pb-1'>
           <Row>
             {posts && posts.map(({ _id, title, views, postImage, loved, is_manga, mangas, comments }) => (
               <CSSTransition key={_id} timeout={500} classNames='fade'>

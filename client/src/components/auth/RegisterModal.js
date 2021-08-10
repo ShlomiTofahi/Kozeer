@@ -102,7 +102,7 @@ class RegisterModal extends Component {
 
         return (
             <Fragment>
-                {/* <Link className={'navlink header-tablinks py-2 px-3 px-md-4 px-lg-5 nav-link d-md-inline-block'} onClick={this.toggle} to='#'>SIGN UP</Link> */}
+                {/* <Link className={'navlink header-tablinks py-2 px-3 px-md-4 px-lg-5 d-md-inline-block'} onClick={this.toggle} to='#'>SIGN UP</Link> */}
                 {/* 
                 <Modal align="left" isOpen={this.state.modal} toggle={this.toggle} onClosed={this.close}>
                     <ModalHeader cssModule={{ 'modal-title': 'w-100 text-center' }} toggle={this.toggle}>הרשמה</ModalHeader>*/}

@@ -13,9 +13,10 @@ import 'swiper/components/navigation/navigation.min.css';
 import 'swiper/components/pagination/pagination.min.css';
 import 'swiper/components/scrollbar/scrollbar.min.css';
 
+import { loadSetting } from '../actions/settingActions'
+
 import LoginModal from './auth/LoginModal';
 import Logout from './auth/Logout';
-import SetAttHeaderModal from './SetAttHeaderModal';
 
 SwiperCore.use([Autoplay]);
 
@@ -30,8 +31,16 @@ class AppNavbar extends Component {
 
     static propTypes = {
         auth: PropTypes.object.isRequired,
-        setting: PropTypes.object.isRequired
+        setting: PropTypes.object.isRequired,
+        loadSetting: PropTypes.func.isRequired,
     }
+
+    componentDidMount() {
+        const { setting } = this.props.setting;
+        if(setting !==null){
+            this.props.loadSetting();
+        }
+      }
 
     openTab = (name, event) => {
         var i, tablinks;
@@ -80,10 +89,10 @@ class AppNavbar extends Component {
         let topColor = "#d959d5";
         let bottomColor = "#c213bd";
         if (setting && setting?.headerColorTop !== null) {
-            topColor = setting.headerColorTop;
+            topColor = setting?.headerColorTop;
         }
         if (setting && setting?.headerColorBottom !== null) {
-            bottomColor = setting.headerColorBottom;
+            bottomColor = setting?.headerColorBottom;
         }
         return {
             background: `linear-gradient(180deg, ${topColor} 50%, ${bottomColor} 50%)`
@@ -95,14 +104,14 @@ class AppNavbar extends Component {
         let linkStyle = {}
         let textColor = "#ffffff";
         if (setting && setting?.headerColorText !== null) {
-            textColor = setting.headerColorText;
+            textColor = setting?.headerColorText;
         }
 
         if ((this.state.hover !== '' && this.state.hover === name) ||
             (this.state.active !== '' && this.state.active === name)) {
             textColor = "#21201f";
             if (setting && setting?.headerHoverColorText !== null) {
-                textColor = setting.headerHoverColorText;
+                textColor = setting?.headerHoverColorText;
             }
         }
 
@@ -134,7 +143,7 @@ class AppNavbar extends Component {
         const { setting } = this.props.setting;
         let headerImage = `url(${this.state.path}header_bg.png)`;
         if (setting && setting?.headerImage !== null) {
-            headerImage = `url(${setting.headerImage})`;
+            headerImage = `url(${setting?.headerImage})`;
         }
 
         const smallScreen = window.innerWidth < 992 ? true : false;
@@ -203,7 +212,6 @@ class AppNavbar extends Component {
                             <CardImg style={window.innerWidth >= 992 ? logoStyle : small_logoStyle} src={'/images/header/header_kozeer_logo.png'} />
                         </div>
                         <Navbar fixed='center' dark={smallScreen} expand='lg' className={'nav-header mb-5 ' + navColor} style={this.navBarColorsStyle()}>
-                            <SetAttHeaderModal />
                             <Container>
                                 <NavbarToggler className='NavToggler' onClick={this.toggle} />
                                 <Collapse onClick={() => { this.setState({ isOpen: false }) }} isOpen={this.state.isOpen} navbar >
@@ -269,4 +277,4 @@ const mapStateToProps = state => ({
     setting: state.setting
 });
 
-export default connect(mapStateToProps, null)(AppNavbar);
+export default connect(mapStateToProps, {loadSetting})(AppNavbar);

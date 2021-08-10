@@ -26,8 +26,8 @@ class About extends Component {
         const { setting } = this.props.setting;
 
         let myVision = "";
-        if (setting?.myVision !== null) {
-            myVision = setting.myVision;
+        if (setting && setting?.myVision !== null) {
+            myVision = setting?.myVision;
         }
         let att= [];
         for (const c of myVision) {

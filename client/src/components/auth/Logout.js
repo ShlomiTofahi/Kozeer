@@ -29,14 +29,14 @@ export class Logout extends Component {
     navTextColorsStyle = () => {
         const { setting } = this.props.setting;
         let textColor = "#ffffff";
-        if (setting?.headerColorText !== null) {
-            textColor = setting.headerColorText;
+        if (setting && setting?.headerColorText !== null) {
+            textColor = setting?.headerColorText;
         }
 
         if (this.state.hover !== '' && this.state.hover === "LOGOUT") {
             textColor = "#21201f";
-            if (setting?.headerHoverColorText !== null) {
-                textColor = setting.headerHoverColorText;
+            if (setting && setting?.headerHoverColorText !== null) {
+                textColor = setting?.headerHoverColorText;
             }
         }
 
@@ -47,7 +47,7 @@ export class Logout extends Component {
 
     render() {
 
-        const navLink = window.innerWidth <= 575 ? 'nav-link' : '';
+        const navLink = window.innerWidth < 992 ? 'nav-link' : '';
 
         return (
             <Fragment>
