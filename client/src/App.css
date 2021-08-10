@@ -458,9 +458,12 @@ padding-right:15px; */
 } 
 
 .share-modal{
-  width: 40vw;   /* Occupy the 90% of the screen width */
+  width: 40vw;   
   max-width: 40vw;
 } 
+.modal-body{
+  padding: 0;
+}
 /*--------------end ShareModal-----------------*/
 
 /*--------------start ShowProfile-----------------*/

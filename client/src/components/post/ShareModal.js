@@ -37,80 +37,77 @@ export const ShareModal = () => {
         </button>
       </div>
 
-      <Modal isOpen={modal} toggle={toggle} className='share-modal'>
+      <Modal isOpen={modal} toggle={toggle} className={window.innerWidth >= 540 ? 'share-modal': ''}>
         <ModalBody>
-          <Container>
-            <Col>
-              <hr />
-              <Row>
-                <FacebookShareButton
-                  className='ml-3'
-                  url={`${url}`}
-                  media={`${shareImage}`}
-                >
-                  <FacebookIcon
-                    size={size}
-                    iconFillColor={iconFillColor}
-                    bgStyle={bgStyle}
-                  />
-                </FacebookShareButton>
+          <hr />
+          <Col className="d-flex justify-content-center">
+            <Row>
+              <FacebookShareButton
+                url={`${url}`}
+                media={`${shareImage}`}
+              >
+                <FacebookIcon
+                  size={size}
+                  iconFillColor={iconFillColor}
+                  bgStyle={bgStyle}
+                />
+              </FacebookShareButton>
 
-                <TwitterShareButton
-                  className='ml-5'
-                  url={`${url}`}
-                  title={title}
-                >
-                  <TwitterIcon
-                    size={size}
-                    iconFillColor={iconFillColor}
-                    bgStyle={bgStyle}
-                  />
-                </TwitterShareButton>
+              <TwitterShareButton
+                className='ml-4 ml-sm-5'
+                url={`${url}`}
+                title={title}
+              >
+                <TwitterIcon
+                  size={size}
+                  iconFillColor={iconFillColor}
+                  bgStyle={bgStyle}
+                />
+              </TwitterShareButton>
 
-                <WhatsappShareButton
-                  className='ml-5'
-                  url={`${url}`}
-                  title={title}
-                  separator=":: "
-                >
-                  <WhatsappIcon
-                    size={size}
-                    iconFillColor={iconFillColor}
-                    bgStyle={bgStyle}
-                  />
-                </WhatsappShareButton>
+              <WhatsappShareButton
+                className='ml-4 ml-sm-5'
+                url={`${url}`}
+                title={title}
+                separator=":: "
+              >
+                <WhatsappIcon
+                  size={size}
+                  iconFillColor={iconFillColor}
+                  bgStyle={bgStyle}
+                />
+              </WhatsappShareButton>
 
-                <LinkedinShareButton
-                  className='ml-5'
-                  url={`${url}`}
-                  title={title}
-                  windowWidth={750}
-                  windowHeight={600}
-                >
-                  <LinkedinIcon
-                    size={size}
-                    iconFillColor={iconFillColor}
-                    bgStyle={bgStyle}
-                  />
-                </LinkedinShareButton>
+              <LinkedinShareButton
+                className='ml-4 ml-sm-5'
+                url={`${url}`}
+                title={title}
+                windowWidth={750}
+                windowHeight={600}
+              >
+                <LinkedinIcon
+                  size={size}
+                  iconFillColor={iconFillColor}
+                  bgStyle={bgStyle}
+                />
+              </LinkedinShareButton>
 
-                <PinterestShareButton
-                  className='ml-5'
-                  url={`${url}`}
-                  media={`${shareImage}`}
-                  windowWidth={1000}
-                  windowHeight={730}
-                >
-                  <PinterestIcon
-                    size={size}
-                    iconFillColor={iconFillColor}
-                    bgStyle={bgStyle}
-                  />
-                </PinterestShareButton>
-              </Row>
-              <hr />
-            </Col>
-          </Container>
+              <PinterestShareButton
+                className='ml-4 ml-sm-5'
+                url={`${url}`}
+                media={`${shareImage}`}
+                windowWidth={1000}
+                windowHeight={730}
+              >
+                <PinterestIcon
+                  size={size}
+                  iconFillColor={iconFillColor}
+                  bgStyle={bgStyle}
+                />
+              </PinterestShareButton>
+            </Row>
+          </Col>
+          <hr />
         </ModalBody>
       </Modal>
     </Fragment>
