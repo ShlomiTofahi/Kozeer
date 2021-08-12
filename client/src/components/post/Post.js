@@ -15,11 +15,15 @@ import {
   LinkedinShareButton,
   WhatsappShareButton,
   PinterestShareButton,
+  FacebookMessengerShareButton,
+  EmailShareButton,
   FacebookIcon,
   TwitterIcon,
   LinkedinIcon,
   WhatsappIcon,
   PinterestIcon,
+  FacebookMessengerIcon,
+  EmailIcon
 } from "react-share";
 
 import moment from 'moment';
@@ -137,7 +141,7 @@ class Post extends Component {
       modal.style.display = "none";
     }
   };
-  
+
   exitImg = () => {
     var modal = document.getElementById("myModal");
     modal.style.display = "none";
@@ -238,13 +242,11 @@ class Post extends Component {
                     </div>
                   ))
                 }
-
-                <Container>
-                  <Col className='pt-4'>
-                    <hr />
-                    <Row>
+                {window.innerWidth >= 992 ?
+                  <Fragment>
+                      <hr />
+                    <Row className="d-flex justify-content-center">
                       <FacebookShareButton
-                        className='ml-5'
                         url={`${url}`}
                         media={`${shareImage}`}
                       >
@@ -307,146 +309,243 @@ class Post extends Component {
                           bgStyle={bgStyle}
                         />
                       </PinterestShareButton>
+                      <EmailShareButton
+                        className='ml-5'
+                        url={`${url}`}
+                        media={`${shareImage}`}
+                      >
+                        <EmailIcon
+                          size={size}
+                          iconFillColor={iconFillColor}
+                          bgStyle={bgStyle}
+                        />
+                      </EmailShareButton>
                     </Row>
-                  </Col>
-                  <Col>
                     <hr />
-                    <Row>
+                  </Fragment> :
+                  <Fragment>
+                    <hr />
+                    <Container>
+                      <div className="d-flex justify-content-between">
+                        <div className="d-flex flex-column">
+                          <FacebookShareButton
+                            url={`${url}`}
+                            media={`${shareImage}`}
+                          >
+                            <FacebookIcon
+                              size={size}
+                              iconFillColor={iconFillColor}
+                              bgStyle={bgStyle}
+                            />
+                          </FacebookShareButton>
 
-                      <div className="input-group">
-                        <p>
-                          <small style={postFooterStyle} className="text-muted pl-3 mb-2">
-                            {post?.views} views
-                            <span className='text-dark post-link pl-2'>
-                              {comments.length} comments
-                            </span>
-                            <span style={postLovedStyle}>
-                              <span className='mr-1'>{post?.loved}</span>
-                              <button className='post-loved-btn' onClick={this.onLovedClick.bind(this, post?._id)}>
-                                {
-                                  localStorage.getItem('lovedPostList') && localStorage.getItem('lovedPostList').includes(String(post?._id)) ?
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" className="bi bi-suit-heart-fill" viewBox="0 0 16 16">
-                                      <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z" />
-                                    </svg> :
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" className="bi bi-suit-heart" viewBox="0 0 16 16">
-                                      <path d="m8 6.236-.894-1.789c-.222-.443-.607-1.08-1.152-1.595C5.418 2.345 4.776 2 4 2 2.324 2 1 3.326 1 4.92c0 1.211.554 2.066 1.868 3.37.337.334.721.695 1.146 1.093C5.122 10.423 6.5 11.717 8 13.447c1.5-1.73 2.878-3.024 3.986-4.064.425-.398.81-.76 1.146-1.093C14.446 6.986 15 6.131 15 4.92 15 3.326 13.676 2 12 2c-.777 0-1.418.345-1.954.852-.545.515-.93 1.152-1.152 1.595L8 6.236zm.392 8.292a.513.513 0 0 1-.784 0c-1.601-1.902-3.05-3.262-4.243-4.381C1.3 8.208 0 6.989 0 4.92 0 2.755 1.79 1 4 1c1.6 0 2.719 1.05 3.404 2.008.26.365.458.716.596.992a7.55 7.55 0 0 1 .596-.992C9.281 2.049 10.4 1 12 1c2.21 0 4 1.755 4 3.92 0 2.069-1.3 3.288-3.365 5.227-1.193 1.12-2.642 2.48-4.243 4.38z" />
-                                    </svg>
-                                }
-                              </button>
-                            </span>
-                          </small>
-                        </p>
+                          <TwitterShareButton
+                            title={title}
+                            url={`${url}`}
+                          >
+                            <TwitterIcon
+                              size={size}
+                              iconFillColor={iconFillColor}
+                              bgStyle={bgStyle}
+                            />
+                          </TwitterShareButton>
+                        </div>
+                        <div className="d-flex flex-column">
+                          <WhatsappShareButton
+                            url={`${url}`}
+                            title={title}
+                            separator=":: "
+                          >
+                            <WhatsappIcon
+                              size={size}
+                              iconFillColor={iconFillColor}
+                              bgStyle={bgStyle}
+                            />
+                          </WhatsappShareButton>
+                          <LinkedinShareButton
+                            url={`${url}`}
+                            title={title}
+                            windowWidth={750}
+                            windowHeight={600}
+                          >
+                            <LinkedinIcon
+                              size={size}
+                              iconFillColor={iconFillColor}
+                              bgStyle={bgStyle}
+                            />
+                          </LinkedinShareButton>
+                        </div>
+                        <div className="d-flex flex-column">
+                          <PinterestShareButton
+                            url={`${url}`}
+                            media={`${shareImage}`}
+                            windowWidth={1000}
+                            windowHeight={730}
+                          >
+                            <PinterestIcon
+                              size={size}
+                              iconFillColor={iconFillColor}
+                              bgStyle={bgStyle}
+                            />
+                          </PinterestShareButton>
+
+                          <FacebookMessengerShareButton
+                            url={`${url}`}
+                            media={`${shareImage}`}
+                            windowWidth={1000}
+                            windowHeight={730}
+                          >
+                            <FacebookMessengerIcon
+                              size={size}
+                              iconFillColor={iconFillColor}
+                              bgStyle={bgStyle}
+                            />
+                          </FacebookMessengerShareButton>
+                        </div>
                       </div>
-                    </Row>
-                  </Col>
-                </Container>
+                    </Container>
+                    <hr />
+                  </Fragment>
+                }
+
+                <Col>
+                  {/* <hr /> */}
+                  <Row>
+
+                    <div className="input-group">
+                      <p>
+                        <small style={postFooterStyle} className="text-muted pl-3 mb-2">
+                          {post?.views} views
+                          <span className='text-dark post-link pl-2'>
+                            {comments.length} comments
+                          </span>
+                          <span style={postLovedStyle}>
+                            <span className='mr-1'>{post?.loved}</span>
+                            <button className='post-loved-btn' onClick={this.onLovedClick.bind(this, post?._id)}>
+                              {
+                                localStorage.getItem('lovedPostList') && localStorage.getItem('lovedPostList').includes(String(post?._id)) ?
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" className="bi bi-suit-heart-fill" viewBox="0 0 16 16">
+                                    <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z" />
+                                  </svg> :
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" className="bi bi-suit-heart" viewBox="0 0 16 16">
+                                    <path d="m8 6.236-.894-1.789c-.222-.443-.607-1.08-1.152-1.595C5.418 2.345 4.776 2 4 2 2.324 2 1 3.326 1 4.92c0 1.211.554 2.066 1.868 3.37.337.334.721.695 1.146 1.093C5.122 10.423 6.5 11.717 8 13.447c1.5-1.73 2.878-3.024 3.986-4.064.425-.398.81-.76 1.146-1.093C14.446 6.986 15 6.131 15 4.92 15 3.326 13.676 2 12 2c-.777 0-1.418.345-1.954.852-.545.515-.93 1.152-1.152 1.595L8 6.236zm.392 8.292a.513.513 0 0 1-.784 0c-1.601-1.902-3.05-3.262-4.243-4.381C1.3 8.208 0 6.989 0 4.92 0 2.755 1.79 1 4 1c1.6 0 2.719 1.05 3.404 2.008.26.365.458.716.596.992a7.55 7.55 0 0 1 .596-.992C9.281 2.049 10.4 1 12 1c2.21 0 4 1.755 4 3.92 0 2.069-1.3 3.288-3.365 5.227-1.193 1.12-2.642 2.48-4.243 4.38z" />
+                                  </svg>
+                              }
+                            </button>
+                          </span>
+                        </small>
+                      </p>
+                    </div>
+                  </Row>
+                </Col>
+                {/* </Container> */}
 
                 {this.state.redirect &&
                   <Redirect exact from='/post/:id' to={this.state.redirect} />
                 }
               </Container>
             </div>
-            <PostSuggestions />
-            <div className='mb-4 mt-5 mx-2' style={postBodyStyle}>
-              <ShowComments postID={this.props.match.params.id} order={this.order} />
-            </div>
-            <div id="myModal" className="manga-modal">
-              <button onClick={this.exitImg} className="close">&times;</button>
-              <img className="modal-content" id="img01" alt="" />
-              <div id="caption"></div>
-            </div>
+              <PostSuggestions />
+              <div className='mb-4 mt-5 mx-2' style={postBodyStyle}>
+                <ShowComments postID={this.props.match.params.id} order={this.order} />
+              </div>
+              <div id="myModal" className="manga-modal">
+                <button onClick={this.exitImg} className="close">&times;</button>
+                <img className="modal-content" id="img01" alt="" />
+                <div id="caption"></div>
+              </div>
           </Container>
         </div>
       </Fragment>
-    );
+        );
   }
 }
 
-const postFrameStyle = {
-  margin: '0 auto',
-  backgroundColor: '#221415dc',
+        const postFrameStyle = {
+          margin: '0 auto',
+        backgroundColor: '#221415dc',
   width: window.innerWidth >= 992 ? '65%' : "90%"
 };
-const postBodyStyle = {
-  background: "white",
-  paddingBottom: "10px",
-  padding: "0",
-  border: '5px solid #730104'
+        const postBodyStyle = {
+          background: "white",
+        paddingBottom: "10px",
+        padding: "0",
+        border: '5px solid #730104'
 };
-const postHeaderStyle = {
-  backgroundColor: '#7301056e',
+        const postHeaderStyle = {
+          backgroundColor: '#7301056e',
 }
-const postSearchStyle = {
-  textAlign: 'right',
-  margin: '15px',
-  paddingRight: '10px'
+        const postSearchStyle = {
+          textAlign: 'right',
+        margin: '15px',
+        paddingRight: '10px'
 }
-const kozeerProfileImgStyle = {
-  borderRadius: '50%',
-  width: '25px',
-  height: '25px',
-  marginRight: '5px',
+        const kozeerProfileImgStyle = {
+          borderRadius: '50%',
+        width: '25px',
+        height: '25px',
+        marginRight: '5px',
 }
-const crownProfileImgStyle = {
-  width: '15px',
-  marginTop: '0px'
+        const crownProfileImgStyle = {
+          width: '15px',
+        marginTop: '0px'
 }
-const kozeerTextStyle = {
-  fontSize: '14px',
-  marginRight: '1.5px',
-  color: 'black'
+        const kozeerTextStyle = {
+          fontSize: '14px',
+        marginRight: '1.5px',
+        color: 'black'
 }
-const timeTextStyle = {
-  fontSize: '11px',
+        const timeTextStyle = {
+          fontSize: '11px',
 }
-const dotStyle = {
-  fontSize: '10px',
+        const dotStyle = {
+          fontSize: '10px',
 }
-const bodyStyle = {
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-  display: '-webkit-box',
-  WebkitLineClamp: '2',
-  WebkitBoxOrient: 'vertical',
-  fontSize: '14px',
+        const bodyStyle = {
+          overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        display: '-webkit-box',
+        WebkitLineClamp: '2',
+        WebkitBoxOrient: 'vertical',
+        fontSize: '14px',
 }
-const titleStyle = {
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-  display: '-webkit-box',
-  WebkitLineClamp: '1',
-  WebkitBoxOrient: 'vertical',
-  fontFamily: "'Brawler', Cyreal",
-  fontSize: window.innerWidth / 35 + 'px',
-  color: 'black',
-  opacity: '0.8'
+        const titleStyle = {
+          overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        display: '-webkit-box',
+        WebkitLineClamp: '1',
+        WebkitBoxOrient: 'vertical',
+        fontFamily: "'Brawler', Cyreal",
+        fontSize: window.innerWidth / 35 + 'px',
+        color: 'black',
+        opacity: '0.8'
 }
-const postLovedStyle = {
-  position: 'absolute',
-  right: '0'
+        const postLovedStyle = {
+          position: 'absolute',
+        right: '0'
 }
-const postFooterStyle = {
-  display: 'block',
-  marginTop: '-6px',
-  fontSize: '13px'
+        const postFooterStyle = {
+          display: 'block',
+        marginTop: '-6px',
+        fontSize: '13px'
 }
-const postImgStyle = {
-  backgroundSize: 'contain',
-  objectFit: 'cover',
-  backgroundPosition: 'top',
-  marginLeft: 'auto',
-  marginRight: 'auto',
-  display: 'block',
-  width: '90%',
+        const postImgStyle = {
+          backgroundSize: 'contain',
+        objectFit: 'cover',
+        backgroundPosition: 'top',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        display: 'block',
+        width: '90%',
 }
 
 const mapStateToProps = state => ({
-  post: state.post,
-  comment: state.comment,
-  auth: state.auth,
+          post: state.post,
+        comment: state.comment,
+        auth: state.auth,
 });
 
-export default connect(
-  mapStateToProps,
-  { deletePost, viewsPost, lovedPost, unlovedPost, getPostComments, getPostById }
-)(Post);
+        export default connect(
+        mapStateToProps,
+        { deletePost, viewsPost, lovedPost, unlovedPost, getPostComments, getPostById }
+        )(Post);

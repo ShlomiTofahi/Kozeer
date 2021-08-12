@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react'
-import { Container, Modal, ModalBody, Col, Row } from 'reactstrap';
+import { Modal, ModalBody, Col, Row } from 'reactstrap';
 
 import {
   FacebookShareButton,

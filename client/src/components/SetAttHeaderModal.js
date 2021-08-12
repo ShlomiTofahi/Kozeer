@@ -250,7 +250,7 @@ class SetAttHeaderModal extends Component {
                                     defaultValue={this.state.headerColorText}
                                     onChange={this.onChange}
                                 />
-                                <small className='pt-3' style={{ color: '#76735c' }}><Label for='headerHoverColorText'>header color text:</Label></small>
+                                <small className='pt-3' style={{ color: '#76735c' }}><Label for='headerHoverColorText'>header hover color text:</Label></small>
                                 <Input
                                     bsSize="sm"
                                     type='color'

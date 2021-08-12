@@ -1,8 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import {
   Button, Modal, ModalHeader, ModalBody, Form, FormGroup,
-  Label, Alert, Collapse, Col, ListGroup,
+  Label, Alert, Col, ListGroup,
 } from 'reactstrap';
+import { Collapse } from 'react-collapse';
 
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -382,10 +383,10 @@ class EditPostModal extends Component {
                     <span className="slider round"></span>
                   </label>
                 </div>
-                <Collapse isOpen={this.state.is_manga}>
+                <Collapse isOpened={this.state.is_manga}>
                   <div>
                     <Button size="sm" className="collapsible" onClick={this.DropDowntoggleManga} style={{ marginBottom: '1rem', opacity: '0.7' }}>Mangas <strong style={{ marginLeft: '44px' }}>{dropDownMangaSymbol}</strong></Button>
-                    <Collapse isOpen={this.state.dropDownMangaOpen}>
+                    <Collapse isOpened={this.state.dropDownMangaOpen}>
                       <div className='chapter-list position-relative py-3 px-4'>
                         {chapters && chapters.map(({ _id, name, mangas }, index) => (
                           <Fragment key={_id}>
@@ -399,7 +400,7 @@ class EditPostModal extends Component {
                               >{name}<strong className='pr-3' style={{ position: 'absolute', right: '0' }}>{dropDownSymbolList[index].name}</strong></Button>
                             </span>
 
-                            <Collapse isOpen={this.state.Collapsetoggle.includes(name)}>
+                            <Collapse isOpened={this.state.Collapsetoggle.includes(name)}>
                               <div className="scrolling-box">
                                 <ListGroup className="manga-list">
                                   {mangas &&
