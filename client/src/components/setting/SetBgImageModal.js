@@ -5,10 +5,10 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-import { editSetting } from '../actions/settingActions';
-import { clearErrors } from '../actions/errorActions';
-import { clearMsgs } from '../actions/msgActions';
-import FileUpload from './fileupload/FileUpload';
+import { loadSetting, editSetting } from '../../actions/settingActions';
+import { clearErrors } from '../../actions/errorActions';
+import { clearMsgs } from '../../actions/msgActions';
+import FileUpload from '../fileupload/FileUpload';
 
 class SetBgImageModal extends Component {
     state = {
@@ -35,6 +35,11 @@ class SetBgImageModal extends Component {
 
     componentDidMount() {
         const { setting } = this.props.setting;
+        
+        if(setting !==null){
+            this.props.loadSetting();
+        }
+
         this.setState({
             bgImage: setting.bgImage,
             prevImage: setting.bgImage,
@@ -259,5 +264,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { editSetting, clearMsgs, clearErrors }
+    { loadSetting, editSetting, clearMsgs, clearErrors }
 )(SetBgImageModal);

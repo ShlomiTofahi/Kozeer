@@ -68,7 +68,6 @@ const FileUpload = (props) => {
 
   const onSubmitFileUpload = async e => {
     e.preventDefault();
-
     const noImageFullpath = props.path + 'no-image.png';
     if (!firstUploaded && filepath !== '' && filepath !== noImageFullpath) {
 
@@ -121,9 +120,10 @@ const FileUpload = (props) => {
       }
 
     } catch (err) {
-      if (err.response.status === 500) {
+      if (err.response && err.response.status === 500) {
         setMessage('There was a problem with the server');
       } else {
+        console.log(err)
         setMessage(err.response.data.msg);
       }
     }

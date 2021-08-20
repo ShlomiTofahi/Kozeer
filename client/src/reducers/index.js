@@ -8,6 +8,7 @@ import authReducer from './authReducer';
 import chapterReducer from './chapterReducer';
 import mangaReducer from './mangaReducer';
 import settingReducer from './settingReducer';
+import characterReducer from './characterReducer';
 import twoFactorAuthReducer from './twoFactorAuthReducer';
 
 export default combineReducers({
@@ -19,5 +20,6 @@ export default combineReducers({
     chapter: chapterReducer,
     manga: mangaReducer,
     setting: settingReducer,
+    character: characterReducer,
     twoFactorAuth: twoFactorAuthReducer,
 });

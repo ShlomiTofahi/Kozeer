@@ -5,10 +5,10 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-import { editSetting } from '../actions/settingActions';
-import { clearErrors } from '../actions/errorActions';
-import { clearMsgs } from '../actions/msgActions';
-import FileUpload from './fileupload/FileUpload';
+import { editSetting, loadSetting } from '../../actions/settingActions';
+import { clearErrors } from '../../actions/errorActions';
+import { clearMsgs } from   '../../actions/msgActions';
+import FileUpload from '../fileupload/FileUpload';
 
 class SetAttHeaderModal extends Component {
     state = {
@@ -32,6 +32,7 @@ class SetAttHeaderModal extends Component {
         auth: PropTypes.object.isRequired,
         error: PropTypes.object.isRequired,
         msg: PropTypes.object.isRequired,
+        loadSetting: PropTypes.func.isRequired,
         clearErrors: PropTypes.func.isRequired,
         clearMsgs: PropTypes.func.isRequired,
         editSetting: PropTypes.func.isRequired,
@@ -39,6 +40,11 @@ class SetAttHeaderModal extends Component {
 
     componentDidMount() {
         const { setting } = this.props.setting;
+
+        if(setting !==null){
+            this.props.loadSetting();
+        }
+
         this.setState({
             headerColorText: setting.headerColorText,
             headerHoverColorText: setting.headerHoverColorText,
@@ -315,5 +321,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { editSetting, clearMsgs, clearErrors }
+    { loadSetting, editSetting, clearMsgs, clearErrors }
 )(SetAttHeaderModal);

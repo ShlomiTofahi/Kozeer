@@ -8,7 +8,7 @@ import { CardImg } from 'reactstrap';
 import { getMangas } from '../../actions/mangaActions';
 import { getChapters } from '../../actions/chapterActions';
 
-import SetCoverBookImageModal from '../SetCoverBookImageModal';
+import SetCoverBookImageModal from '../setting/SetCoverBookImageModal';
 
 import SwiperCore, { Navigation, Pagination, A11y } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';

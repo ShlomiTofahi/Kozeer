@@ -17,18 +17,33 @@ app.use(fileUpload({
 
 // Upload Endpoint
 app.post('/upload', (req, res) => {
-  if (req.files === null) {
-    return res.status(400).json({ msg: 'No file uploaded' });
+  console.log(`____________________________________________________`)
+
+  try {
+    const file = req.files.file;
+    const { filename, abspath } = req.body;
+    const fullDir = `${__dirname}/client/public${abspath}`
+    if (req.files === null) {
+      return res.status(400).json({ msg: 'No file uploaded' });
+    }
+    if (!fs.existsSync(fullDir)) {
+      fs.mkdirSync(fullDir);
+    }
+
+      console.log(abspath)
+      console.log(`____________________________________________________`)
+      console.log(`${fullDir}/${filename}`)
+      file.mv(`${fullDir}/${filename}`, err => {
+        if (err) {
+          return res.status(500).send(err);
+        }
+        return res.json({ fileName: filename, filePath: `${abspath}${filename}` });
+      });
+
+  } catch (err) {
+    return res.status(500).send(err);
   }
 
-  const file = req.files.file;
-  const { filename, abspath } = req.body;
-  file.mv(`${__dirname}/client/public${abspath}${filename}`, err => {
-    if (err) {
-      return res.status(500).send(err);
-    }
-    return res.json({ fileName: filename, filePath: `${abspath}${filename}` });
-  });
 });
 
 // Remove Endpoint
@@ -37,8 +52,11 @@ app.post('/remove', (req, res) => {
     return res.status(400).json({ msg: 'No file to remove' });
   }
   const { filepath } = req.body;
-
-  fs.unlinkSync(`${__dirname}/client/public/${filepath}`);
+  try {
+    fs.unlinkSync(`${__dirname}/client/public/${filepath}`);
+  } catch (err) {
+    return res.status(500).send(err);
+  }
 
 });
 
@@ -68,6 +86,7 @@ app.use('/api/mangas', require('./routes/api/mangas'));
 app.use('/api/chapters', require('./routes/api/chapters'));
 app.use('/api/subscribes', require('./routes/api/subscribes'));
 app.use('/api/settings', require('./routes/api/settings'));
+app.use('/api/characters', require('./routes/api/characters'));
 
 // Serve static assets if in production
 if (process.env.NODE_ENV === 'production') {

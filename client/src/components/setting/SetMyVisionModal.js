@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-import { editSetting } from '../actions/settingActions';
-import { clearErrors } from '../actions/errorActions';
-import { clearMsgs } from '../actions/msgActions';
+import { loadSetting, editSetting } from '../../actions/settingActions';
+import { clearErrors } from '../../actions/errorActions';
+import { clearMsgs } from '../../actions/msgActions';
 
 class SetMyVisionModal extends Component {
     state = {
@@ -26,6 +26,11 @@ class SetMyVisionModal extends Component {
 
     componentDidMount() {
         const { setting } = this.props.setting;
+
+        if(setting !==null){
+            this.props.loadSetting();
+        }
+        
         this.setState({
             myVision: setting.myVision
         });
@@ -109,8 +114,9 @@ class SetMyVisionModal extends Component {
 
                         <Form onSubmit={this.onSubmit}>
                             <FormGroup>
-                                <small className='pt-3' style={{ color: '#76735c' }}><Label>My vision:</Label></small>
-                                <textarea style={{ width: "100%" }} onChange={this.onChange} name="myVision" value={this.state.myVision} onKeyDown={this.handleKeyDown}></textarea>
+                                {/* <small className='pt-3' style={{ color: '#76735c' }}><Label>My vision:</Label></small> */}
+                                {/* <textarea style={{ width: "100%" }} onChange={this.onChange} name="myVision" value={this.state.myVision} onKeyDown={this.handleKeyDown}></textarea> */}
+                                <textarea className='hide-scroll input-place-holder form-control pt-3 pl-3 mb-5 mt-3' style={LineInputStyle} onChange={this.onChange} name="myVision" value={this.state.myVision} onKeyDown={this.handleKeyDown} placeholder="Enter Your Vision here..."></textarea>
 
                                 <Button
                                     className='green-style-btn mt-4'
@@ -127,7 +133,15 @@ class SetMyVisionModal extends Component {
         );
     }
 }
-
+const LineInputStyle = {
+    backgroundColor: 'rgba(0, 0, 0, 0)',
+    border: 'none',
+    borderBottom: '1px solid rgba(255, 255, 255, 0.411)',
+    borderRadius: '1px',
+    marginTop: '-9px',
+    width: '350px',
+    margin: '0 auto'
+};
 const mapStateToProps = state => ({
     auth: state.auth,
     setting: state.setting,
@@ -137,5 +151,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { editSetting, clearMsgs, clearErrors }
+    { loadSetting, editSetting, clearMsgs, clearErrors }
 )(SetMyVisionModal);

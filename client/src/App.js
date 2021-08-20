@@ -11,8 +11,7 @@ import AppNavbar from './components/AppNavbar';
 import Footer from './components/Footer';
 import Main from './components/Main';
 import Over13 from './components/Over13';
-import SetAttHeaderModal from './components/SetAttHeaderModal';
-import SetBgImageModal from './components/SetBgImageModal';
+import SiteSetting from './components/setting/SiteSetting';
 import ScrollUpButton from "react-scroll-up-button";
 
 class App extends Component {
@@ -45,13 +44,7 @@ class App extends Component {
       backgroundPosition: 'bottom left',
     };
   };
-  adminBtns = () => {
-    return {
-      display: 'flex',
-      flexrap: 'wrap',
-      marginLeft: '8px'
-    }
-  };
+
   render() {
     return (
       <Provider store={store}>
@@ -62,10 +55,7 @@ class App extends Component {
             <div className="App" style={this.bgStyle()}>
               <BrowserRouter>
                 <AppNavbar />
-                <div style={this.adminBtns()}>
-                <SetAttHeaderModal />
-                <SetBgImageModal />
-                </div>
+                <SiteSetting />
                 <Main />
                 <ScrollUpButton />
                 <Footer />

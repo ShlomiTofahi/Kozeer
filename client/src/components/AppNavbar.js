@@ -181,7 +181,7 @@ class AppNavbar extends Component {
             <Fragment>
                 <header className='header'>
                     <div className='pt-3' style={{ backgroundImage: headerImage }}>
-                        <div style={{ maxWidth: String(window.innerWidth + 15.6) + 'px' }} className='row justify-content-between'>
+                        <div style={{ maxWidth: String(window.innerWidth -1) + 'px' }} className='row justify-content-between'>
                             {sliders && sliders.map((slider) => (
                                 <div key={slider} className='header-img-slider'>
                                     <Swiper
@@ -224,6 +224,9 @@ class AppNavbar extends Component {
                                         </NavItem>
                                         <NavItem>
                                             {this.link(navLink, '/manga', 'MANGA')}
+                                        </NavItem>
+                                        <NavItem>
+                                            {this.link(navLink, '/character', 'CHARACTER')}
                                         </NavItem>
                                         <NavItem>
                                             {this.link(navLink, '/my-vision', 'MY VISION')}

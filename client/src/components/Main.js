@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import ScrollToTop from './ScrollToTop';
 import About from './About';
 import MangaBook from './manga/MangaBook';
+import CharacterSwiper from './character/CharacterSwiper';
 import Posts from './post/AllPosts';
 import OnlyPosts from './post/OnlyPosts';
 import Post from './post/Post';
@@ -35,6 +36,7 @@ class Main extends Component {
                     <Route exact path='/manga' component={MangaBook} />
                     <Route exact path='/post' component={OnlyPosts} />
                     <Route exact path="/post/:id" component={Post} />
+                    <Route exact path='/character' component={CharacterSwiper} />
                     <Route exact path='/show-mangas' component={is_admin ? ShowMangas : MangaBook} />
                 </Switch>
             </main>
