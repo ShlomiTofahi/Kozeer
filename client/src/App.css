@@ -530,8 +530,8 @@ padding-right:15px; */
   background-repeat: no-repeat;
   background-position: 0 0;
   background-size: 100%;
-  width: 528px;  
-  height: 524px;
+  max-width: 528px;  
+  max-height: 524px;
 }
 .prop-imgs{
   background-repeat: no-repeat;
