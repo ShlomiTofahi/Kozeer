@@ -105,8 +105,6 @@ router.post('/edit/:id', auth, (req, res) => {
 router.delete('/:id', auth, (req, res) => {
     Manga.findById(req.params.id)
         .then(manga => {
-            console.log(manga)
-
             User.findById(req.user.id)
                 .select('-password')
                 .then(user => {

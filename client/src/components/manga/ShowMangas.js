@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { ListGroup, ListGroupItem, Button, Alert, Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { Collapse } from 'react-collapse';
+import axios from 'axios';
 
 import { getMangas, deleteManga } from '../../actions/mangaActions';
 import { getChapters, deleteChapter } from '../../actions/chapterActions';
@@ -19,6 +20,9 @@ class ShowMangas extends Component {
     state = {
         modal: false,
         Collapsetoggle: [],
+
+        chapterImage: '',
+        mangaImage: ''
     };
 
     static protoType = {
@@ -31,7 +35,7 @@ class ShowMangas extends Component {
         clearErrors: PropTypes.func.isRequired,
         clearMsgs: PropTypes.func.isRequired,
         getMangas: PropTypes.func.isRequired,
-        deleteManga: PropTypes.func.isRequired
+        deleteManga: PropTypes.func.isRequired,
     }
 
     componentDidMount() {
@@ -40,13 +44,33 @@ class ShowMangas extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        const { error } = this.props;
+        const { error, msg } = this.props;
         if (error !== prevProps.error) {
             // Check for register error
             if (error.id === 'DELETE_FAIL') {
                 this.setState({ msg: error.msg, modal: true });
             } else {
                 this.setState({ msg: null, modal: false });
+            }
+        }
+
+        if (msg && msg.id === 'DELETE_CHAPTER_SUCCESS') {
+            const filepath = this.state.chapterImage;
+            if (filepath !== '') {
+                const formData = new FormData();
+                formData.append('filepath', filepath);
+                console.log("*remove onDeleteChapterClick");
+                axios.post('/remove', formData);
+            }
+        }
+
+        if (msg && msg.id === 'DELETE_MANGA_SUCCESS') {
+            const filepath = this.state.mangaImage;
+            if (filepath !== '') {
+                const formData = new FormData();
+                formData.append('filepath', filepath);
+                console.log("*remove onDeleteMangaClick");
+                axios.post('/remove', formData);
             }
         }
     }
@@ -63,12 +87,13 @@ class ShowMangas extends Component {
         }
     }
 
-    onDeleteChapterClick = (id) => {
+    onDeleteChapterClick = (id, chapterImage) => {
+        this.setState({ chapterImage })
         this.props.deleteChapter(id);
     }
 
-    onDeleteMangaClick = (id) => {
-        
+    onDeleteMangaClick = (id, mangaImage) => {
+        this.setState({ mangaImage })
         this.props.deleteManga(id);
     }
 
@@ -110,7 +135,7 @@ class ShowMangas extends Component {
                     <div align='center' style={bodyStyle}>
                         <div className='chapter-list position-relative mx-4 py-3 px-5'>
                             <AddChapterModal />
-                            {chapters && chapters.map(({ _id, name, mangas }, index) => (
+                            {chapters && chapters.map(({ _id, name, mangas, chapterImage }, index) => (
                                 <Fragment key={_id}>
                                     <span className='chapter-item'>
                                         <Button
@@ -120,8 +145,8 @@ class ShowMangas extends Component {
                                             onClick={this.CollapseHangdle.bind(this, name)}
                                             style={{ marginBottom: '1rem', opacity: '0.7' }}
                                         >{name}<strong className='pr-3' style={{ position: 'absolute', right: '0' }}>{dropDownSymbolList[index].name}</strong></Button>
-                                        <button onClick={this.onDeleteChapterClick.bind(this, _id)} className="chapter-delete-btn">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
+                                        <button onClick={this.onDeleteChapterClick.bind(this, _id, chapterImage)} className="chapter-delete-btn">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
                                                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
                                                 <path fillRule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
                                             </svg>
@@ -135,19 +160,19 @@ class ShowMangas extends Component {
                                         <div className="scrolling-box manga-scrolling-box mt-2">
                                             <ListGroup className="manga-list">
                                                 <TransitionGroup className='pt-3 pb-3'>
-                                                    {mangas && mangas.sort((a, b) => Number(a.page.substring(4)) - Number(b.page.substring(4))).map(({ _id: mangaid, page, inuse }) => (
-                                                            <CSSTransition key={mangaid} timeout={500} classNames='fade'>
-                                                                <ListGroupItem className={'manga-item ' + (inuse ? 'minus' : 'plus')}>
-                                                                    <span>{page}</span>
-                                                                    <button onClick={this.onDeleteMangaClick.bind(this, mangaid)} className="delete-btn">
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
-                                                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
-                                                                            <path fillRule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
-                                                                        </svg>
-                                                                    </button>
-                                                                    <EditMangaModal mangaID={mangaid} />
-                                                                </ListGroupItem>
-                                                            </CSSTransition>
+                                                    {mangas && mangas.sort((a, b) => Number(a.page.substring(4)) - Number(b.page.substring(4))).map(({ _id: mangaid, page, inuse, mangaImage }) => (
+                                                        <CSSTransition key={mangaid} timeout={500} classNames='fade'>
+                                                            <ListGroupItem className={'manga-item ' + (inuse ? 'minus' : 'plus')}>
+                                                                <span>{page}</span>
+                                                                <button onClick={this.onDeleteMangaClick.bind(this, mangaid, mangaImage)} className="delete-btn">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
+                                                                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                                                                        <path fillRule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                                                                    </svg>
+                                                                </button>
+                                                                <EditMangaModal mangaID={mangaid} />
+                                                            </ListGroupItem>
+                                                        </CSSTransition>
                                                     ))}
                                                 </TransitionGroup>
                                             </ListGroup>

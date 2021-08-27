@@ -136,6 +136,10 @@ export const editPost = (id, post, prevMangas) => (dispatch, getState) => {
                 payload: res.data
             })
             dispatch({
+                type: GET_POST_BY_ID,
+                payload: res.data
+            })
+            dispatch({
                 type: EDIT_CHAPTER_FROM_POST_EDIT,
                 payload: { newMangas: post.mangasSelected, prevMangas }
             })
@@ -158,6 +162,9 @@ export const deletePost = (id) => (dispatch, getState) => {
     axios
         .delete(`/api/posts/${id}`, tokenConfig(getState))
         .then(res => {
+            dispatch(
+                returnMsgs('The post deleted successfully', null, 'DELETE_POST_SUCCESS')
+            );
             dispatch({
                 type: DELETE_POST,
                 payload: id

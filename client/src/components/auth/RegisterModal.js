@@ -81,8 +81,10 @@ class RegisterModal extends Component {
     }
 
     setRegisterModalStates = (val) => {
-        if (val !== '')
+        if (val !== ''){
             this.setState({ profileImage: val });
+            this.props.setProfileImage(val);
+        }
     }
 
     close = () => {

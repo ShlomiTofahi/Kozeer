@@ -85,11 +85,15 @@ export const getUsers = () => (dispatch, getState) => {
 export const deleteUser = (id) => (dispatch, getState) => {
   axios
     .delete(`/api/users/${id}`, tokenConfig(getState))
-    .then(res =>
+    .then(res => {
+      dispatch(
+        returnMsgs('User deleted successfully', null, 'DELETE_USER_SUCCESS')
+      );
       dispatch({
         type: DELETE_USER,
         payload: id
-      }))
+      })
+    })
     .catch(err =>
       dispatch(returnErrors(err.response.data, err.response.status))
     );

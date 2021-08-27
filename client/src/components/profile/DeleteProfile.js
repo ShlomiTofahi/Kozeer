@@ -20,7 +20,9 @@ class DeleteProfile extends Component {
         visible: true,
 
         msg: null,
-        msgAlert: ''
+        msgAlert: '',
+
+        profileImage:''
     };
 
     static protoType = {
@@ -29,6 +31,21 @@ class DeleteProfile extends Component {
         error: PropTypes.object.isRequired,
         deleteUser: PropTypes.func.isRequired,
         logout: PropTypes.func.isRequired
+    }
+
+    componentDidUpdate(prevProps) {
+        const { msg } = this.props;
+
+        if (msg && msg.id === 'DELETE_USER_SUCCESS') {
+            const noImageFullpath = this.state.path + 'no-image.png';
+            const filepath = this.state.profileImage;
+            if (filepath !== '' && filepath !== noImageFullpath) {
+                const formData = new FormData();
+                formData.append('filepath', filepath);
+                console.log("*remove DeleteProfile");
+                axios.post('/remove', formData);
+            }
+        }
     }
 
     onChange = e => {
@@ -41,17 +58,18 @@ class DeleteProfile extends Component {
         const { user } = this.props.auth;
 
         if (confirm) {
+            this.setState({profileImage:user.profileImage})
             this.props.deleteUser(user.id);
             this.props.logout();
-            const noImageFullpath = this.state.path + 'no-image.png';
-            const filepath = user.petImage;
-            if (filepath !== '' && filepath !== noImageFullpath) {
-                const formData = new FormData();
-                formData.append('filepath', filepath);
+            // const noImageFullpath = this.state.path + 'no-image.png';
+            // const filepath = user.profileImage;
+            // if (filepath !== '' && filepath !== noImageFullpath) {
+            //     const formData = new FormData();
+            //     formData.append('filepath', filepath);
 
-                console.log("*remove DeleteProfile");
-                axios.post('/remove', formData);
-            }
+            //     console.log("*remove DeleteProfile");
+            //     axios.post('/remove', formData);
+            // }
             this.setState({ redirect: '/' });
 
         } else {

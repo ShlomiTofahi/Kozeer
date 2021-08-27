@@ -3,6 +3,7 @@ import { Button, Modal, ModalHeader, ModalBody, Collapse, Form, FormGroup, Label
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 import { login } from '../../actions/authActions';
 import { clearErrors } from '../../actions/errorActions';
@@ -21,7 +22,9 @@ class LoginModal extends Component {
         registerfadeIn: false,
         restPassfadeIn: false,
 
-        hover: ''
+        hover: '',
+
+        profileImage: ''
     };
 
     static propTypes = {
@@ -130,16 +133,10 @@ class LoginModal extends Component {
             hover: ''
         });
     }
-
-    close = () => {
-        this.setState((state) => ({
-            signUpfadeIn: true,
-            signInfadeIn: false,
-            logInfadeIn: false,
-            registerfadeIn: false,
-            restPassfadeIn: false,
-        }))
+    setProfileImage = (profileImage) => {
+        this.setState({profileImage})
     }
+
 
     navTextColorsStyle = () => {
         const { setting } = this.props.setting;
@@ -159,6 +156,26 @@ class LoginModal extends Component {
             color: textColor
         };
     };
+
+    close = () => {
+        const noImageFullpath = this.state.path + 'no-image.png';
+        const filepath = this.state.profileImage
+        if (filepath !== '' && filepath !== noImageFullpath) {
+            const formData = new FormData();
+            formData.append('filepath', filepath);
+            console.log("*remove registerModal");
+            axios.post('/remove', formData);
+            this.setState({ profileImage: '' });
+        }
+
+        this.setState((state) => ({
+            signUpfadeIn: true,
+            signInfadeIn: false,
+            logInfadeIn: false,
+            registerfadeIn: false,
+            restPassfadeIn: false,
+        }))
+    }
 
     render() {
 
@@ -192,7 +209,7 @@ class LoginModal extends Component {
                     <Collapse isOpen={this.state.registerfadeIn}>
                         <ModalHeader style={{ fontFamily: "'Indie Flower', Kimberly Geswein" }} cssModule={{ 'modal-title': 'w-100 text-center' }} toggle={this.toggle}><span style={{ 'fontSize': '30px' }} >Register</span></ModalHeader>
                         <div style={{ maxWidth: '250px' }}>
-                            <RegisterModal />
+                            <RegisterModal setProfileImage={this.setProfileImage} />
                         </div>
                     </Collapse>
                     <Collapse isOpen={this.state.restPassfadeIn}>

@@ -363,7 +363,7 @@ class EditPostModal extends Component {
           toggle={this.toggle}
           onClosed={this.close}
         >
-          <ModalHeader cssModule={{ 'modal-title': 'w-100 text-center' }} toggle={this.toggle} ><span className="lead">Create Post</span></ModalHeader>
+          <ModalHeader cssModule={{ 'modal-title': 'w-100 text-center' }} toggle={this.toggle} ><span className="lead">Edit Post</span></ModalHeader>
           <ModalBody>
             {this.state.msg ? <Alert color="danger">{this.state.msg}</Alert> : null}
             <Form onSubmit={this.onSubmit}>
@@ -445,7 +445,7 @@ class EditPostModal extends Component {
                   color='dark'
                   style={{ marginTop: '2rem' }}
                   block
-                >Create</Button>
+                >Save</Button>
               </FormGroup>
             </Form>
           </ModalBody>

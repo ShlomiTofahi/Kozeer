@@ -17,7 +17,7 @@ class EditCharacterModal extends Component {
         avatarImage: '',
         name: '',
         description: '',
-
+        charId: '',
         prevImage: '',
         imageSubmited: false,
         removedOrginalImageAndNotSave: false,
@@ -35,17 +35,17 @@ class EditCharacterModal extends Component {
 
     componentDidMount() {
         const { character } = this.props.character;
-        console.log({ "edirchar": character })
 
         this.setState({
+            charId: character._id,
             name: character.name,
             description: character.description,
             avatarImage: character.avatarImage,
-            prevImage: character.avatarImage
+            prevImage: character.avatarImage,
         });
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps, prevState) {
         const { error, msg } = this.props;
         const { character } = this.props.character;
 
@@ -58,17 +58,19 @@ class EditCharacterModal extends Component {
             }
         }
 
-        // if (character !== prevProps.character) {
-        //     // Check for edit error
-        //     if (msg.id === 'GET_CHARACTER_SUCCESS') {
-        //         this.setState({ 
-        //             name: character.name,
-        //             description: character.description,
-        //             avatarImage: character.avatarImage,
-        //             prevImage: character.avatarImage
-        //         });
-        //     } 
-        // }
+        if (character !== prevProps.character) {
+            if (this.state.charId !== character._id ) {
+                if (msg.id === 'GET_CHARACTER_SUCCESS') {
+                    this.setState({
+                        charId:character._id,
+                        name: character.name,
+                        description: character.description,
+                        avatarImage: character.avatarImage,
+                        prevImage: character.avatarImage
+                    });
+                }
+            }
+        }
 
         //If edited, close modal
         if (this.state.modal) {
@@ -163,7 +165,7 @@ class EditCharacterModal extends Component {
         const { character } = this.props.character;
 
         const filepath = this.state.avatarImage
-        if (!this.state.imageSubmited && filepath !== this.state.prevImage) {
+        if (!this.state.imageSubmited && character.avatarImage !==this.state.prevImage && filepath !== this.state.prevImage) {
             const formData = new FormData();
             formData.append('filepath', filepath);
 

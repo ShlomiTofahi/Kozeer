@@ -21,8 +21,6 @@ router.post('/', auth, (req, res) => {
     const { myVision, headerColorText, headerHoverColorText, headerColorTop, headerColorBottom,
         headerImage, bgImage, coverBookImage } = req.body;
 
-    console.log({myVision, headerColorText, headerHoverColorText, headerColorTop, headerColorBottom,
-        headerImage, bgImage, coverBookImage });
     User.findById(req.user.id).then(user => {
         if (!user.admin) {
             return res.status(400).json({ msg: 'No permission' });

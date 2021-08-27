@@ -63,25 +63,29 @@ class Post extends Component {
     this.props.getPostComments(this.props.match.params.id)
   }
 
+  componentDidUpdate(prevProps) {
+    const { msg } = this.props;
+
+    if (msg && msg.id === 'DELETE_POST_SUCCESS') {
+      const filepath = this.state.postImage;
+      if (filepath !== '') {
+        const formData = new FormData();
+        formData.append('filepath', filepath);
+        console.log("*remove onDeletePostClick");
+        axios.post('/remove', formData);
+      }
+    }
+  }
+
   order = (order) => {
     if (order === -1 || order === 1)
       this.props.getPostComments(this.props.match.params.id, order)
   }
 
   onDeletePostClick = (id, postImage) => {
+    this.setState({ postImage });
     this.props.deletePost(id);
-
-    const noImageFullpath = this.state.path + 'no-image.png';
-    const filepath = postImage;
-    if (filepath !== '' && filepath !== noImageFullpath) {
-      const formData = new FormData();
-      formData.append('filepath', filepath);
-
-      console.log("*remove Post");
-      axios.post('/remove', formData);
-    }
     this.setState({ redirect: '/' });
-
   }
 
   handleClickPost = (id) => {
@@ -134,7 +138,7 @@ class Post extends Component {
 
     // Get the <span> element that closes the modal
     var span = document.getElementsByClassName("close")[0];
-    debugger;
+
     // When the user clicks on <span> (x), close the modal
     span.onclick = function () {
       modal.style.display = "none";
@@ -243,7 +247,7 @@ class Post extends Component {
                 }
                 {window.innerWidth >= 992 ?
                   <Fragment>
-                      <hr />
+                    <hr />
                     <Row className="d-flex justify-content-center">
                       <FacebookShareButton
                         url={`${url}`}
@@ -444,107 +448,107 @@ class Post extends Component {
                 }
               </Container>
             </div>
-              <PostSuggestions />
-              <div className='mb-4 mt-5 mx-2' style={postBodyStyle}>
-                <ShowComments postID={this.props.match.params.id} order={this.order} />
-              </div>
-              <div id="myModal" className="manga-modal">
-                <button onClick={this.exitImg} className="close">&times;</button>
-                <img className="modal-content" id="img01" alt="" />
-                <div id="caption"></div>
-              </div>
+            <PostSuggestions />
+            <div className='mb-4 mt-5 mx-2' style={postBodyStyle}>
+              <ShowComments postID={this.props.match.params.id} order={this.order} />
+            </div>
+            <div id="myModal" className="manga-modal">
+              <button onClick={this.exitImg} className="close">&times;</button>
+              <img className="modal-content" id="img01" alt="" />
+              <div id="caption"></div>
+            </div>
           </Container>
         </div>
       </Fragment>
-        );
+    );
   }
 }
 
-        const postFrameStyle = {
-          margin: '0 auto',
-        backgroundColor: '#221415dc',
+const postFrameStyle = {
+  margin: '0 auto',
+  backgroundColor: '#221415dc',
   width: window.innerWidth >= 992 ? '65%' : "90%"
 };
-        const postBodyStyle = {
-          background: "white",
-        paddingBottom: "10px",
-        padding: "0",
-        border: '5px solid #730104'
+const postBodyStyle = {
+  background: "white",
+  paddingBottom: "10px",
+  padding: "0",
+  border: '5px solid #730104'
 };
-        const postHeaderStyle = {
-          backgroundColor: '#7301056e',
+const postHeaderStyle = {
+  backgroundColor: '#7301056e',
 }
-        const postSearchStyle = {
-          textAlign: 'right',
-        margin: '15px',
-        paddingRight: '10px'
+const postSearchStyle = {
+  textAlign: 'right',
+  margin: '15px',
+  paddingRight: '10px'
 }
-        const kozeerProfileImgStyle = {
-          borderRadius: '50%',
-        width: '25px',
-        height: '25px',
-        marginRight: '5px',
+const kozeerProfileImgStyle = {
+  borderRadius: '50%',
+  width: '25px',
+  height: '25px',
+  marginRight: '5px',
 }
-        const crownProfileImgStyle = {
-          width: '15px',
-        marginTop: '0px'
+const crownProfileImgStyle = {
+  width: '15px',
+  marginTop: '0px'
 }
-        const kozeerTextStyle = {
-          fontSize: '14px',
-        marginRight: '1.5px',
-        color: 'black'
+const kozeerTextStyle = {
+  fontSize: '14px',
+  marginRight: '1.5px',
+  color: 'black'
 }
-        const timeTextStyle = {
-          fontSize: '11px',
+const timeTextStyle = {
+  fontSize: '11px',
 }
-        const dotStyle = {
-          fontSize: '10px',
+const dotStyle = {
+  fontSize: '10px',
 }
-        const bodyStyle = {
-          overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        display: '-webkit-box',
-        WebkitLineClamp: '2',
-        WebkitBoxOrient: 'vertical',
-        fontSize: '14px',
+const bodyStyle = {
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  display: '-webkit-box',
+  WebkitLineClamp: '2',
+  WebkitBoxOrient: 'vertical',
+  fontSize: '14px',
 }
-        const titleStyle = {
-          overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        display: '-webkit-box',
-        WebkitLineClamp: '1',
-        WebkitBoxOrient: 'vertical',
-        fontFamily: "'Brawler', Cyreal",
-        fontSize: window.innerWidth / 35 + 'px',
-        color: 'black',
-        opacity: '0.8'
+const titleStyle = {
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  display: '-webkit-box',
+  WebkitLineClamp: '1',
+  WebkitBoxOrient: 'vertical',
+  fontFamily: "'Brawler', Cyreal",
+  fontSize: window.innerWidth / 35 + 'px',
+  color: 'black',
+  opacity: '0.8'
 }
-        const postLovedStyle = {
-          position: 'absolute',
-        right: '0'
+const postLovedStyle = {
+  position: 'absolute',
+  right: '0'
 }
-        const postFooterStyle = {
-          display: 'block',
-        marginTop: '-6px',
-        fontSize: '13px'
+const postFooterStyle = {
+  display: 'block',
+  marginTop: '-6px',
+  fontSize: '13px'
 }
-        const postImgStyle = {
-          backgroundSize: 'contain',
-        objectFit: 'cover',
-        backgroundPosition: 'top',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        display: 'block',
-        width: '90%',
+const postImgStyle = {
+  backgroundSize: 'contain',
+  objectFit: 'cover',
+  backgroundPosition: 'top',
+  marginLeft: 'auto',
+  marginRight: 'auto',
+  display: 'block',
+  width: '90%',
 }
 
 const mapStateToProps = state => ({
-          post: state.post,
-        comment: state.comment,
-        auth: state.auth,
+  post: state.post,
+  comment: state.comment,
+  auth: state.auth,
 });
 
-        export default connect(
-        mapStateToProps,
-        { deletePost, viewsPost, lovedPost, unlovedPost, getPostComments, getPostById }
-        )(Post);
+export default connect(
+  mapStateToProps,
+  { deletePost, viewsPost, lovedPost, unlovedPost, getPostComments, getPostById }
+)(Post);

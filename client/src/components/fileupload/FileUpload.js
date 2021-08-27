@@ -82,6 +82,7 @@ const FileUpload = (props) => {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('filename', filename);
+    formData.append('abspath', props.path);
 
     try {
       const res = await axios.post('/upload', formData, {
@@ -210,9 +211,9 @@ const FileUpload = (props) => {
           }
         }}
       />
-
+      
       {message ? <Message msg={message} /> : null}
-
+      
       <form>
         <div className='custom-file mb-4'>
           <input

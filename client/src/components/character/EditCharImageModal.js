@@ -34,7 +34,6 @@ class EditCharImageModal extends Component {
     componentDidMount() {
 
         const { character } = this.props.character;
-        console.log({"edircharimg":character})
         this.setState({
             charImage: character.charImage,
             prevImage: character.charImage
@@ -43,12 +42,25 @@ class EditCharImageModal extends Component {
 
     componentDidUpdate(prevProps) {
         const { error, msg } = this.props;
+        const { character } = this.props.character;
+
         if (error !== prevProps.error) {
             // Check for edit error
             if (error.id === 'EDIT_CHARACTER_FAIL') {
                 this.setState({ msg: error.msg });
             } else {
                 this.setState({ msg: null });
+            }
+        }
+
+        if (character !== prevProps.character) {
+            if (this.state.charImage !== character.charImage ) {
+                if (msg.id === 'GET_CHARACTER_SUCCESS') {
+                    this.setState({
+                        charImage: character.charImage,
+                        prevImage: character.charImage
+                    });
+                }
             }
         }
 
@@ -141,7 +153,7 @@ class EditCharImageModal extends Component {
         const { character } = this.props.character;
 
         const filepath = this.state.charImage
-        if (!this.state.imageSubmited && filepath !== this.state.prevImage) {
+        if (!this.state.imageSubmited && character.charImage !==this.state.charImage && filepath !== this.state.prevImage) {
             const formData = new FormData();
             formData.append('filepath', filepath);
 

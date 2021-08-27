@@ -82,6 +82,9 @@ export const deleteManga = (id) => (dispatch, getState) => {
     axios
         .delete(`/api/mangas/${id}`, tokenConfig(getState))
         .then(res => {
+            dispatch(
+                returnMsgs('Manga deleted successfully', null, 'DELETE_MANGA_SUCCESS')
+            );
             dispatch({
                 type: DELETE_MANGA,
                 payload: id

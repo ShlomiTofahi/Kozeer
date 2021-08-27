@@ -80,11 +80,15 @@ export const editChapter = (id, chapter) => (dispatch, getState) => {
 export const deleteChapter = (id) => (dispatch, getState) => {
     axios
         .delete(`/api/chapters/${id}`, tokenConfig(getState))
-        .then(res =>
+        .then(res => {
+            dispatch(
+                returnMsgs('Chapter deleted successfully', null, 'DELETE_CHAPTER_SUCCESS')
+            );
             dispatch({
                 type: DELETE_CHAPTER,
                 payload: id
-            }))
+            })
+        })
         .catch(err => {
             dispatch(returnErrors(err.response.data.msg, err.response.status, 'DELETE_FAIL'));
             dispatch({

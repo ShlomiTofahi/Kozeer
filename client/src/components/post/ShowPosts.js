@@ -19,16 +19,33 @@ class ShowPosts extends Component {
   state = {
     path: '/uploads/posts/',
     modal: false,
-    lovedcicked: false
+    lovedcicked: false,
+
+    postImage:''
   };
 
   static protoType = {
     auth: PropTypes.object,
     error: PropTypes.object,
+    msg: PropTypes.object,
     viewsPost: PropTypes.func.isRequired,
     lovedPost: PropTypes.func.isRequired,
     unlovedPost: PropTypes.func.isRequired,
     deletePost: PropTypes.func.isRequired
+  }
+
+  componentDidUpdate(prevProps) {
+    const { msg } = this.props;
+
+    if (msg && msg.id === 'DELETE_POST_SUCCESS') {
+      const filepath = this.state.postImage;
+      if (filepath !== '') {
+        const formData = new FormData();
+        formData.append('filepath', filepath);
+        console.log("*remove onDeletePostClick 2");
+        axios.post('/remove', formData);
+      }
+    }
   }
 
   handleClickPost = (id) => {
@@ -42,17 +59,8 @@ class ShowPosts extends Component {
   }
 
   onDeleteClick = (id, postImage) => {
+    this.setState({ postImage });
     this.props.deletePost(id);
-
-    const noImageFullpath = this.state.path + 'no-image.png';
-    const filepath = postImage;
-    if (filepath !== '' && filepath !== noImageFullpath) {
-      const formData = new FormData();
-      formData.append('filepath', filepath);
-
-      console.log("*remove ShowPosts");
-      axios.post('/remove', formData);
-    }
   }
   onLovedClick = (id) => {
     var lovedPostList = localStorage.getItem('lovedPostList');
@@ -263,6 +271,7 @@ const postLovedStyle = {
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
+  msg: state.msg,
   error: state.error
 });
 

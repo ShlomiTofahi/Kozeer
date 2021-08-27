@@ -28,6 +28,7 @@ class SetBgImageModal extends Component {
         auth: PropTypes.object.isRequired,
         error: PropTypes.object.isRequired,
         msg: PropTypes.object.isRequired,
+        setting: PropTypes.object.isRequired,
         clearErrors: PropTypes.func.isRequired,
         clearMsgs: PropTypes.func.isRequired,
         editSetting: PropTypes.func.isRequired,

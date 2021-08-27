@@ -111,7 +111,7 @@ class Character extends Component {
         this.props.deletePropCharacter(id, propImg);
     }
 
-    onDeletePostClick = () => {
+    onDeleteCharacterClick = () => {
         const { character } = this.props.character;
         this.setState({
             avatarImage: character.avatarImage,
@@ -212,7 +212,7 @@ class Character extends Component {
                                 size='sm'
                                 color='danger'
                                 style={{ marginBottom: '2rem' }}
-                                onClick={this.onDeletePostClick} >
+                                onClick={this.onDeleteCharacterClick} >
                                 Delete Character
                             </Button>
                         }
