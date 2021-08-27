@@ -192,18 +192,21 @@ class AddCharacterModal extends Component {
 
                                 <Collapse isOpened={this.state.name !== ''}>
                                     <small className='pt-3' style={{ color: '#76735c' }}><Label>Avatar Image:</Label></small>
-                                    <FileUpload
-                                        setRegisterModalStates={this.setRegisterModalAvatarImageStates}
-                                        path={this.state.path + this.state.name?.replaceAll(' ', '_') + '/'}
-                                        currImage={noImageFullpath}
-                                    />
-
+                                    {this.state.name !== '' &&
+                                        <FileUpload
+                                            setRegisterModalStates={this.setRegisterModalAvatarImageStates}
+                                            path={this.state.path + this.state.name?.replaceAll(' ', '_') + '/'}
+                                            currImage={noImageFullpath}
+                                        />
+                                    }
                                     <small className='pt-3' style={{ color: '#76735c' }}><Label>Character Image:</Label></small>
-                                    <FileUpload
-                                        setRegisterModalStates={this.setRegisterModalCharImageStates}
-                                        path={this.state.path + this.state.name?.replaceAll(' ', '_') + '/'}
-                                        currImage={noImageFullpath}
-                                    />
+                                    {this.state.name !== '' &&
+                                        <FileUpload
+                                            setRegisterModalStates={this.setRegisterModalCharImageStates}
+                                            path={this.state.path + this.state.name?.replaceAll(' ', '_') + '/'}
+                                            currImage={noImageFullpath}
+                                        />
+                                    }
                                 </Collapse>
 
                                 <Button

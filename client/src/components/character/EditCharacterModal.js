@@ -240,7 +240,7 @@ class EditCharacterModal extends Component {
                                 <input className='input-place-holder form-control pt-3 pl-3 mb-5 mt-3' defaultValue={this.state.name} style={LineInputStyle} onChange={this.onChange} type="text" name='name' placeholder="Enter name..." />
 
                                 <textarea className='hide-scroll input-place-holder form-control pt-3 pl-3 mb-5 mt-3' style={LineInputStyle} onChange={this.onChange} name="description" value={this.state.description} onKeyDown={this.handleKeyDown} placeholder="Enter Your description here..."></textarea>
-
+                                {this.state.name !== '' &&
                                 <FileUpload
                                     payload={payload}
                                     setRegisterModalStates={this.setRegisterModalStates}
@@ -251,7 +251,7 @@ class EditCharacterModal extends Component {
                                     removedOrginalImageAndNotSave={this.removedOrginalImageAndNotSave}
                                     removedOrginalItemImage={this.removedOrginalImage}
                                 />
-
+                                }
                                 <Button
                                     className='green-style-btn mt-4'
                                     size="sm"

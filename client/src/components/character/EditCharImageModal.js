@@ -217,18 +217,18 @@ class EditCharImageModal extends Component {
                             {this.state.msg ? <Alert color="danger">{this.state.msg}</Alert> : null}
                             <Form onSubmit={this.onSubmit}>
                                 <FormGroup>
-
-                                    <FileUpload
-                                        payload={payload}
-                                        setRegisterModalStates={this.setRegisterModalStates}
-                                        path={this.state.path + character.name?.replaceAll(' ', '_') + '/'}
-                                        currImage={this.state.charImage}
-                                        prevImage={this.state.prevImage}
-                                        imageSaved={this.state.imageSubmited}
-                                        removedOrginalImageAndNotSave={this.removedOrginalImageAndNotSave}
-                                        removedOrginalItemImage={this.removedOrginalImage}
-                                    />
-
+                                    {character.name &&
+                                        <FileUpload
+                                            payload={payload}
+                                            setRegisterModalStates={this.setRegisterModalStates}
+                                            path={this.state.path + character.name?.replaceAll(' ', '_') + '/'}
+                                            currImage={this.state.charImage}
+                                            prevImage={this.state.prevImage}
+                                            imageSaved={this.state.imageSubmited}
+                                            removedOrginalImageAndNotSave={this.removedOrginalImageAndNotSave}
+                                            removedOrginalItemImage={this.removedOrginalImage}
+                                        />
+                                    }
                                     <Button
                                         className='green-style-btn mt-4'
                                         size="sm"
