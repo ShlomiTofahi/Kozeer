@@ -71,6 +71,7 @@ class Character extends Component {
                 axios.post('/remove', formData);
                 this.setState({ charImage: '' });
             }
+            debugger;
             if (this.state.propImages && this.state.propImages.length) {
                 for (const propImage of this.state.propImages) {
                     if (propImage !== '') {
@@ -118,7 +119,7 @@ class Character extends Component {
         this.setState({
             avatarImage: character.avatarImage,
             charImage: character.charImage,
-            proImages: character.proImages,
+            propImages: character.propImages,
         })
 
         this.props.deleteCharacter(character._id);

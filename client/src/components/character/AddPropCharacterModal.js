@@ -111,6 +111,7 @@ class AddPropCharacterModal extends Component {
         const noImageFullpath = this.state.path + 'no-image.png';
         const { isAuthenticated, user } = this.props.auth;
         const is_admin = (isAuthenticated && user.admin);
+        const { character } = this.props.character;
 
         return (
             <div>
@@ -122,41 +123,43 @@ class AddPropCharacterModal extends Component {
                         onClick={this.toggle}
                     >Add Prop Character</Button>
                     : null}
+                {
+                    character &&
+                    <Modal
+                        align="right"
+                        isOpen={this.state.modal}
+                        toggle={this.toggle}
+                        onClosed={this.close}
+                        className="dark-modal"
+                    >
+                        <ModalHeader cssModule={{ 'modal-title': 'w-100 text-center' }} toggle={this.toggle} ><span className="lead">Add Character</span></ModalHeader>
 
-                <Modal
-                    align="right"
-                    isOpen={this.state.modal}
-                    toggle={this.toggle}
-                    onClosed={this.close}
-                    className="dark-modal"
-                >
-                    <ModalHeader cssModule={{ 'modal-title': 'w-100 text-center' }} toggle={this.toggle} ><span className="lead">Add Character</span></ModalHeader>
+                        <ModalBody>
+                            {this.state.msg ? <Alert color="danger">{this.state.msg}</Alert> : null}
 
-                    <ModalBody>
-                        {this.state.msg ? <Alert color="danger">{this.state.msg}</Alert> : null}
+                            <Form onSubmit={this.onSubmit}>
+                                <FormGroup>
 
-                        <Form onSubmit={this.onSubmit}>
-                            <FormGroup>
-
-                                <small className='pt-3' style={{ color: '#76735c' }}><Label>Character prop Image:</Label></small>
-                                {this.props?.character?.character?.name &&
-                                    <FileUpload
-                                        setRegisterModalStates={this.setRegisterModalStates}
-                                        path={this.state.path + this.props?.character?.character?.name?.replaceAll(' ', '_') + '/props/'}
-                                        currImage={noImageFullpath}
-                                    />
-                                }
-                                <Button
-                                    className='green-style-btn mt-4'
-                                    size="sm"
-                                    color='dark'
-                                    style={{ marginTop: '2rem' }}
-                                    block
-                                >Add</Button>
-                            </FormGroup>
-                        </Form>
-                    </ModalBody>
-                </Modal>
+                                    <small className='pt-3' style={{ color: '#76735c' }}><Label>Character prop Image:</Label></small>
+                                    {character.name &&
+                                        <FileUpload
+                                            setRegisterModalStates={this.setRegisterModalStates}
+                                            path={this.state.path + character?.name?.replaceAll(' ', '_') + '/props/'}
+                                            currImage={noImageFullpath}
+                                        />
+                                    }
+                                    <Button
+                                        className='green-style-btn mt-4'
+                                        size="sm"
+                                        color='dark'
+                                        style={{ marginTop: '2rem' }}
+                                        block
+                                    >Add</Button>
+                                </FormGroup>
+                            </Form>
+                        </ModalBody>
+                    </Modal>
+                }
             </div>
         );
     }
