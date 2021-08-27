@@ -51,6 +51,9 @@ class CharacterSwiper extends Component {
         this.props.getCharacterById(id)
         this.setState({ Collapsetoggle: true })
     }
+    TurnOffCollapseHangdle = () => {
+        this.setState({ Collapsetoggle: false })
+    }
 
     frameStyle = () => {
         return {
@@ -134,7 +137,7 @@ class CharacterSwiper extends Component {
                     </div>
                     <AddCharacterModal />
                     <Collapse isOpened={this.state.Collapsetoggle}>
-                        <Character />
+                        <Character TurnOffCollapseHangdle={this.TurnOffCollapseHangdle} />
                     </Collapse>
                 </div >
             </div >

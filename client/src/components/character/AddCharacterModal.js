@@ -64,6 +64,31 @@ class AddCharacterModal extends Component {
 
     onChange = e => {
         this.setState({ [e.target.name]: e.target.value });
+        if (e.target.name === 'name') {
+            const filepath_charImage = this.state.charImage;
+            const filepath_avatarImage = this.state.avatarImage;
+            if (filepath_charImage !== '') {
+                const formData = new FormData();
+                formData.append('filepath', filepath_charImage);
+
+                console.log("*remove AddCharacterModal onchange 1");
+                axios.post('/remove', formData);
+                this.setState({ charImage: '' });
+            }
+
+            if (filepath_avatarImage !== '') {
+                const formData = new FormData();
+                formData.append('filepath', filepath_avatarImage);
+
+                console.log("*remove AddCharacterModal onchange 2");
+                axios.post('/remove', formData);
+                this.setState({ avatarImage: '' });
+            }
+            this.setState({
+                avatarImage: '',
+                charImage: ''
+            })
+        }
     }
 
     onSubmit = e => {
@@ -169,14 +194,14 @@ class AddCharacterModal extends Component {
                                     <small className='pt-3' style={{ color: '#76735c' }}><Label>Avatar Image:</Label></small>
                                     <FileUpload
                                         setRegisterModalStates={this.setRegisterModalAvatarImageStates}
-                                        path={this.state.path+this.state.name?.replaceAll(' ', '_')+'/'}
+                                        path={this.state.path + this.state.name?.replaceAll(' ', '_') + '/'}
                                         currImage={noImageFullpath}
                                     />
 
                                     <small className='pt-3' style={{ color: '#76735c' }}><Label>Character Image:</Label></small>
                                     <FileUpload
                                         setRegisterModalStates={this.setRegisterModalCharImageStates}
-                                        path={this.state.path+this.state.name?.replaceAll(' ', '_') +'/'}
+                                        path={this.state.path + this.state.name?.replaceAll(' ', '_') + '/'}
                                         currImage={noImageFullpath}
                                     />
                                 </Collapse>

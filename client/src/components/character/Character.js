@@ -37,6 +37,7 @@ class Character extends Component {
         character: PropTypes.object.isRequired,
         msg: PropTypes.object.isRequired,
         getCharacters: PropTypes.func.isRequired,
+        deleteCharacter: PropTypes.func.isRequired,
         deletePropCharacter: PropTypes.func.isRequired,
     }
 
@@ -81,6 +82,7 @@ class Character extends Component {
                 }
                 this.setState({ propImages: [] });
             }
+            this.props?.TurnOffCollapseHangdle();
         }
     }
     onClickImg = (mangaImage, page) => {
@@ -223,13 +225,14 @@ class Character extends Component {
                                 {character.name}
                             </h2>
                         </legend>
-                        {character?.charImage !== '' &&
+                        {character?.charImage !== '' ?
                             <div className='hover-item'>
-                                <EditCharImageModal  />
+                                <EditCharImageModal />
                                 <CardImg bottom className="char-img" src={character?.charImage} onClick={this.onClickImg.bind(this, character?.charImage, '')} id="myImg" />
                             </div>
+                            : <EditCharImageModal noCharImage={true} />
                         }
-                        <div className="px-2 px-md-5" style={{ opacity: '0.7' }}>
+                        <div className="px-2 px-md-5 mt-3" style={{ opacity: '0.7' }}>
                             <p align="left" className='lead'> {att}</p>
                         </div>
                         <AddPropCharacterModal />
@@ -312,5 +315,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { getCharacters, deletePropCharacter }
+    { getCharacters, deletePropCharacter, deleteCharacter }
 )(Character);
