@@ -74,7 +74,6 @@ const FileUpload = (props) => {
       // (!props.currImage || props.currImage == noImageFullpath) && 
       const formData = new FormData();
       formData.append('filepath', filepath);
-      formData.append('abspath', props.path);
 
       console.log("*remove FileUpload 1");
       axios.post('/remove', formData);
@@ -83,7 +82,6 @@ const FileUpload = (props) => {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('filename', filename);
-    formData.append('abspath', props.path);
 
     try {
       const res = await axios.post('/upload', formData, {
@@ -136,7 +134,6 @@ const FileUpload = (props) => {
     if (filepath !== noImageFullpath) {
       const formData = new FormData();
       formData.append('filepath', filepath);
-      formData.append('abspath', props.path);
 
       console.log("*remove FileUpload 2");
       axios.post('/remove', formData);
@@ -163,7 +160,6 @@ const FileUpload = (props) => {
     if (filepath !== noImageFullpath) {
       const formData = new FormData();
       formData.append('filepath', filepath);
-      formData.append('abspath', props.path);
 
       console.log("*remove FileUpload 4");
       axios.post('/remove', formData);

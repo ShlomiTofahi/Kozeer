@@ -288,7 +288,7 @@ router.post('/filter', (req, res) => {
     const { title } = req.body;
 
     //Simple validation
-    if (title == null)
+    if (!title)
         return res.status(400).json({ msg: 'One or more field is missing' });
 
     if (!title || title == "") {

@@ -13,7 +13,7 @@ const CharacterSchema = new Schema({
         type: String,
         default: ''
     },
-    propImags: {
+    propImages: {
         type: [{
             type: String
         }],

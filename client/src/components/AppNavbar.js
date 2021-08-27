@@ -37,7 +37,7 @@ class AppNavbar extends Component {
 
     componentDidMount() {
         const { setting } = this.props.setting;
-        if(setting !==null){
+        if(!setting){
             this.props.loadSetting();
         }
       }
@@ -88,10 +88,10 @@ class AppNavbar extends Component {
         const { setting } = this.props.setting;
         let topColor = "#d959d5";
         let bottomColor = "#c213bd";
-        if (setting && setting?.headerColorTop !== null) {
+        if (setting && setting?.headerColorTop) {
             topColor = setting?.headerColorTop;
         }
-        if (setting && setting?.headerColorBottom !== null) {
+        if (setting && setting?.headerColorBottom) {
             bottomColor = setting?.headerColorBottom;
         }
         return {
@@ -103,14 +103,14 @@ class AppNavbar extends Component {
         const { setting } = this.props.setting;
         let linkStyle = {}
         let textColor = "#ffffff";
-        if (setting && setting?.headerColorText !== null) {
+        if (setting && setting?.headerColorText) {
             textColor = setting?.headerColorText;
         }
 
         if ((this.state.hover !== '' && this.state.hover === name) ||
             (this.state.active !== '' && this.state.active === name)) {
             textColor = "#21201f";
-            if (setting && setting?.headerHoverColorText !== null) {
+            if (setting && setting?.headerHoverColorText) {
                 textColor = setting?.headerHoverColorText;
             }
         }
@@ -142,7 +142,7 @@ class AppNavbar extends Component {
         const { isAuthenticated } = this.props.auth;
         const { setting } = this.props.setting;
         let headerImage = `url(${this.state.path}header_bg.png)`;
-        if (setting && setting?.headerImage !== null) {
+        if (setting && setting?.headerImage) {
             headerImage = `url(${setting?.headerImage})`;
         }
 

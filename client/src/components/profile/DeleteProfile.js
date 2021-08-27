@@ -48,7 +48,6 @@ class DeleteProfile extends Component {
             if (filepath !== '' && filepath !== noImageFullpath) {
                 const formData = new FormData();
                 formData.append('filepath', filepath);
-                formData.append('abspath', this.state.path);
 
                 console.log("*remove DeleteProfile");
                 axios.post('/remove', formData);

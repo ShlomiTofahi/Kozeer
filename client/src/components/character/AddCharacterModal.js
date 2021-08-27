@@ -14,14 +14,11 @@ class AddCharacterModal extends Component {
     state = {
         path: '/uploads/characters/',
         modal: false,
-        name: '',
-        description: '',
-        avatarImage: '',
-        charImage: ''
+        propImage: ''
     };
 
     static propTypes = {
-        isAuthenticated: PropTypes.bool,
+        auth: PropTypes.object.isRequired,
         error: PropTypes.object.isRequired,
         msg: PropTypes.object.isRequired,
         clearErrors: PropTypes.func.isRequired,
@@ -109,7 +106,6 @@ class AddCharacterModal extends Component {
         if (filepath_charImage !== '' && filepath_charImage !== noImageFullpath) {
             const formData = new FormData();
             formData.append('filepath', filepath_charImage);
-            formData.append('abspath', this.state.path);
 
             console.log("*remove AddCharacterModal 1");
             axios.post('/remove', formData);
@@ -119,7 +115,6 @@ class AddCharacterModal extends Component {
         if (filepath_avatarImage !== '' && filepath_avatarImage !== noImageFullpath) {
             const formData = new FormData();
             formData.append('filepath', filepath_avatarImage);
-            formData.append('abspath', this.state.path);
 
             console.log("*remove AddCharacterModal 2");
             axios.post('/remove', formData);
@@ -136,10 +131,12 @@ class AddCharacterModal extends Component {
 
     render() {
         const noImageFullpath = this.state.path + 'no-image.png';
+        const { isAuthenticated, user } = this.props.auth;
+        const is_admin = (isAuthenticated && user.admin);
 
         return (
             <div>
-                {this.props.isAuthenticated ?
+                {is_admin ?
                     <Button outline
                         // color='info'
                         size='sm'
@@ -172,14 +169,14 @@ class AddCharacterModal extends Component {
                                     <small className='pt-3' style={{ color: '#76735c' }}><Label>Avatar Image:</Label></small>
                                     <FileUpload
                                         setRegisterModalStates={this.setRegisterModalAvatarImageStates}
-                                        path={this.state.path+this.state.name+'/'}
+                                        path={this.state.path+this.state.name?.replaceAll(' ', '_')+'/'}
                                         currImage={noImageFullpath}
                                     />
 
                                     <small className='pt-3' style={{ color: '#76735c' }}><Label>Character Image:</Label></small>
                                     <FileUpload
                                         setRegisterModalStates={this.setRegisterModalCharImageStates}
-                                        path={this.state.path+this.state.name+'/'}
+                                        path={this.state.path+this.state.name?.replaceAll(' ', '_') +'/'}
                                         currImage={noImageFullpath}
                                     />
                                 </Collapse>
@@ -211,7 +208,7 @@ const LineInputStyle = {
 };
 
 const mapStateToProps = state => ({
-    isAuthenticated: state.auth.isAuthenticated,
+    auth: state.auth,
     error: state.error,
     msg: state.msg
 });

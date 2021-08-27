@@ -1,49 +1,52 @@
 import React, { Component } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Alert } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Alert, Label } from 'reactstrap';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-import { addChapter } from '../../actions/chapterActions';
+import { addPropCharacter } from '../../actions/characterActions';
 import { clearErrors } from '../../actions/errorActions';
 import { clearMsgs } from '../../actions/msgActions';
 import FileUpload from '../fileupload/FileUpload';
 
-class AddChapterModal extends Component {
+class AddPropCharacterModal extends Component {
     state = {
-        path: '/uploads/chapters/',
+        path: '/uploads/characters/',
         modal: false,
-        name: '',
-        chapterImage: ''
+        propImage: ''
     };
 
     static propTypes = {
-        isAuthenticated: PropTypes.bool,
+        auth: PropTypes.object.isRequired,
+        character: PropTypes.object.isRequired,
         error: PropTypes.object.isRequired,
         msg: PropTypes.object.isRequired,
         clearErrors: PropTypes.func.isRequired,
         clearMsgs: PropTypes.func.isRequired,
-        addChapter: PropTypes.func.isRequired,
+        addPropCharacter: PropTypes.func.isRequired,
+    }
+
+    componentDidMount() {
+
     }
 
     componentDidUpdate(prevProps) {
         const { error, msg } = this.props;
         if (error !== prevProps.error) {
             // Check for add error
-            if (error.id === 'ADD_CHAPTER_FAIL') {
+            if (error.id === 'ADD_PROP_CHARACTER_FAIL') {
                 this.setState({ msg: error.msg });
             } else {
                 this.setState({ msg: null });
             }
         }
 
-        //If added chapter, close modal
+        //If added character, close modal
         if (this.state.modal) {
-            if (msg.id === 'ADD_CHAPTER_SUCCESS') {
+            if (msg.id === 'ADD_PROP_CHARACTER_SUCCESS') {
                 this.toggle();
                 this.setState({
-                    name: '',
-                    chapterImage: ''
+                    propImage: ''
                 })
             }
         }
@@ -67,45 +70,57 @@ class AddChapterModal extends Component {
     onSubmit = e => {
         e.preventDefault();
 
-        const newChapter = {
-            name: this.state.name,
-            chapterImage: this.state.chapterImage
+        const propImage = {
+            propImage: this.state.propImage
         }
-        // Add chapter via addChapter action
-        this.props.addChapter(newChapter);
+        // Add character via addPropCharacter action
+        this.props.addPropCharacter(this.props.character.character._id, propImage);
     }
 
     setRegisterModalStates = (val) => {
         if (val !== '') {
-            this.setState({ chapterImage: val });
+            this.setState({ propImage: val });
         }
+    }
+
+    handleKeyDown(e) {
+        e.target.style.height = 'inherit';
+        e.target.style.height = `${e.target.scrollHeight}px`;
+        // In case you have a limitation
+        // e.target.style.height = `${Math.min(e.target.scrollHeight, limit)}px`;
     }
 
     close = () => {
         const noImageFullpath = this.state.path + 'no-image.png';
-        const filepath = this.state.chapterImage
-        if (filepath !== '' && filepath !== noImageFullpath) {
+        const propImage = this.state.propImage;
+        if (propImage !== '' && propImage !== noImageFullpath) {
             const formData = new FormData();
-            formData.append('filepath', filepath);
+            formData.append('filepath', propImage);
 
-            console.log("*remove AddChapterModal");
+            console.log("*remove AddPropCharacterModal 1");
             axios.post('/remove', formData);
-            this.setState({ chapterImage: '' });
+            this.setState({ charImage: '' });
         }
+
+        this.setState({
+            propImage: ''
+        })
     }
 
     render() {
         const noImageFullpath = this.state.path + 'no-image.png';
+        const { isAuthenticated, user } = this.props.auth;
+        const is_admin = (isAuthenticated && user.admin);
 
         return (
             <div>
-                {this.props.isAuthenticated ?
+                {is_admin ?
                     <Button outline
                         // color='info'
                         size='sm'
                         style={{ marginBottom: '2rem' }}
                         onClick={this.toggle}
-                    >Add Chapter</Button>
+                    >Add Prop Character</Button>
                     : null}
 
                 <Modal
@@ -115,22 +130,22 @@ class AddChapterModal extends Component {
                     onClosed={this.close}
                     className="dark-modal"
                 >
-                    <ModalHeader cssModule={{ 'modal-title': 'w-100 text-center' }} toggle={this.toggle} ><span className="lead">Add chapter</span></ModalHeader>
+                    <ModalHeader cssModule={{ 'modal-title': 'w-100 text-center' }} toggle={this.toggle} ><span className="lead">Add Character</span></ModalHeader>
 
                     <ModalBody>
                         {this.state.msg ? <Alert color="danger">{this.state.msg}</Alert> : null}
 
                         <Form onSubmit={this.onSubmit}>
                             <FormGroup>
-                                
-                                <input className='input-place-holder form-control pt-3 pl-3 mb-5 mt-3' style={LineInputStyle} onChange={this.onChange} type="text" name='name'  id='name' placeholder="Enter chapter..." />
 
-                                <FileUpload
-                                    setRegisterModalStates={this.setRegisterModalStates}
-                                    path={this.state.path}
-                                    currImage={noImageFullpath}
-                                />
-
+                                <small className='pt-3' style={{ color: '#76735c' }}><Label>Character prop Image:</Label></small>
+                                {this.props?.character?.character?.name &&
+                                    <FileUpload
+                                        setRegisterModalStates={this.setRegisterModalStates}
+                                        path={this.state.path + this.props?.character?.character?.name?.replaceAll(' ', '_') + '/props/'}
+                                        currImage={noImageFullpath}
+                                    />
+                                }
                                 <Button
                                     className='green-style-btn mt-4'
                                     size="sm"
@@ -147,23 +162,14 @@ class AddChapterModal extends Component {
     }
 }
 
-const LineInputStyle = {
-    backgroundColor: 'rgba(0, 0, 0, 0)',
-    border: 'none',
-    borderBottom: '1px solid rgba(255, 255, 255, 0.411)',
-    borderRadius: '1px',
-    marginTop: '-9px',
-    width: '350px',
-    margin: '0 auto'
-  };
-
 const mapStateToProps = state => ({
-    isAuthenticated: state.auth.isAuthenticated,
+    auth: state.auth,
     error: state.error,
+    character: state.character,
     msg: state.msg
 });
 
 export default connect(
     mapStateToProps,
-    { addChapter, clearMsgs, clearErrors }
-)(AddChapterModal);
+    { addPropCharacter, clearMsgs, clearErrors }
+)(AddPropCharacterModal);

@@ -1,5 +1,6 @@
 import {
-    GET_CHARACTERS, ADD_CHARACTER, DELETE_CHARACTER, CHARACTERS_LOADING, EDIT_CHARACTER, GET_CHARACTER_BY_ID
+    GET_CHARACTERS, ADD_CHARACTER, DELETE_CHARACTER, CHARACTERS_LOADING, EDIT_CHARACTER, 
+    GET_CHARACTER_BY_ID, EDIT_SINGAL_CHARACTER, DELETE_PROP_CHARACTER
 } from '../actions/types';
 
 const initialState = {
@@ -9,7 +10,8 @@ const initialState = {
 };
 
 export default function characterReducer(state = initialState, action) {
-    let newcharacters = []
+    let newcharacter = null;
+    let newcharacters = [];
     var index;
     switch (action.type) {
         case GET_CHARACTERS:
@@ -30,10 +32,22 @@ export default function characterReducer(state = initialState, action) {
                 ...state,
                 characters: newcharacters,
             };
+        case EDIT_SINGAL_CHARACTER:
+            return {
+                ...state,
+                character: action.payload
+            };
         case DELETE_CHARACTER:
             return {
                 ...state,
                 characters: state.characters.filter(character => character._id !== action.payload)
+            };
+        case DELETE_PROP_CHARACTER:
+            newcharacter = state.character;
+            newcharacter.propImages = newcharacter.propImages.filter( element => element !== action.payload)
+            return {
+                ...state,
+                character: newcharacter
             };
         case EDIT_CHARACTER:
             newcharacters = [...state.characters];

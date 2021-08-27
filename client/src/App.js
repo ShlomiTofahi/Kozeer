@@ -33,7 +33,7 @@ class App extends Component {
   bgStyle = () => {
     let backgroundImage = `url(/images/main/bg.png)`;
     const { setting } = store.getState().setting;
-    if (setting && setting?.bgImage !== null) {
+    if (setting && setting?.bgImage) {
       backgroundImage = `url(${setting?.bgImage})`;
     }
 

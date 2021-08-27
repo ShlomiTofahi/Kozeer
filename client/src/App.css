@@ -512,6 +512,20 @@ padding-right:15px; */
   transform: translate3d(0px,0,0);
   opacity: 0.7;
 }
+.prop-img {
+  /* vertical-align: middle; */
+  /* border: solid 1px black; */
+  position: absolute;
+  width: 40px;
+  height: 100%;
+  transition:1s all;
+  /* transition: 0.3s; */
+  /* transform: translate3d(0px,10px,0); */
+
+  cursor: pointer;
+
+}
+
 .char-img{
   background-repeat: no-repeat;
   background-position: 0 0;
@@ -782,6 +796,21 @@ input[type='number'] {
   opacity: 0;
   transition: opacity 0.3s ease;
 }
+.hover-delete-btn {
+  cursor: pointer;
+  background-color: #e74c3c;
+  border: 0;
+  color: #fff;
+  font-size: 20px;
+  line-height: 20px;
+  padding: 2px 5px;
+  /* position: absolute;
+  top: 50%;
+  left: -4px; */
+  transform: translate(-100%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
 .delete-post-btn{
   position:relative;
 }
@@ -805,6 +834,8 @@ input[type='number'] {
 }
 
 .action-item:hover .delete-btn,
+.hover-item:hover .hover-delete-btn,
+.hover-item:hover .hover-edit-btn,
 .manga-list .manga-item:hover .delete-btn,
 .chapter-list .chapter-item:hover .chapter-delete-btn,
 .action-item:hover .edit-btn,
@@ -836,6 +867,23 @@ input[type='number'] {
   opacity: 0;
   transition: opacity 0.3s ease;
 }
+
+.hover-edit-btn {
+  cursor: pointer;
+  background-color: #44a03c;
+  border: 0;
+  color: #fff;
+  font-size: 20px;
+  line-height: 20px;
+  padding: 2px 5px;
+  /* position: absolute;
+  top: 50%;
+  left: -31px ;
+  transform: translate(-100%, -50%);  */
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
 .chapter-edit-btn {
   cursor: pointer;
   background-color: #44a03c;

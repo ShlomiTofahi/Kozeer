@@ -17,22 +17,16 @@ app.use(fileUpload({
 
 // Upload Endpoint
 app.post('/upload', (req, res) => {
-  console.log(`____________________________________________________`)
-
   try {
     const file = req.files.file;
     const { filename, abspath } = req.body;
     const fullDir = `${__dirname}/client/public${abspath}`
-    if (req.files === null) {
+    if (!req.files) {
       return res.status(400).json({ msg: 'No file uploaded' });
     }
     if (!fs.existsSync(fullDir)) {
       fs.mkdirSync(fullDir);
     }
-
-      console.log(abspath)
-      console.log(`____________________________________________________`)
-      console.log(`${fullDir}/${filename}`)
       file.mv(`${fullDir}/${filename}`, err => {
         if (err) {
           return res.status(500).send(err);
@@ -48,12 +42,17 @@ app.post('/upload', (req, res) => {
 
 // Remove Endpoint
 app.post('/remove', (req, res) => {
-  if (req.body === null) {
+  if (!req.body) {
     return res.status(400).json({ msg: 'No file to remove' });
   }
   const { filepath } = req.body;
   try {
-    fs.unlinkSync(`${__dirname}/client/public/${filepath}`);
+    const fullDir = `${__dirname}/client/public${filepath}`
+    const directoryPath = path.dirname(fullDir) 
+    fs.unlinkSync(fullDir);
+    if(fs.readdirSync(directoryPath).length === 0){
+      fs.rmdirSync(directoryPath, { recursive: true })
+    }
   } catch (err) {
     return res.status(500).send(err);
   }

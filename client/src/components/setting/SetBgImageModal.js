@@ -36,7 +36,7 @@ class SetBgImageModal extends Component {
     componentDidMount() {
         const { setting } = this.props.setting;
         
-        if(setting !==null){
+        if(!setting){
             this.props.loadSetting();
         }
 
@@ -94,7 +94,6 @@ class SetBgImageModal extends Component {
         if (this.state.bgImage !== this.state.prevImage && this.state.prevImage !== noImageFullpath) {
             const formData = new FormData();
             formData.append('filepath', this.state.prevImage);
-            formData.append('abspath', this.state.path);
 
             console.log("*remove SettingModal 1");
             axios.post('/remove', formData);
@@ -132,7 +131,6 @@ class SetBgImageModal extends Component {
         if (this.state.bgImage !== this.state.prevImage && this.state.prevImage !== noImageFullpath) {
             const formData = new FormData();
             formData.append('filepath', this.state.prevImage);
-            formData.append('abspath', this.state.path);
 
             console.log("*remove SettingModal 2");
             axios.post('/remove', formData);
@@ -152,13 +150,13 @@ class SetBgImageModal extends Component {
     navTextColorsStyle = () => {
         const { setting } = this.props.setting;
         let textColor = "#ffffff";
-        if (setting?.headerColorText !== null) {
+        if (setting && setting?.headerColorText) {
             textColor = setting.headerColorText;
         }
 
         if (this.state.hover) {
             textColor = "#21201f";
-            if (setting?.headerHoverColorText !== null) {
+            if (setting && setting?.headerHoverColorText) {
                 textColor = setting.headerHoverColorText;
             }
         }
@@ -177,7 +175,6 @@ class SetBgImageModal extends Component {
 
             const formData = new FormData();
             formData.append('filepath', filepath);
-            formData.append('abspath', this.state.path);
 
             console.log("*remove SettingModal 3");
             axios.post('/remove', formData);

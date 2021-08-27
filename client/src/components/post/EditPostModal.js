@@ -165,7 +165,6 @@ class EditPostModal extends Component {
     if (this.state.postImage !== this.state.prevPostImage && this.state.prevPostImage !== noImageFullpath) {
       const formData = new FormData();
       formData.append('filepath', this.state.prevPostImage);
-      formData.append('abspath', this.state.path);
 
       console.log("*remove EditPostModal 1");
       axios.post('/remove', formData);
@@ -200,7 +199,6 @@ class EditPostModal extends Component {
     if (this.state.postImage !== this.state.prevPostImage && this.state.prevPostImage !== noImageFullpath) {
       const formData = new FormData();
       formData.append('filepath', this.state.prevPostImage);
-      formData.append('abspath', this.state.path);
 
       console.log("*remove EditPostModal 3");
       axios.post('/remove', formData);
@@ -301,14 +299,12 @@ class EditPostModal extends Component {
       Collapsetoggle: chapterList
     });
 
-    const noImageFullpath = this.state.path + 'no-image.png';
     const filepath = this.state.postImage
 
-    if (!this.state.imageSubmited && filepath !== this.state.prevPostImage && filepath !== noImageFullpath) {
+    if (!this.state.imageSubmited && filepath !== this.state.prevPostImage) {
 
       const formData = new FormData();
       formData.append('filepath', filepath);
-      formData.append('abspath', this.state.path);
 
       console.log("*remove EditPostModal 2");
       axios.post('/remove', formData);

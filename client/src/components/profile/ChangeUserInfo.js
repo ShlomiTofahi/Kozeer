@@ -108,7 +108,6 @@ class ChangeUserInfo extends Component {
         if (this.state.profileImage !== this.state.prevProfileImage && this.state.prevProfileImage !== noImageFullpath) {
             const formData = new FormData();
             formData.append('filepath', this.state.prevProfileImage);
-            formData.append('abspath', this.state.path);
 
             console.log("*remove ChangeUserInfo 1");
             axios.post('/remove', formData);
@@ -138,7 +137,6 @@ class ChangeUserInfo extends Component {
         if (this.state.profileImage !== this.state.prevProfileImage && this.state.prevProfileImage !== noImageFullpath) {
             const formData = new FormData();
             formData.append('filepath', this.state.prevProfileImage);
-            formData.append('abspath', this.state.path);
 
             console.log("*remove ChangeUserInfo 2");
             axios.post('/remove', formData);

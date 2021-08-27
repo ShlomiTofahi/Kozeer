@@ -144,13 +144,13 @@ class LoginModal extends Component {
     navTextColorsStyle = () => {
         const { setting } = this.props.setting;
         let textColor = "#ffffff";
-        if (setting && setting?.headerColorText !== null) {
+        if (setting && setting?.headerColorText) {
             textColor = setting?.headerColorText;
         }
 
         if (this.state.hover !== '' && this.state.hover === "SIGN-UP") {
             textColor = "#21201f";
-            if (setting && setting?.headerHoverColorText !== null) {
+            if (setting && setting?.headerHoverColorText) {
                 textColor = setting?.headerHoverColorText;
             }
         }

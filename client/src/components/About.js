@@ -26,7 +26,7 @@ class About extends Component {
         const { setting } = this.props.setting;
 
         let myVision = "";
-        if (setting && setting?.myVision !== null) {
+        if (setting && setting?.myVision) {
             myVision = setting?.myVision;
         }
         let att= [];
@@ -38,7 +38,6 @@ class About extends Component {
                 att.push(c)
             }
         }
-        myVision = myVision.replace("<br />", <br />)
         return (
             <div className="wrapper animated bounceInLeft">
                 <div style={this.aboutStyle()}>

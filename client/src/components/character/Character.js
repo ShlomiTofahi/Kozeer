@@ -3,9 +3,13 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Collapse } from 'react-collapse';
-import { CardImg } from 'reactstrap';
+import { CardImg, Button } from 'reactstrap';
+import axios from 'axios';
 
-import { getCharacters } from '../../actions/characterActions';
+import { getCharacters, deletePropCharacter, deleteCharacter } from '../../actions/characterActions';
+import AddPropCharacterModal from './AddPropCharacterModal';
+import EditCharImageModal from './EditCharImageModal';
+import EditCharacterModal from './EditCharacterModal';
 
 
 import SwiperCore, { Navigation, Pagination, A11y } from 'swiper';
@@ -22,18 +26,63 @@ class Character extends Component {
     state = {
         // path: "/images/manga/",
         Collapsetoggle: [],
+        propImg: '',
+        avatarImage: '',
+        charImage: '',
+        propImages: []
 
     }
     static propTypes = {
         auth: PropTypes.object.isRequired,
         character: PropTypes.object.isRequired,
+        msg: PropTypes.object.isRequired,
         getCharacters: PropTypes.func.isRequired,
+        deletePropCharacter: PropTypes.func.isRequired,
     }
 
     componentDidMount() {
-        this.props.getCharacters();
+        // this.props.getCharacters();
     }
 
+    componentDidUpdate(prevProps) {
+        const { msg } = this.props;
+        if (msg && msg.id === 'DELETE_PROP_CHARACTER_SUCCESS') {
+            if (this.state.propImg !== '') {
+                const formData = new FormData();
+                formData.append('filepath', this.state.propImg);
+                console.log("*remove onDeletePropCharClick 1");
+                axios.post('/remove', formData);
+                this.setState({ propImg: '' });
+            }
+        }
+        if (msg && msg.id === 'DELETE_CHARACTER_SUCCESS') {
+            if (this.state.avatarImage !== '') {
+                const formData = new FormData();
+                formData.append('filepath', this.state.avatarImage);
+                console.log("*remove onDeletePropCharClick 2");
+                axios.post('/remove', formData);
+                this.setState({ avatarImage: '' });
+            }
+            if (this.state.charImage !== '') {
+                const formData = new FormData();
+                formData.append('filepath', this.state.charImage);
+                console.log("*remove onDeletePropCharClick 3");
+                axios.post('/remove', formData);
+                this.setState({ charImage: '' });
+            }
+            if (this.state.propImages && this.state.propImages.length) {
+                for (const propImage of this.state.propImages) {
+                    if (propImage !== '') {
+                        const formData = new FormData();
+                        formData.append('filepath', propImage);
+                        console.log("*remove onDeletePropCharClick 4");
+                        axios.post('/remove', formData);
+                    }
+                }
+                this.setState({ propImages: [] });
+            }
+        }
+    }
     onClickImg = (mangaImage, page) => {
         var modal = document.getElementById("myModal");
 
@@ -55,6 +104,35 @@ class Character extends Component {
             modal.style.display = "none";
         }
     };
+
+
+    onDeletePropCharClick = (id, propImg) => {
+        this.setState({ propImg })
+        this.props.deletePropCharacter(id, propImg);
+    }
+
+    onDeletePostClick = () => {
+        const { character } = this.props.character;
+        this.setState({
+            avatarImage: character.avatarImage,
+            charImage: character.charImage,
+            proImages: character.proImages,
+        })
+
+        this.props.deleteCharacter(character._id);
+
+        // const noImageFullpath = this.state.path + 'no-image.png';
+        // const filepath = character.avatarImage;
+        // if (filepath !== '' && filepath !== noImageFullpath) {
+        //   const formData = new FormData();
+        //   formData.append('filepath', filepath);
+
+        //   console.log("*remove Post");
+        //   axios.post('/remove', formData);
+        // }
+        // this.setState({ redirect: '/' });
+
+    }
 
     CollapseHangdle = (name) => {
         if (this.state.Collapsetoggle.includes(name)) {
@@ -99,7 +177,7 @@ class Character extends Component {
         const { character } = this.props.character;
 
         let description = "";
-        if (character && character?.description !== null) {
+        if (character && character?.description) {
             description = character?.description;
         }
 
@@ -126,6 +204,18 @@ class Character extends Component {
                     <div align='center' style={this.frameStyle()}>
                         <hr />
 
+                        <EditCharacterModal />
+                        <br />
+                        {is_admin &&
+                            <Button
+                                outline
+                                size='sm'
+                                color='danger'
+                                style={{ marginBottom: '2rem' }}
+                                onClick={this.onDeletePostClick} >
+                                Delete Character
+                            </Button>
+                        }
 
 
                         <legend align='center'>
@@ -134,20 +224,22 @@ class Character extends Component {
                             </h2>
                         </legend>
                         {character?.charImage !== '' &&
-                            <div>
+                            <div className='hover-item'>
+                                <EditCharImageModal  />
                                 <CardImg bottom className="char-img" src={character?.charImage} onClick={this.onClickImg.bind(this, character?.charImage, '')} id="myImg" />
                             </div>
                         }
                         <div className="px-2 px-md-5" style={{ opacity: '0.7' }}>
                             <p align="left" className='lead'> {att}</p>
                         </div>
+                        <AddPropCharacterModal />
+
                         <legend align='center'>
                             <h2 className='brand display-4' style={secondtittleStyle}>
                                 CHARACTER DESIFN
                             </h2>
                         </legend>
                         <div style={this.charStyle()}>
-
                             <Swiper
                                 speed={2000}
                                 slidesPerView={1}
@@ -160,15 +252,21 @@ class Character extends Component {
                                     reverseDirection: true,
                                 }}
                             >
-                                {character.propImags &&
-                                    character.propImags.map((img) => (
-                                        <div key={img}>
-                                            <SwiperSlide >
+                                {character.propImages &&
+                                    character.propImages.map((img) => (
+                                        <SwiperSlide key={img}>
+                                            <div className='hover-item'>
                                                 <div style={pageStyle} >
                                                     <CardImg className="prop-imgs" onClick={this.onClickImg.bind(this, img, '')} src={img} id="myImg" />
                                                 </div>
-                                            </SwiperSlide>
-                                        </div>
+                                                <button onClick={this.onDeletePropCharClick.bind(this, character._id, img)} className="hover-delete-btn mt-3">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
+                                                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                                                        <path fillRule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </SwiperSlide>
                                     ))
                                 }
                             </Swiper>
@@ -208,10 +306,11 @@ const pageStyle = {
 
 const mapStateToProps = state => ({
     character: state.character,
-    auth: state.auth
+    auth: state.auth,
+    msg: state.msg,
 });
 
 export default connect(
     mapStateToProps,
-    { getCharacters }
+    { getCharacters, deletePropCharacter }
 )(Character);

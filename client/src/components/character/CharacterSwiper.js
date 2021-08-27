@@ -40,7 +40,7 @@ class CharacterSwiper extends Component {
 
     componentDidMount() {
         const { setting } = this.props.setting;
-        if (setting !== null) {
+        if (!setting) {
             this.props.loadSetting();
         }
 
@@ -70,7 +70,7 @@ class CharacterSwiper extends Component {
             borderRadius: '10px',
             margin: '0 auto',
             color: 'white',
-             maxWidth: window.innerWidth >= 576 ? (window.innerWidth >= 992 ? String(window.innerWidth / 1.5) + 'px' : String(window.innerWidth / 1.2) + 'px') : String(window.innerWidth / 1.04) + 'px',
+            maxWidth: window.innerWidth >= 576 ? (window.innerWidth >= 992 ? String(window.innerWidth / 1.5) + 'px' : String(window.innerWidth / 1.2) + 'px') : String(window.innerWidth / 1.04) + 'px',
             maxHeight: '1000px',
             paddingTop: '32px',
             paddingBottom: '32px',
@@ -80,7 +80,7 @@ class CharacterSwiper extends Component {
     tittleStyle = () => {
         const { setting } = this.props.setting;
         let bottomColor = "#c213bd";
-        if (setting && setting?.headerColorBottom !== null) {
+        if (setting && setting?.headerColorBottom) {
             bottomColor = setting?.headerColorBottom;
         }
         return {
@@ -123,13 +123,11 @@ class CharacterSwiper extends Component {
                         >
                             {characters &&
                                 characters.map(({ _id, avatarImage }) => (
-                                    <div key={_id}>
-                                        <SwiperSlide >
-                                            <div style={pageStyle} >
-                                                <CardImg onClick={this.CollapseHangdle.bind(this, _id)} className='avatar' src={avatarImage} />
-                                            </div>
-                                        </SwiperSlide>
-                                    </div>
+                                    <SwiperSlide key={_id}>
+                                        <div style={pageStyle} >
+                                            <CardImg onClick={this.CollapseHangdle.bind(this, _id)} className='avatar' src={avatarImage} />
+                                        </div>
+                                    </SwiperSlide>
                                 ))
                             }
                         </Swiper>

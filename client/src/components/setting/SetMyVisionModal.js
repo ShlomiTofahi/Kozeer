@@ -27,7 +27,7 @@ class SetMyVisionModal extends Component {
     componentDidMount() {
         const { setting } = this.props.setting;
 
-        if(setting !==null){
+        if(!setting){
             this.props.loadSetting();
         }
         

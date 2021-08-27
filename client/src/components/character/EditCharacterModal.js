@@ -4,20 +4,21 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-import { editChapter } from '../../actions/chapterActions';
+import { editCharacter } from '../../actions/characterActions';
 import { clearErrors } from '../../actions/errorActions';
 import { clearMsgs } from '../../actions/msgActions';
 import FileUpload from '../fileupload/FileUpload';
 
-class EditChapterModal extends Component {
+class EditCharacterModal extends Component {
     state = {
-        path: '/uploads/chapters/',
+        path: '/uploads/characters/',
         modal: false,
 
+        avatarImage: '',
         name: '',
-        chapterImage: '',
+        description: '',
 
-        prevChapterImage: '',
+        prevImage: '',
         imageSubmited: false,
         removedOrginalImageAndNotSave: false,
     };
@@ -26,36 +27,52 @@ class EditChapterModal extends Component {
         auth: PropTypes.object.isRequired,
         error: PropTypes.object.isRequired,
         msg: PropTypes.object.isRequired,
-        chapter: PropTypes.object.isRequired,
+        character: PropTypes.object.isRequired,
         clearErrors: PropTypes.func.isRequired,
         clearMsgs: PropTypes.func.isRequired,
-        editChapter: PropTypes.func.isRequired
+        editCharacter: PropTypes.func.isRequired
     }
 
     componentDidMount() {
-        const { chapters } = this.props.chapter;
-        const chapter = chapters.filter(chapter => chapter._id === this.props.chapterID)[0];
+        const { character } = this.props.character;
+        console.log({ "edirchar": character })
+
         this.setState({
-            name: chapter.name,
-            chapterImage: chapter.chapterImage,
-            prevChapterImage: chapter.chapterImage
+            name: character.name,
+            description: character.description,
+            avatarImage: character.avatarImage,
+            prevImage: character.avatarImage
         });
     }
 
     componentDidUpdate(prevProps) {
         const { error, msg } = this.props;
+        const { character } = this.props.character;
+
         if (error !== prevProps.error) {
             // Check for edit error
-            if (error.id === 'EDIT_CHAPTER_FAIL') {
+            if (error.id === 'EDIT_CHARACTER_FAIL') {
                 this.setState({ msg: error.msg });
             } else {
                 this.setState({ msg: null });
             }
         }
 
+        // if (character !== prevProps.character) {
+        //     // Check for edit error
+        //     if (msg.id === 'GET_CHARACTER_SUCCESS') {
+        //         this.setState({ 
+        //             name: character.name,
+        //             description: character.description,
+        //             avatarImage: character.avatarImage,
+        //             prevImage: character.avatarImage
+        //         });
+        //     } 
+        // }
+
         //If edited, close modal
         if (this.state.modal) {
-            if (!this.state.removedOrginalImageAndNotSave && msg && msg.id === 'EDIT_CHAPTER_SUCCESS') {
+            if (!this.state.removedOrginalImageAndNotSave && msg && msg.id === 'EDIT_CHARACTER_SUCCESS') {
                 this.toggle();
             }
         }
@@ -78,24 +95,24 @@ class EditChapterModal extends Component {
 
     onSubmit = e => {
         e.preventDefault();
+        const { character } = this.props.character;
 
-        var { name, chapterImage } = this.state;
-
-        const newChapter = {
-            name,
-            chapterImage
+        const newCharacter = {
+            name: this.state.name,
+            description: this.state.description,
+            avatarImage: this.state.avatarImage,
         }
 
-        // Edit chapter via editChapter action
-        this.props.editChapter(this.props.chapterID, newChapter);
+        // Edit avatarImage via editCharacter action
+        this.props.editCharacter(character._id, newCharacter);
 
         //delete prev image
         const noImageFullpath = this.state.path + 'no-image.png';
-        if (this.state.chapterImage !== this.state.prevChapterImage && this.state.prevChapterImage !== noImageFullpath) {
+        if (this.state.avatarImage !== this.state.prevImage && this.state.prevImage !== noImageFullpath) {
             const formData = new FormData();
-            formData.append('filepath', this.state.prevChapterImage);
+            formData.append('filepath', this.state.prevImage);
 
-            console.log("*remove EditChapterModal 1");
+            console.log("*remove editCharacterModal 1");
             axios.post('/remove', formData);
         }
         this.setState({
@@ -108,24 +125,24 @@ class EditChapterModal extends Component {
     }
 
     removedOrginalImageAndNotSave = () => {
-        var { name, chapterImage } = this.state;
+        const { character } = this.props.character;
 
-        const newChapter = {
-            name,
-            chapterImage
+        const newCharacter = {
+            name: this.state.name,
+            description: this.state.description,
+            avatarImage: this.state.avatarImage,
         }
 
-
         // Attempt to edit
-        this.props.editChapter(this.props.chapterID, newChapter);
+        this.props.editCharacter(character._id, newCharacter);
 
         //delete prev image
         const noImageFullpath = this.state.path + 'no-image.png';
-        if (this.state.chapterImage !== this.state.prevChapterImage && this.state.prevChapterImage !== noImageFullpath) {
+        if (this.state.avatarImage !== this.state.prevImage && this.state.prevImage !== noImageFullpath) {
             const formData = new FormData();
-            formData.append('filepath', this.state.prevChapterImage);
+            formData.append('filepath', this.state.prevImage);
 
-            console.log("*remove EditChapterModal 2");
+            console.log("*remove editCharacterModal 2");
             axios.post('/remove', formData);
         }
         this.setState({
@@ -138,33 +155,32 @@ class EditChapterModal extends Component {
     setRegisterModalStates = (val) => {
         if (val !== '')
             this.setState({
-                chapterImage: val
+                avatarImage: val
             });
     }
 
     close = () => {
-        const { chapters } = this.props.chapter;
-        const chapter = chapters.filter(chapter => chapter._id === this.props.chapterID)[0];
+        const { character } = this.props.character;
 
-        const filepath = this.state.chapterImage
-        const noImageFullpath = this.state.path + 'no-image.png';
-        if (!this.state.imageSubmited && this.state.chapterImage !== this.state.prevChapterImage && filepath !== noImageFullpath) {
+        const filepath = this.state.avatarImage
+        if (!this.state.imageSubmited && filepath !== this.state.prevImage) {
             const formData = new FormData();
             formData.append('filepath', filepath);
 
-            console.log("*remove EditChapterModal 3");
+            console.log("*remove editCharacterModal 3");
             axios.post('/remove', formData);
 
             this.setState({
-                name: chapter.name,
-                chapterImage: chapter.chapterImage,
-                prevChapterImage: chapter.chapterImage
+                name: character.name,
+                description: character.description,
+                avatarImage: character.avatarImage,
+                prevImage: character.avatarImage
             });
         }
         else {
             this.setState({
                 imageSubmited: false,
-                prevChapterImage: chapter.chapterImage
+                prevImage: character.avatarImage
             });
         }
         if (this.state.removedOrginalImageAndNotSave) {
@@ -172,30 +188,37 @@ class EditChapterModal extends Component {
         }
     }
 
-    removedOrginalChapterImage = () => {
+    removedOrginalImage = () => {
         this.setState({
             removedOrginalImageAndNotSave: true
         });
     }
 
+    handleKeyDown(e) {
+        e.target.style.height = 'inherit';
+        e.target.style.height = `${e.target.scrollHeight}px`;
+        // In case you have a limitation
+        // e.target.style.height = `${Math.min(e.target.scrollHeight, limit)}px`;
+    }
+
     render() {
         const { isAuthenticated, user } = this.props.auth;
         const is_admin = (isAuthenticated && user.admin);
+        const { character } = this.props.character;
 
-        //payload name for chapter image
+        //payload name for character image
         var payload = '';
 
         return (
             <Fragment>
-                {is_admin ?
-                    <button onClick={this.toggle} className="chapter-edit-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
-                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                            <path fillRule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
-                        </svg>
-                    </button>
-                    : null
-                }
+                {is_admin && character ?
+                    <Button outline
+                        // color='info'
+                        size='sm'
+                        style={{ marginBottom: '2rem' }}
+                        onClick={this.toggle}
+                    >Edit Character</Button>
+                    : null}
 
 
 
@@ -206,23 +229,25 @@ class EditChapterModal extends Component {
                     onClosed={this.close}
                     className="dark-modal"
                 >
-                    <ModalHeader cssModule={{ 'modal-title': 'w-100 text-center' }} toggle={this.toggle} ><span className="lead">Edit Chapter</span></ModalHeader>
+                    <ModalHeader cssModule={{ 'modal-title': 'w-100 text-center' }} toggle={this.toggle} ><span className="lead">Edit character image</span></ModalHeader>
                     <ModalBody>
                         {this.state.msg ? <Alert color="danger">{this.state.msg}</Alert> : null}
                         <Form onSubmit={this.onSubmit}>
                             <FormGroup>
 
-                                <input className='input-place-holder form-control pt-3 pl-3 mb-5 mt-3' defaultValue={this.state.name} style={LineInputStyle} onChange={this.onChange} type="text" name='name' id='name' placeholder="Enter chapter..." />
+                                <input className='input-place-holder form-control pt-3 pl-3 mb-5 mt-3' defaultValue={this.state.name} style={LineInputStyle} onChange={this.onChange} type="text" name='name' placeholder="Enter name..." />
+
+                                <textarea className='hide-scroll input-place-holder form-control pt-3 pl-3 mb-5 mt-3' style={LineInputStyle} onChange={this.onChange} name="description" value={this.state.description} onKeyDown={this.handleKeyDown} placeholder="Enter Your description here..."></textarea>
 
                                 <FileUpload
                                     payload={payload}
                                     setRegisterModalStates={this.setRegisterModalStates}
                                     path={this.state.path}
-                                    currImage={this.state.chapterImage}
-                                    prevImage={this.state.prevChapterImage}
+                                    currImage={this.state.avatarImage}
+                                    prevImage={this.state.prevImage}
                                     imageSaved={this.state.imageSubmited}
                                     removedOrginalImageAndNotSave={this.removedOrginalImageAndNotSave}
-                                    removedOrginalItemImage={this.removedOrginalChapterImage}
+                                    removedOrginalItemImage={this.removedOrginalImage}
                                 />
 
                                 <Button
@@ -252,7 +277,7 @@ const LineInputStyle = {
 };
 
 const mapStateToProps = state => ({
-    chapter: state.chapter,
+    character: state.character,
     auth: state.auth,
     error: state.error,
     msg: state.msg
@@ -260,5 +285,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { editChapter, clearErrors, clearMsgs }
-)(EditChapterModal);
+    { editCharacter, clearErrors, clearMsgs }
+)(EditCharacterModal);

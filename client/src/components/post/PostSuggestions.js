@@ -36,7 +36,7 @@ class PostSuggestions extends Component {
   }
   handleClickPost = (id) => {
     var viewedPostList = localStorage.getItem('viewedPostList');
-    if (viewedPostList == null)
+    if (!viewedPostList)
       viewedPostList = [];
 
     if (!viewedPostList.includes(String(id))) {
@@ -56,7 +56,6 @@ class PostSuggestions extends Component {
     if (filepath !== '' && filepath !== noImageFullpath) {
       const formData = new FormData();
       formData.append('filepath', filepath);
-      formData.append('abspath', this.state.path);
 
       console.log("*remove PostSuggetions");
       axios.post('/remove', formData);
@@ -64,7 +63,7 @@ class PostSuggestions extends Component {
   }
   onLovedClick = (id) => {
     var lovedPostList = localStorage.getItem('lovedPostList');
-    if (lovedPostList == null)
+    if (!lovedPostList)
       lovedPostList = [];
 
     if (!this.state.lovedcicked) {
@@ -76,7 +75,7 @@ class PostSuggestions extends Component {
     else {
       if (lovedPostList.includes(String(id))) {
         this.props.unlovedPost(id)
-        lovedPostList = lovedPostList.replace(id, '')
+        lovedPostList = lovedPostList.replaceAll(id, '')
       }
     }
     localStorage.setItem('lovedPostList', lovedPostList);

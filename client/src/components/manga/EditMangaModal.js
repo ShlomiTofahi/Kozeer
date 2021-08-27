@@ -105,7 +105,6 @@ class EditMangaModal extends Component {
         if (this.state.mangaImage !== this.state.prevMangaImage && this.state.prevMangaImage !== noImageFullpath) {
             const formData = new FormData();
             formData.append('filepath', this.state.prevMangaImage);
-            formData.append('abspath', this.state.path);
 
             console.log("*remove EditMangaModal 1");
             axios.post('/remove', formData);
@@ -137,7 +136,6 @@ class EditMangaModal extends Component {
         if (this.state.mangaImage !== this.state.prevMangaImage && this.state.prevMangaImage !== noImageFullpath) {
             const formData = new FormData();
             formData.append('filepath', this.state.prevMangaImage);
-            formData.append('abspath', this.state.path);
 
             console.log("*remove EditMangaModal 2");
             axios.post('/remove', formData);
@@ -165,7 +163,6 @@ class EditMangaModal extends Component {
         if (!this.state.imageSubmited && this.state.mangaImage !== this.state.prevMangaImage && filepath !== noImageFullpath) {
             const formData = new FormData();
             formData.append('filepath', filepath);
-            formData.append('abspath', this.state.path);
 
             console.log("*remove EditMangaModal 3");
             axios.post('/remove', formData);

@@ -95,7 +95,6 @@ class AddMangaModal extends Component {
         if (filepath !== '' && filepath !== noImageFullpath) {
             const formData = new FormData();
             formData.append('filepath', filepath);
-            formData.append('abspath', this.state.path);
 
             console.log("*remove AddMangaModal");
             axios.post('/remove', formData);

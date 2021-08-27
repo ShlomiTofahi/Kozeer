@@ -61,7 +61,7 @@ class ShowComments extends Component {
   onLovedClick = (id) => {
 
     var lovedCommentList = localStorage.getItem('lovedCommentList');
-    if (lovedCommentList == null)
+    if (!lovedCommentList)
       lovedCommentList = [];
 
     if (!this.state.lovedcicked) {
@@ -73,7 +73,7 @@ class ShowComments extends Component {
     else {
       if (lovedCommentList.includes(String(id))) {
         this.props.unlovedComment(id)
-        lovedCommentList = lovedCommentList.replace(id, '')
+        lovedCommentList = lovedCommentList.replaceAll(id, '')
       }
     }
     localStorage.setItem('lovedCommentList', lovedCommentList);
