@@ -244,7 +244,7 @@ class EditCharacterModal extends Component {
                                 <FileUpload
                                     payload={payload}
                                     setRegisterModalStates={this.setRegisterModalStates}
-                                    path={this.state.path+this.state.name?.replaceAll(' ', '_') +'/'}
+                                    path={this.state.path+this.state.name?.replace(/ /g, '_') +'/'}
                                     currImage={this.state.avatarImage}
                                     prevImage={this.state.prevImage}
                                     imageSaved={this.state.imageSubmited}

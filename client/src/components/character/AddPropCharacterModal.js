@@ -144,7 +144,7 @@ class AddPropCharacterModal extends Component {
                                     {character.name &&
                                         <FileUpload
                                             setRegisterModalStates={this.setRegisterModalStates}
-                                            path={this.state.path + character?.name?.replaceAll(' ', '_') + '/props/'}
+                                            path={this.state.path + character?.name + '/props/'}
                                             currImage={noImageFullpath}
                                         />
                                     }

@@ -195,7 +195,7 @@ class AddCharacterModal extends Component {
                                     {this.state.name !== '' &&
                                         <FileUpload
                                             setRegisterModalStates={this.setRegisterModalAvatarImageStates}
-                                            path={this.state.path + this.state.name?.replaceAll(' ', '_') + '/'}
+                                            path={this.state.path + this.state.name?.replace(/ /g, '_') + '/'}
                                             currImage={noImageFullpath}
                                         />
                                     }
@@ -203,7 +203,7 @@ class AddCharacterModal extends Component {
                                     {this.state.name !== '' &&
                                         <FileUpload
                                             setRegisterModalStates={this.setRegisterModalCharImageStates}
-                                            path={this.state.path + this.state.name?.replaceAll(' ', '_') + '/'}
+                                            path={this.state.path + this.state.name?.replace(/ /g, '_') + '/'}
                                             currImage={noImageFullpath}
                                         />
                                     }
