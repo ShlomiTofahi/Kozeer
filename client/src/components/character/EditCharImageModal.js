@@ -221,7 +221,7 @@ class EditCharImageModal extends Component {
                                         <FileUpload
                                             payload={payload}
                                             setRegisterModalStates={this.setRegisterModalStates}
-                                            path={this.state.path + character.name?.replaceAll(' ', '_') + '/'}
+                                            path={this.state.path + character.name?.replace(/ /g, '_') + '/'}
                                             currImage={this.state.charImage}
                                             prevImage={this.state.prevImage}
                                             imageSaved={this.state.imageSubmited}
